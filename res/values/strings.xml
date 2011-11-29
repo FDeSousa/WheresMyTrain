@@ -17,5 +17,7 @@
     <string name="out_of_service_train">546</string>
     <!-- If Train's L value is this, it has no trip -->
     <string name="no_trip_train">255</string>
+    <string name="lines_prompt">Underground Lines</string>
+    <string name="stations_prompt">Train Stations</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.fdesousa.android.WheresMyTrain.json;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -8,13 +9,21 @@ import android.util.Log;
 
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.information.Station;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DetailedPredictionsContainer;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DetailedPredictionsList;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DetailedPredictionsStation;
+import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPContainer;
+import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPHandler;
+import com.fdesousa.android.WheresMyTrain.json.StationsList.SLContainer;
+import com.fdesousa.android.WheresMyTrain.json.StationsList.SLHandler;
 
+/**
+ * Complete class to automate sending a request, parsing the response JSON.
+ * Some of the items are not in use, but will be implemented later. This application
+ * will possibly never use summary predictions, so the request is mostly ignored.
+ * @author Filipe De Sousa
+ * @version 0.1
+ */
+@SuppressWarnings("unused")
 public class TflJsonReader {
 	/**	Convenient definitions of the dividers for URL and its arguments				*/
-	private static final char DIVIDER = '/';
 	private static final char QUERY = '?';
 	private static final char ARG_DIV = '&';
 
@@ -45,6 +54,13 @@ public class TflJsonReader {
 	public static final String OUT_OF_SERVICE = "546";
 	/**	Value representing "no trip", provided in tripno value							*/
 	public static final String NO_TRIP = "255";
+	
+	/**	File pointing to the application's cache folder									*/
+	private final File cacheDir;
+
+	public TflJsonReader(File cacheDir) {
+		this.cacheDir = cacheDir;
+	}
 
 	/**
 	 * Convenience method to return a URL using the base_url and
@@ -52,12 +68,12 @@ public class TflJsonReader {
 	 * @param extension - the portion of the URL, after the base URL, required for the request
 	 * @return a new URL instance based upon the base URL concatenated with the extension
 	 */
-	private URI makeUri(final String request, final char line, final String station,
+	private URI makeUri(final String request, final String line, final String station,
 			final boolean incidentsOnly) {
 		try {
 			String arguments = REQUEST_ARG + request;
 			//	If line is a letter, it's valid, add it to the arguments
-			if (Character.isLetter(line)) arguments += ARG_DIV + LINE_ARG + line;
+			if (line != null) arguments += ARG_DIV + LINE_ARG + line;
 			//	If station isn't null, it's probably valid, add it
 			if (station != null) arguments += ARG_DIV + STATION_ARG + station;
 			//	If incidentsOnly is true, add it
@@ -77,16 +93,21 @@ public class TflJsonReader {
 	 * @param line - the desired London Underground line's unique identifier
 	 * @param station - the desired London Underground station's unique identifier
 	 */
-	public List<DetailedPredictionsStation> getPredictionsDetailed(final char line, final String station) {
+	public DPContainer getPredictionsDetailed(final String line, final String station) {
 		//	Parses String "PredictionDetailed/line/station"
 		URI uri = makeUri(PREDICTION_DETAILED, line, station, false);
-
-		DetailedPredictionsList predictions = new DetailedPredictionsList();
-		DetailedPredictionsContainer container = predictions.getDetailedPredictionsListFromUri(uri);
+		//	Instantiate, set the newest URI to fetch and parse
+		DPHandler predictions = new DPHandler().setUri(uri);
+		//	Start the thread for fetching and parsing
+		predictions.start();
+		//	Wait for thread to finish before returning
+		try {
+			predictions.join();
+		} catch (InterruptedException e) {
+			Log.e(WheresMyTrain.TAG, e.getMessage());
+		}
 		
-		List<DetailedPredictionsStation> stations = container.stations;
-		
-		return stations;
+		return predictions.getDPContainer();
 	}
 
 	/**
@@ -94,7 +115,7 @@ public class TflJsonReader {
 	 * @param line - the desired London Underground line's unique identifier
 	 * @return 
 	 */
-	public List<Station> getPredictionsSummary(final char line) {
+	public List<Station> getPredictionsSummary(final String line) {
 		//	Parses String "PredictionSummary/line"
 		URI uri = makeUri(PREDICTION_SUMMARY, line, null, false);
 
@@ -112,7 +133,7 @@ public class TflJsonReader {
 	public List<Station> getStationStatus(final boolean incidentsOnly) {
 		//	Conditional assignment, parses String "StationStatus/IncidentsOnly" if incidentsOnly
 		//+	is true, or parses String "StationStatus" if incidentsOnly is false
-		URI uri = makeUri(STATION_STATUS, ' ', null, incidentsOnly);
+		URI uri = makeUri(STATION_STATUS, null, null, incidentsOnly);
 
 		List<Station> stations = null;
 		
@@ -129,10 +150,24 @@ public class TflJsonReader {
 	public List<Station> getLineStatus(final boolean incidentsOnly) {
 		//	Conditional assignment, parses String "LineStatus/IncidentsOnly" if incidentsOnly
 		//+	is true, or parses String "LineStatus" if incidentsOnly is false
-		URI uri = makeUri(LINE_STATUS, ' ', null, incidentsOnly);
+		URI uri = makeUri(LINE_STATUS, null, null, incidentsOnly);
 
 		List<Station> stations = null;
 		
 		return stations;
+	}
+	
+	public SLContainer getStationsList() {
+		URI uri = makeUri(STATIONS_LIST, null, null, false);
+
+		SLHandler stationslist = new SLHandler(cacheDir).setUri(uri);
+		stationslist.start();
+		try {
+			stationslist.join();
+		} catch (InterruptedException e) {
+			Log.e(WheresMyTrain.TAG, e.getMessage());
+		}
+
+		return stationslist.getSLContainer();
 	}
 }
