@@ -23,8 +23,10 @@ import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLStation;
 
+import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
@@ -38,9 +40,11 @@ import android.widget.TextView;
 public class StationsSpinnerAdapter implements SpinnerAdapter {
 
 	private List<SLStation> stations;
+	private int colour;
 	
-	public StationsSpinnerAdapter(List<SLStation> stations) {
+	public StationsSpinnerAdapter(List<SLStation> stations, String linecode) {
 		this.stations = stations;
+		this.colour = WheresMyTrain.INSTANCE.getLineColour(linecode);
 	}
 	
 	@Override
@@ -65,10 +69,19 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView v = new TextView(WheresMyTrain.INSTANCE);
-        v.setTextColor(Color.BLACK);
-        v.setText(stations.get(position).stationname);
-        return v;
+		SLStation station = (SLStation) getItem(position);
+		WheresMyTrain w = WheresMyTrain.INSTANCE;
+		w.setTextColour(colour);
+		
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.spinner_row, null);
+		}
+		TextView tv = (TextView) convertView.findViewById(R.id.row);
+
+        tv.setTextColor(colour);
+        tv.setText(station.stationname);
+        return convertView;
 	}
 
 	@Override

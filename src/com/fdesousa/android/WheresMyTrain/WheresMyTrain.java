@@ -26,6 +26,8 @@ import com.fdesousa.android.WheresMyTrain.json.StationsList.SLLine;
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLStation;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,29 +43,19 @@ public class WheresMyTrain extends Activity {
 	private ExpandableListView predictionsList;
 	private SLLine line;
 	private SLStation station;
+	private int textColour;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		INSTANCE = this;
-
-		final TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
-		
-		/* Older code, previously for testing
-		setContentView(R.layout.main);
-		TextView tvMain = (TextView) findViewById(R.id.tvMain);
-		tvMain.setMovementMethod(new ScrollingMovementMethod());
-
-		DPContainer mList = mJsonR.getPredictionsDetailed('c', "bnk");
-
-		tvMain.setText(mList.toString());
-		//	Works. Prints out all of the strings from all of the nested classes and arrays
-		*/
 
 		//	Now try out the second interface layout. Two spinners, one expandable list
 		setContentView(R.layout.detailed_predictions);
+
+		INSTANCE = this;
+
+		final TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 
 		SLContainer sList = mJsonR.getStationsList();
 
@@ -71,17 +63,22 @@ public class WheresMyTrain extends Activity {
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
-		
+
 		//	Displays unstylized list of TfL lines
 		LinesSpinnerAdapter mLineAdapter = new LinesSpinnerAdapter(sList.lines);
 		linesSpinner.setAdapter(mLineAdapter);
-		
+
+		//	On initialisation, when setting colours, Waterloo & City line colours are used first
+		//+ as textColour is changed when filling the Lines spinner, reset colour here
+		//+	For safety, since Bakerloo is shown first, use Bakerloo colours
+		textColour = getResources().getColor(R.color.bakerloo_colour);
+
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				//	Handle the item selected by setting the second spinner with the correct stations
 				line = (SLLine) parent.getItemAtPosition(pos);
-				StationsSpinnerAdapter mStationAdapter = new StationsSpinnerAdapter(line.stations);
+				StationsSpinnerAdapter mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode);
 				stationsSpinner.setAdapter(mStationAdapter);
 			}
 			@Override
@@ -89,7 +86,7 @@ public class WheresMyTrain extends Activity {
 				// Do nothing
 			}
 		});
-		
+
 		stationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -98,7 +95,7 @@ public class WheresMyTrain extends Activity {
 				station = (SLStation) parent.getItemAtPosition(pos);
 				DPContainer sPredictions = mJsonR.getPredictionsDetailed(line.linecode, station.stationcode);
 				//	Always get the first element in sPredictions.stations as tfl.php only includes 1 station
-				//+ per Detailed Predictions request, but places it into an array. Future-proofing.
+				//+ per Detailed Predictions request, but places it into an array.
 				PlatformsExpListAdapter platformsList = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);
 				predictionsList.setAdapter(platformsList);
 			}
@@ -115,5 +112,41 @@ public class WheresMyTrain extends Activity {
 	 */
 	public final static void displayToast(final String message) {
 		Toast.makeText(INSTANCE.getApplicationContext(), message, Toast.LENGTH_LONG);
+	}
+
+	public int getLineColour(String linecode) {
+		Resources r = getResources();
+		int colour = 0;
+		
+		if (linecode.equalsIgnoreCase("b"))
+			colour = r.getColor(R.color.bakerloo_colour);
+		else if (linecode.equalsIgnoreCase("c"))
+			colour = r.getColor(R.color.central_colour);
+		else if (linecode.equalsIgnoreCase("d"))
+			colour = r.getColor(R.color.district_colour);
+		else if (linecode.equalsIgnoreCase("h"))
+			colour = r.getColor(R.color.hammersmith_colour);
+		else if (linecode.equalsIgnoreCase("j"))
+			colour = r.getColor(R.color.jubilee_colour);
+		else if (linecode.equalsIgnoreCase("m"))
+			colour = r.getColor(R.color.metropolitan_colour);
+		else if (linecode.equalsIgnoreCase("n"))
+			colour = r.getColor(R.color.northern_colour);
+		else if (linecode.equalsIgnoreCase("p"))
+			colour = r.getColor(R.color.piccadilly_colour);
+		else if (linecode.equalsIgnoreCase("v"))
+			colour = r.getColor(R.color.victoria_colour);
+		else if (linecode.equalsIgnoreCase("w"))
+			colour = r.getColor(R.color.waterloo_colour);
+		
+		return colour;
+	}
+	
+	public int getTextColour() {
+		return textColour;
+	}
+
+	public void setTextColour(int textColour) {
+		this.textColour = textColour;
 	}
 }

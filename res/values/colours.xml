@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Web safe colour values from TfL for LU lines -->
+	<color name="bakerloo_colour">#ff996633</color>
+	<color name="central_colour">#ffcc3333</color>
+	<color name="circle_colour">#ffffcc00</color>
+	<color name="district_colour">#ff006633</color>
+	<color name="hammersmith_colour">#ffcc9999</color>
+	<color name="jubilee_colour">#ff868f98</color>
+	<color name="metropolitan_colour">#ff660066</color>
+	<color name="northern_colour">#ff000000</color>
+	<color name="piccadilly_colour">#ff000099</color>
+	<color name="victoria_colour">#ff0099cc</color>
+	<color name="waterloo_colour">#ff66cccc</color>
+    
+</resources>

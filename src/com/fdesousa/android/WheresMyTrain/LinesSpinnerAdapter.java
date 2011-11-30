@@ -22,26 +22,30 @@ package com.fdesousa.android.WheresMyTrain;
 import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLLine;
+
+import android.content.Context;
+import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-public class LinesSpinnerAdapter implements SpinnerAdapter {
 
 /**
  * Simple class to handle use a list of SLLine with Android Spinner widget
  * cf. http://stackoverflow.com/questions/6562236/
  * @author Filipe De Sousa
  */
-private List<SLLine> lines;
-	
+public class LinesSpinnerAdapter implements SpinnerAdapter {
+
+	private List<SLLine> lines;
+
 	public LinesSpinnerAdapter(List<SLLine> lines) {
 		this.lines = lines;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return lines.size();
@@ -64,10 +68,19 @@ private List<SLLine> lines;
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView v = new TextView(WheresMyTrain.INSTANCE);
-        v.setTextColor(Color.BLACK);
-        v.setText(lines.get(position).linename);
-        return v;
+		WheresMyTrain w = WheresMyTrain.INSTANCE;
+		SLLine line = (SLLine) getItem(position);
+		
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.spinner_row, null);
+		}
+		TextView tv = (TextView) convertView.findViewById(R.id.row);
+		int colour = w.getLineColour(line.linecode);
+		tv.setTextColor(colour);
+		tv.setText(line.linename);
+		
+		return convertView;
 	}
 
 	@Override

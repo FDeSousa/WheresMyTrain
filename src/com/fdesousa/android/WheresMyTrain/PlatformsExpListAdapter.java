@@ -56,15 +56,24 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		WheresMyTrain w = WheresMyTrain.INSTANCE;
+		int textColour = w.getTextColour();
 		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
+		
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.child_layout, null);
 		}
 		TextView tvDest = (TextView) convertView.findViewById(R.id.tvDestination);
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
+		tvDest.setTextColor(textColour);
+		tvTime.setTextColor(textColour);
 		tvDest.setText(train.destination);
-		tvTime.setText(train.timeto);
+		if (train.timeto.equals("-")) {
+			tvTime.setText("Waiting");
+		} else {
+			tvTime.setText(train.timeto);			
+		}
 		return convertView;
 	}
 

@@ -12,6 +12,7 @@
     <string name="line_status">LineStatus</string>
     <!-- An optional part for URL of station or line status calls -->
     <string name="incidents_only">IncidentsOnly</string>
+
     <!-- Useful codes for checking status of trains or lines -->
     <!-- If Train's D value is this, it is out of service -->
     <string name="out_of_service_train">546</string>

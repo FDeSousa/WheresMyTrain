@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="45dip"
     android:weightSum="1.0"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="#ffffffff" >
 
     <TextView
         android:id="@+id/tvDestination"
@@ -15,7 +16,7 @@
         android:paddingRight="5dip"
         android:text="Children"
         android:textColor="#ffCCCC22"
-        android:textSize="17dip"
+        android:textSize="15dip"
         android:textStyle="bold" />
     
     <TextView
@@ -28,7 +29,7 @@
         android:paddingRight="5dip"
         android:text="Children"
         android:textColor="#ffCCCC22"
-        android:textSize="17dip"
+        android:textSize="15dip"
         android:textStyle="bold" />
 
 </LinearLayout>
