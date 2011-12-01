@@ -30,56 +30,98 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class WheresMyTrain extends Activity {
+	//	Useful logging variables
+	/**	Tag to be used when Logging an exception/error/anything at all							*/
 	public static final String TAG = "WheresMyTrain";
+	/**	Current instance of this activity. Quick and dirty access to resources, context, etc.	*/
 	public static WheresMyTrain INSTANCE;
 
+	//	Fonts to use for all text
+	/**	Quicksand Book font to be used for standard dialogs and text, not bold, not italic		*/
 	public Typeface book;
+	/**	Quicksand Bold font to be used for headers, extra emphasis. Bold as name suggests		*/
 	public Typeface bold;
 
+	//	Main view widgets
+	/**	Spinner used for selecting Underground Line - colour-coded text choices					*/
 	private Spinner linesSpinner;
+	/**	Spinner used for selecting tube station from the given Line - colour-coded by Line		*/
 	private Spinner stationsSpinner;
+	/**	Expandable List used for display Platforms and predicted Trains' destination and timing	*/
 	private ExpandableListView predictionsList;
+
+	//	Custom title bar widgets
+	/**	View instance for the custom Title bar. Useful for changing background colours.
+	 *	As it is only used for changing background colour, which is generic to all Views,
+	 *	we save the type-casting calling for that
+	 */
+	private View titleBar;
+	/**	TextView isntance for the line textview in our custom title bar							*/
+	private TextView lineTitle;
+	/**	TextView isntance for the station textview in our custom title bar						*/
+	private TextView stationTitle;
+	
+	//	JSON reading related instances
+	/**	Private instance of TflJsonReader for fetching and parsing JSON requests				*/
+	private TflJsonReader mJsonR;
+	/**	Instance of the currently selected Line for rapid access to code, name and stations		*/
 	private SLLine line;
+	/**	Instance of the currently selected Station for rapid access to code and name			*/
 	private SLStation station;
+	
+	//	Anything else
+	/**	Current text colour for on-screen widgets to use. Dependant upon the current Line		*/
 	private int textColour;
+	/**	Simple boolean for determining whether the Custom Title bar window feature is enabled	*/
+	private boolean customTitleBarSupported;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//	Requesting window features must be done before anything else, so do it now
+		customTitleBarSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.detailed_predictions);
 
+		instantiateVariables();
+		setupSpinners();
+		if (customTitleBarSupported) setupCustomTitleBar();
+	}
+
+	private void instantiateVariables() {
 		INSTANCE = this;
+
+		mJsonR = new TflJsonReader(getCacheDir());
+		//	Send the request to prepare the JSON data while other stuff goes on
+		mJsonR.prepareStationsList();
+
 		book = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Book.otf");
 		bold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Bold.otf");
-		
 
-		final TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
-		//	Send the request to prepare the JSON data
-		mJsonR.prepareStationsList();
+		//	For safety, since Bakerloo is shown first, use Bakerloo colours to initialise
+		textColour = getResources().getColor(R.color.bakerloo_colour);
 
 		//	Initialise the display widgets
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
+	}
 
+	private void setupSpinners() {
 		//	Get the prepared JSON data now to fill the spinners
 		SLContainer sList = mJsonR.getStationsList();
 		//	Displays stylised list of TfL lines
 		LinesSpinnerAdapter mLineAdapter = new LinesSpinnerAdapter(sList.lines);
 		linesSpinner.setAdapter(mLineAdapter);
-
-		//	On initialisation, when setting colours, Waterloo & City line colours are used first
-		//+ as textColour is changed when filling the Lines spinner, reset colour here
-		//+	For safety, since Bakerloo is shown first, use Bakerloo colours
-		textColour = getResources().getColor(R.color.bakerloo_colour);
 
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -107,12 +149,34 @@ public class WheresMyTrain extends Activity {
 				//+ per Detailed Predictions request, but places it into an array.
 				PlatformsExpListAdapter platformsList = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);
 				predictionsList.setAdapter(platformsList);
+				//	Edit the title bar every time station is changed to reflect the changes
+				if (customTitleBarSupported) editTitleBar();
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 				// Do nothing	
 			}
 		});
+	}
+	
+	private void setupCustomTitleBar() {
+		//	Setup the custom title bar
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
+		//	Get the widget instances
+		titleBar = findViewById(R.id.custom_title_bar);
+		lineTitle = (TextView) findViewById(R.id.text_line);
+		stationTitle = (TextView) findViewById(R.id.text_station);
+		//	Set colours and text of widgets
+		titleBar.setBackgroundColor(textColour);
+		if (line != null) lineTitle.setText(line.linename);
+		if (station != null) stationTitle.setText(station.stationname);
+	}
+	
+	private void editTitleBar() {
+		//	Set colours and text of widgets
+		if (line != null) lineTitle.setText(line.linename);
+		if (station != null) stationTitle.setText(station.stationname);
+		titleBar.setBackgroundColor(textColour);
 	}
 
 	/**
@@ -126,31 +190,21 @@ public class WheresMyTrain extends Activity {
 	public int getLineColour(String linecode) {
 		Resources r = getResources();
 		int colour = 0;
-		
-		if (linecode.equalsIgnoreCase("b"))
-			colour = r.getColor(R.color.bakerloo_colour);
-		else if (linecode.equalsIgnoreCase("c"))
-			colour = r.getColor(R.color.central_colour);
-		else if (linecode.equalsIgnoreCase("d"))
-			colour = r.getColor(R.color.district_colour);
-		else if (linecode.equalsIgnoreCase("h"))
-			colour = r.getColor(R.color.hammersmith_colour);
-		else if (linecode.equalsIgnoreCase("j"))
-			colour = r.getColor(R.color.jubilee_colour);
-		else if (linecode.equalsIgnoreCase("m"))
-			colour = r.getColor(R.color.metropolitan_colour);
-		else if (linecode.equalsIgnoreCase("n"))
-			colour = r.getColor(R.color.northern_colour);
-		else if (linecode.equalsIgnoreCase("p"))
-			colour = r.getColor(R.color.piccadilly_colour);
-		else if (linecode.equalsIgnoreCase("v"))
-			colour = r.getColor(R.color.victoria_colour);
-		else if (linecode.equalsIgnoreCase("w"))
-			colour = r.getColor(R.color.waterloo_colour);
-		
+
+		if (linecode.equals("b"))		colour = r.getColor(R.color.bakerloo_colour);
+		else if (linecode.equals("c"))	colour = r.getColor(R.color.central_colour);
+		else if (linecode.equals("d"))	colour = r.getColor(R.color.district_colour);
+		else if (linecode.equals("h"))	colour = r.getColor(R.color.hammersmith_colour);
+		else if (linecode.equals("j"))	colour = r.getColor(R.color.jubilee_colour);
+		else if (linecode.equals("m"))	colour = r.getColor(R.color.metropolitan_colour);
+		else if (linecode.equals("n"))	colour = r.getColor(R.color.northern_colour);
+		else if (linecode.equals("p"))	colour = r.getColor(R.color.piccadilly_colour);
+		else if (linecode.equals("v"))	colour = r.getColor(R.color.victoria_colour);
+		else if (linecode.equals("w"))	colour = r.getColor(R.color.waterloo_colour);
+
 		return colour;
 	}
-	
+
 	public int getTextColour() {
 		return textColour;
 	}
