@@ -14,7 +14,6 @@
         android:paddingRight="5dip"
         android:text="Groups"
         android:textColor="#ff000000"
-        android:textSize="17dip"
-        android:textStyle="bold" />
+        android:textSize="17dip" />
 
 </LinearLayout>

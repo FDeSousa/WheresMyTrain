@@ -16,8 +16,7 @@
         android:paddingRight="5dip"
         android:text="Children"
         android:textColor="#ffCCCC22"
-        android:textSize="15dip"
-        android:textStyle="bold" />
+        android:textSize="15dip" />
     
     <TextView
         android:id="@+id/tvTimeTo"
@@ -29,7 +28,6 @@
         android:paddingRight="5dip"
         android:text="Children"
         android:textColor="#ffCCCC22"
-        android:textSize="15dip"
-        android:textStyle="bold" />
+        android:textSize="15dip" />
 
 </LinearLayout>

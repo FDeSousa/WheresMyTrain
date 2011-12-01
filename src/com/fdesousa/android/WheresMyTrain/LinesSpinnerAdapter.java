@@ -76,6 +76,7 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 		int colour = w.getLineColour(line.linecode);
 		tv.setTextColor(colour);
+		tv.setTypeface(w.book);
 		tv.setText(line.linename);
 		
 		return convertView;

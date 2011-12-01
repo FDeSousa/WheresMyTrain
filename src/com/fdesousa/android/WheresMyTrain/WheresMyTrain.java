@@ -38,7 +38,10 @@ import android.widget.Toast;
 public class WheresMyTrain extends Activity {
 	public static final String TAG = "WheresMyTrain";
 	public static WheresMyTrain INSTANCE;
-	public Typeface typeface;
+
+	public Typeface book;
+	public Typeface bold;
+
 	private Spinner linesSpinner;
 	private Spinner stationsSpinner;
 	private ExpandableListView predictionsList;
@@ -51,11 +54,12 @@ public class WheresMyTrain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		INSTANCE = this;
-		typeface = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Book.otf");
-		
-		//	Now try out the second interface layout. Two spinners, one expandable list
 		setContentView(R.layout.detailed_predictions);
+
+		INSTANCE = this;
+		book = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Book.otf");
+		bold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Bold.otf");
+		
 
 		final TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 		//	Send the request to prepare the JSON data

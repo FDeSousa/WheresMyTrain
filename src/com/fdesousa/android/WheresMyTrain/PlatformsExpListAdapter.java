@@ -66,12 +66,12 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tvDest = (TextView) convertView.findViewById(R.id.tvDestination);
 		tvDest.setTextColor(textColour);
-		tvDest.setTypeface(w.typeface);
+		tvDest.setTypeface(w.book);
 		tvDest.setText(train.destination);
 
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
 		tvTime.setTextColor(textColour);
-		tvTime.setTypeface(w.typeface);
+		tvTime.setTypeface(w.bold);
 		if (train.timeto.equals("-")) {
 			tvTime.setText("Waiting");
 		} else {
@@ -103,13 +103,14 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		WheresMyTrain w = WheresMyTrain.INSTANCE;
 		DPPlatform platform = (DPPlatform) getGroup(groupPosition);
 		if (convertView == null) {
-			LayoutInflater inflator = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflator = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflator.inflate(R.layout.group_layout, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.tvGroup);
-		tv.setTypeface(WheresMyTrain.INSTANCE.typeface);
+		tv.setTypeface(w.bold);
 		tv.setText(platform.platformname);
 		
 		return convertView;

@@ -79,7 +79,7 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 
         tv.setTextColor(colour);
-        tv.setTypeface(w.typeface);
+        tv.setTypeface(w.book);
         tv.setText(station.stationname);
 
         return convertView;
