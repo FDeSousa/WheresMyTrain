@@ -25,7 +25,6 @@ import com.fdesousa.android.WheresMyTrain.json.StationsList.SLStation;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +79,9 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 
         tv.setTextColor(colour);
+        tv.setTypeface(w.typeface);
         tv.setText(station.stationname);
+
         return convertView;
 	}
 

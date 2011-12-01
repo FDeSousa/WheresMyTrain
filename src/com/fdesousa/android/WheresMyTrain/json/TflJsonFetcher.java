@@ -1,4 +1,4 @@
-package com.fdesousa.android.WheresMyTrain.json.DetailedPredictions;
+package com.fdesousa.android.WheresMyTrain.json;
 
 /*****************************************************************************************************
  *	Copyright (c) 2011 Filipe De Sousa
@@ -19,32 +19,33 @@ package com.fdesousa.android.WheresMyTrain.json.DetailedPredictions;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
-import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
-import com.google.gson.Gson;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 
-public class DPHandler extends TflJsonHandler {
-	private DPContainer detailedpredictions;
+public class TflJsonFetcher {
 
 	/**
-	 * Constructor. Sets the URI of the request
+	 * Utility method for fetching an InputStream from a designated URI
+	 * and returning it for processing.<br/>
+	 * Static method to aide in easy, wide-spread use
 	 * @param uri - the URI of the data to fetch
+	 * @return InputStream containing the response of the request
+	 * @throws IllegalStateException - in case of a problem, or if connection was aborted
+	 * @throws IOException - if the stream could not be created
 	 */
-	public DPHandler(URI uri) {
-		super(uri);
-	}
+	public static InputStream fetchNewJson(URI uri) throws IllegalStateException, IOException {
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(uri);
+		HttpResponse httpresponse = httpclient.execute(httppost);
+		HttpEntity entity = httpresponse.getEntity();
 
-	/**
-	 * Simple getter, return the container the JSON was parsed into
-	 * @return New DPContainer instance with the fetched data
-	 */
-	public Object getContainer() {
-		return detailedpredictions;
-	}
-
-	@Override
-	protected void parseJson() {
-		detailedpredictions = new Gson().fromJson(json, DPContainer.class);
+		return entity.getContent();
 	}
 }

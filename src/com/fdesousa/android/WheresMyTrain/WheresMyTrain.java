@@ -27,7 +27,7 @@ import com.fdesousa.android.WheresMyTrain.json.StationsList.SLStation;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,6 +38,7 @@ import android.widget.Toast;
 public class WheresMyTrain extends Activity {
 	public static final String TAG = "WheresMyTrain";
 	public static WheresMyTrain INSTANCE;
+	public Typeface typeface;
 	private Spinner linesSpinner;
 	private Spinner stationsSpinner;
 	private ExpandableListView predictionsList;
@@ -50,21 +51,24 @@ public class WheresMyTrain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		INSTANCE = this;
+		typeface = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Book.otf");
+		
 		//	Now try out the second interface layout. Two spinners, one expandable list
 		setContentView(R.layout.detailed_predictions);
 
-		INSTANCE = this;
-
 		final TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
-
-		SLContainer sList = mJsonR.getStationsList();
+		//	Send the request to prepare the JSON data
+		mJsonR.prepareStationsList();
 
 		//	Initialise the display widgets
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
 
-		//	Displays unstylized list of TfL lines
+		//	Get the prepared JSON data now to fill the spinners
+		SLContainer sList = mJsonR.getStationsList();
+		//	Displays stylised list of TfL lines
 		LinesSpinnerAdapter mLineAdapter = new LinesSpinnerAdapter(sList.lines);
 		linesSpinner.setAdapter(mLineAdapter);
 
@@ -93,7 +97,8 @@ public class WheresMyTrain extends Activity {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				DPContainer sPredictions = mJsonR.getPredictionsDetailed(line.linecode, station.stationcode);
+				mJsonR.preparePredictionsDetailed(line.linecode, station.stationcode);
+				DPContainer sPredictions = mJsonR.getPredictionsDetailed();
 				//	Always get the first element in sPredictions.stations as tfl.php only includes 1 station
 				//+ per Detailed Predictions request, but places it into an array.
 				PlatformsExpListAdapter platformsList = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);

@@ -37,9 +37,9 @@ import android.widget.TextView;
  *
  */
 public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
-	
+
 	private List<DPPlatform> platforms;
-	
+
 	public PlatformsExpListAdapter(List<DPPlatform> platforms) {
 		this.platforms = platforms;
 	}
@@ -59,21 +59,25 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		WheresMyTrain w = WheresMyTrain.INSTANCE;
 		int textColour = w.getTextColour();
 		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
-		
+
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.child_layout, null);
+			convertView = inflater.inflate(R.layout.child_layout, null);
 		}
 		TextView tvDest = (TextView) convertView.findViewById(R.id.tvDestination);
-		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
 		tvDest.setTextColor(textColour);
-		tvTime.setTextColor(textColour);
+		tvDest.setTypeface(w.typeface);
 		tvDest.setText(train.destination);
+
+		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
+		tvTime.setTextColor(textColour);
+		tvTime.setTypeface(w.typeface);
 		if (train.timeto.equals("-")) {
 			tvTime.setText("Waiting");
 		} else {
 			tvTime.setText(train.timeto);			
 		}
+
 		return convertView;
 	}
 
@@ -105,18 +109,20 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 			convertView = inflator.inflate(R.layout.group_layout, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.tvGroup);
+		tv.setTypeface(WheresMyTrain.INSTANCE.typeface);
 		tv.setText(platform.platformname);
+		
 		return convertView;
 	}
 
 	@Override
 	public boolean hasStableIds() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return true;
+		return false;
 	}
 
 }

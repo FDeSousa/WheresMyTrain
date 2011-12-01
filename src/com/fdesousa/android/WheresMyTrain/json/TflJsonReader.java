@@ -30,8 +30,14 @@ import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.information.Station;
 import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPContainer;
 import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPHandler;
+import com.fdesousa.android.WheresMyTrain.json.LineStatus.LSContainer;
+import com.fdesousa.android.WheresMyTrain.json.LineStatus.LSHandler;
+import com.fdesousa.android.WheresMyTrain.json.StationStatus.SSContainer;
+import com.fdesousa.android.WheresMyTrain.json.StationStatus.SSHandler;
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLContainer;
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLHandler;
+import com.fdesousa.android.WheresMyTrain.json.SummaryPredictions.SPContainer;
+import com.fdesousa.android.WheresMyTrain.json.SummaryPredictions.SPHandler;
 
 /**
  * Complete class to automate sending a request, parsing the response JSON.
@@ -42,10 +48,17 @@ import com.fdesousa.android.WheresMyTrain.json.StationsList.SLHandler;
  */
 @SuppressWarnings("unused")
 public class TflJsonReader {
-	/**	Convenient definitions of the dividers for URL and its arguments				*/
-	private static final char QUERY = '?';
-	private static final char ARG_DIV = '&';
+	//	Diagnostic values, useful for other classes, hence public
+	/**	Value representing "out of service", provided in destcode value					*/
+	public static final String OUT_OF_SERVICE = "546";
+	/**	Value representing "no trip", provided in tripno value							*/
+	public static final String NO_TRIP = "255";
 
+	//	Internal query values, only useful in this class, hence private
+	/**	URL divider for beginning of Query arguments									*/
+	private static final char QUERY = '?';
+	/**	URL divider of URL arguments, to be used after Query marker						*/
+	private static final char ARG_DIV = '&';
 	/**	The base URL used for all TfL requests											*/
 	private static final String BASE_URL = "http://trains.desousa.com.pt/tfl.php";
 	/**	The base for the request type URL argument										*/
@@ -69,14 +82,16 @@ public class TflJsonReader {
 	/**	Useful String value that evaluates to true in PHP when type-casting to boolean	*/
 	private static final String PHP_TRUE_VALUE = "1";
 
-	/**	Value representing "out of service", provided in destcode value					*/
-	public static final String OUT_OF_SERVICE = "546";
-	/**	Value representing "no trip", provided in tripno value							*/
-	public static final String NO_TRIP = "255";
-	
+	//	Private instances that should not be revealed directly to other classes
 	/**	File pointing to the application's cache folder									*/
 	private final File cacheDir;
+	/**	Instance of TflJsonHandler for fetching and parsing JSON requests				*/
+	private TflJsonHandler handler;
 
+	/**
+	 * Very basic constructor, just sets the cache directory's location
+	 * @param cacheDir - File instance pointing to application's cache directory
+	 */
 	public TflJsonReader(File cacheDir) {
 		this.cacheDir = cacheDir;
 	}
@@ -105,88 +120,123 @@ public class TflJsonReader {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Method for handling getting detailed predictions of trains at a specific
-	 * station on a specific line
-	 * @param line - the desired London Underground line's unique identifier
-	 * @param station - the desired London Underground station's unique identifier
+	 * Convenience method, simply joins to the handler's Thread, logs any
+	 * interruption that might occur.
 	 */
-	public DPContainer getPredictionsDetailed(final String line, final String station) {
+	private void stopHandler() {
+		//	Wait for thread to finish before returning
+		try {
+			handler.join();
+		} catch (InterruptedException e) {
+			Log.e(WheresMyTrain.TAG, e.getMessage());
+		}
+	}
+
+	//	Detailed Predictions methods
+	/**
+	 * Utility method to begin preparations of Detailed Predictions.<br/>
+	 * Makes the URI, instantiates the handler, starts new Thread.
+	 * @param line - the unique line code for the request
+	 * @param station - the unique station code for the request
+	 */
+	public void preparePredictionsDetailed(final String line, final String station) {
 		//	Parses String "PredictionDetailed/line/station"
 		URI uri = makeUri(PREDICTION_DETAILED, line, station, false);
 		//	Instantiate, set the newest URI to fetch and parse
-		DPHandler predictions = new DPHandler().setUri(uri);
+		handler = new DPHandler(uri);
 		//	Start the thread for fetching and parsing
-		predictions.start();
-		//	Wait for thread to finish before returning
-		try {
-			predictions.join();
-		} catch (InterruptedException e) {
-			Log.e(WheresMyTrain.TAG, e.getMessage());
-		}
-		
-		return predictions.getDPContainer();
+		handler.start();
 	}
 
 	/**
-	 * Method for handling getting summary predictions of trains on a specific line
-	 * @param line - the desired London Underground line's unique identifier
-	 * @return 
+	 * Method to return the results obtained from the request.
+	 * Type-casted for convenience.
 	 */
-	public List<Station> getPredictionsSummary(final String line) {
+	public DPContainer getPredictionsDetailed() {
+		stopHandler();
+		return (DPContainer) handler.getContainer();
+	}
+
+	//	Summary Predictions methods
+	/**
+	 * Utility method to begin preparations of Detailed Predictions.<br/>
+	 * Makes the URI, instantiates the handler, starts new Thread.
+	 * @param line - the unique line code for the request
+	 * @param station - the unique station code for the request
+	 */
+	public void preparePredictionsSummary(final String line) {
 		//	Parses String "PredictionSummary/line"
 		URI uri = makeUri(PREDICTION_SUMMARY, line, null, false);
-
-		List<Station> stations = null;
-		
-		return stations;
+		handler = new SPHandler(uri);
+		handler.start();
 	}
 
 	/**
-	 * Method for handling getting station status for all London Underground stations,
-	 * and optionally only for stations with incidents flagged
-	 * @param incidentsOnly - true for status only from stations with incidents, false otherwise
-	 * @return 
+	 * Method to return the results obtained from the request.
+	 * Type-casted for convenience.
 	 */
-	public List<Station> getStationStatus(final boolean incidentsOnly) {
-		//	Conditional assignment, parses String "StationStatus/IncidentsOnly" if incidentsOnly
-		//+	is true, or parses String "StationStatus" if incidentsOnly is false
-		URI uri = makeUri(STATION_STATUS, null, null, incidentsOnly);
-
-		List<Station> stations = null;
-		
-		return stations;
+	public SPContainer getPredictionsSummary(final String line) {
+		stopHandler();
+		return (SPContainer) handler.getContainer();
 	}
 
+	//	Station Status methods
 	/**
-	 * Method for handling getting line status for a specific London Underground line,
-	 * and optionally only for lines with incidents flagged
-	 * @param line - the desired London Underground line's unique identifier
-	 * @param incidentsOnly - true for status only from stations with incidents, false otherwise
-	 * @return 
+	 * Utility method to begin preparations of Station Status.<br/>
+	 * Makes the URI, instantiates the handler, starts new Thread.
 	 */
-	public List<Station> getLineStatus(final boolean incidentsOnly) {
-		//	Conditional assignment, parses String "LineStatus/IncidentsOnly" if incidentsOnly
-		//+	is true, or parses String "LineStatus" if incidentsOnly is false
+	public void prepareStationStatus(final boolean incidentsOnly) {
 		URI uri = makeUri(LINE_STATUS, null, null, incidentsOnly);
-
-		List<Station> stations = null;
-		
-		return stations;
+		handler = new SSHandler(uri);
+		handler.start();
 	}
-	
-	public SLContainer getStationsList() {
+	/**
+	 * Method to return the results obtained from the request.
+	 * Type-casted for convenience.
+	 */
+	public SSContainer getStationStatus() {
+		stopHandler();
+		return (SSContainer) handler.getContainer();
+	}
+
+	//	Line Status methods
+	/**
+	 * Utility method to begin preparations of Line Status.<br/>
+	 * Makes the URI, instantiates the handler, starts new Thread.
+	 */
+	public void prepareLineStatus(final boolean incidentsOnly) {
+		URI uri = makeUri(LINE_STATUS, null, null, incidentsOnly);
+		handler = new LSHandler(uri);
+		handler.start();
+	}
+	/**
+	 * Method to return the results obtained from the request.
+	 * Type-casted for convenience.
+	 */
+	public LSContainer getLineStatus() {
+		stopHandler();
+		return (LSContainer) handler.getContainer();
+	}
+
+	//	Stations List methods
+	/**
+	 * Utility method to begin preparations of Stations List.<br/>
+	 * Makes the URI, instantiates the handler, starts new Thread.
+	 */
+	public void prepareStationsList() {
 		URI uri = makeUri(STATIONS_LIST, null, null, false);
+		handler = new SLHandler(cacheDir, uri);
+		handler.start();		
+	}
 
-		SLHandler stationslist = new SLHandler(cacheDir).setUri(uri);
-		stationslist.start();
-		try {
-			stationslist.join();
-		} catch (InterruptedException e) {
-			Log.e(WheresMyTrain.TAG, e.getMessage());
-		}
-
-		return stationslist.getSLContainer();
+	/**
+	 * Method to return the results obtained from the request.
+	 * Type-casted for convenience.
+	 */
+	public SLContainer getStationsList() {
+		stopHandler();
+		return (SLContainer) handler.getContainer();
 	}
 }

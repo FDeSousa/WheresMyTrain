@@ -27,37 +27,31 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.util.Log;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
-public class SLHandler extends Thread {
+public class SLHandler extends TflJsonHandler {
 	private SLContainer stationslist;
-	private URI uri;
 	private File cacheFile;
 
-	public SLHandler(File cacheDir) {
+	/**
+	 * Constructor. Sets the URI of the request, and the cache file location
+	 * @param cacheDir - File instance for the application's cache directory
+	 * @param uri - the URI of the data to fetch
+	 */
+	public SLHandler(File cacheDir, URI uri) {
+		super(uri);
 		cacheFile = new File(cacheDir, "stationslist.json");
 	}
 
-	public SLContainer getSLContainer() {
-		return stationslist;
-	}
-
 	/**
-	 * Convenience method to set the URI. Can use in method chaining
-	 * @param uri - the URI of the data to fetch
-	 * @return this instance - for method chaining
+	 * Simple getter, return the container the JSON was parsed into
+	 * @return New SLContainer instance with the fetched data
 	 */
-	public SLHandler setUri(URI uri) {
-		this.uri = uri;
-		return this;
+	public Object getContainer() {
+		return stationslist;
 	}
 
 	/**
@@ -69,74 +63,53 @@ public class SLHandler extends Thread {
 	 */
 	@Override
 	public void run() {
-		String json = "";
-		InputStreamReader in = null;
-		//	Check the cache file exists and is recent enough first (7 days in milliseconds: 604800000)
 		if (cacheFile.exists() && System.currentTimeMillis() - cacheFile.lastModified() < 604800000) {
-			try {
-				//	Get an InputStreamReader for the file input, get the JSON string from there
-				in = new InputStreamReader(new FileInputStream(cacheFile));
-				json = stringFromInputStream(in);
-			} catch (FileNotFoundException e) {
-				//	Exception? How odd, we checked the file exists. Log it, silently ignore
-				Log.e(WheresMyTrain.TAG, e.getMessage());
-			}
-		//	If not, grab the newest copy from the server for later use
+			//	Check the cache file exists and is recent enough first (7 days in milliseconds: 604800000)
+			json = fetchJsonFromCache();
 		} else {
-			try {
-				//	Get the response from the request into InputStreamReader
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpPost httppost = new HttpPost(uri);
-				HttpResponse httpresponse = httpclient.execute(httppost);
-				HttpEntity entity = httpresponse.getEntity();
-				in = new InputStreamReader(entity.getContent());
-			} catch (IllegalStateException e) {
-				Log.e(WheresMyTrain.TAG, e.getMessage());
-				WheresMyTrain.displayToast("Problem fetching the data");
-			} catch (IOException e) {
-				Log.e(WheresMyTrain.TAG, e.getMessage());
-				WheresMyTrain.displayToast("Problem opening the data");
-			} finally {
-				//	Get the InputStreamReader into String
-				json = stringFromInputStream(in);
-				try {
-					//	Write out a new cache, since the old one wasn't valid
-					final BufferedWriter out = new BufferedWriter(new FileWriter(cacheFile), 2048);
-					out.write(json);
-					out.close();
-				} catch (IOException e) {
-					//	Exception? Log it, silently ignore it
-					Log.e(WheresMyTrain.TAG, e.getMessage());
-				}
-			}
+			//	If not, grab the newest copy from the server for parsing
+			json = fetchJson();
+			//	Save that JSON to a cache file
+			writeJsonToCache();
 		}
-		try {
-			//	Try to safely close the InputStream now
-			in.close();
-		} catch (IOException e) {
-			// Can't close the InputStreamReader, log it, silently ignore
-			Log.e(WheresMyTrain.TAG, e.getMessage());
-		}
-		
-		//	We have the String instantiated now with the response JSON, so parse it
+		//	Time to parse that JSON!
+		parseJson();
+	}
+
+	@Override
+	protected void parseJson() {
 		stationslist = new Gson().fromJson(json, SLContainer.class);
 	}
-	
-	private String stringFromInputStream(InputStreamReader in) {
-		int BUFFER_SIZE = 8192;
-		char[] buffer = new char[BUFFER_SIZE];
-		StringBuilder out = new StringBuilder(BUFFER_SIZE);
-		
+
+	private String fetchJsonFromCache() {
+		InputStreamReader in = null;
+
 		try {
-			for (int read = in.read(buffer, 0, BUFFER_SIZE); read != -1;
-					read = in.read(buffer, 0, BUFFER_SIZE)) {
-				out.append(buffer, 0, read);
-			}
-		} catch (IOException e) {
-			// Silently ignore, just log the error
+			//	Get an InputStreamReader for the file input, get the JSON string from there
+			in = new InputStreamReader(new FileInputStream(cacheFile));
+		} catch (FileNotFoundException e) {
+			//	Exception? How odd, we checked the file exists. Log it, silently ignore
 			Log.e(WheresMyTrain.TAG, e.getMessage());
 		}
-		
-		return out.toString();
+
+		return stringFromInputStream(in);
+	}
+
+	private void writeJsonToCache() {
+		try {
+			/*
+			 *	Write out a new cache, since the old one wasn't valid
+			 *	This is the reason why two identical lines exist:
+			 *	json = stringFromInputStream(in);
+			 *	If there was no need to save the json string into cache,
+			 *	this line would need calling only once
+			 */
+			final BufferedWriter out = new BufferedWriter(new FileWriter(cacheFile), 2048);
+			out.write(json);
+			out.close();
+		} catch (IOException e) {
+			//	Exception? Log it, silently ignore it
+			Log.e(WheresMyTrain.TAG, e.getMessage());
+		}
 	}
 }

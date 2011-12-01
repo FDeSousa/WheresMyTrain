@@ -24,9 +24,7 @@ import java.util.List;
 import com.fdesousa.android.WheresMyTrain.json.StationsList.SLLine;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +88,7 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 
 	@Override
 	public boolean hasStableIds() {
-		return false;
+		return true;
 	}
 
 	@Override

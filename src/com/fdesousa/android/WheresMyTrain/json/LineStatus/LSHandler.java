@@ -1,4 +1,4 @@
-package com.fdesousa.android.WheresMyTrain.json.DetailedPredictions;
+package com.fdesousa.android.WheresMyTrain.json.LineStatus;
 
 /*****************************************************************************************************
  *	Copyright (c) 2011 Filipe De Sousa
@@ -24,27 +24,27 @@ import java.net.URI;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
-public class DPHandler extends TflJsonHandler {
-	private DPContainer detailedpredictions;
+public class LSHandler extends TflJsonHandler {
+	private LSContainer linesstatus;
 
 	/**
 	 * Constructor. Sets the URI of the request
 	 * @param uri - the URI of the data to fetch
 	 */
-	public DPHandler(URI uri) {
+	public LSHandler(URI uri) {
 		super(uri);
 	}
 
 	/**
 	 * Simple getter, return the container the JSON was parsed into
-	 * @return New DPContainer instance with the fetched data
+	 * @return New SPContainer instance with the fetched data
 	 */
 	public Object getContainer() {
-		return detailedpredictions;
+		return linesstatus;
 	}
 
 	@Override
 	protected void parseJson() {
-		detailedpredictions = new Gson().fromJson(json, DPContainer.class);
+		linesstatus = new Gson().fromJson(json, LSContainer.class);
 	}
 }
