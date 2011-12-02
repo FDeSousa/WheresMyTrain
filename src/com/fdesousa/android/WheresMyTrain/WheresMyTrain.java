@@ -31,6 +31,7 @@ import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,7 +64,7 @@ public class WheresMyTrain extends Activity {
 	private Spinner stationsSpinner;
 	/**	Expandable List used for display Platforms and predicted Trains' destination and timing	*/
 	private ExpandableListView predictionsList;
-	
+
 	//	Adapters for Spinners and ExpandableListView widgets
 	/**	Instance of the Adapter for LinesSpinner												*/
 	private LinesSpinnerAdapter mLineAdapter;
@@ -82,7 +83,7 @@ public class WheresMyTrain extends Activity {
 	private TextView lineTitle;
 	/**	TextView isntance for the station textview in our custom title bar						*/
 	private TextView stationTitle;
-	
+
 	//	JSON reading related instances
 	/**	Private instance of TflJsonReader for fetching and parsing JSON requests				*/
 	private TflJsonReader mJsonR;
@@ -90,7 +91,7 @@ public class WheresMyTrain extends Activity {
 	private SLLine line;
 	/**	Instance of the currently selected Station for rapid access to code and name			*/
 	private SLStation station;
-	
+
 	//	Anything else
 	/**	Current text colour for on-screen widgets to use. Dependant upon the current Line		*/
 	private int textColour;
@@ -110,32 +111,34 @@ public class WheresMyTrain extends Activity {
 		setupSpinners();
 		if (customTitleBarSupported) setupCustomTitleBar();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater mInflater = getMenuInflater();
 		mInflater.inflate(R.menu.menu, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.more:
 		case R.id.set_default:
 		case R.id.refresh:
-			refreshPredictions();
+			new RefreshPredictions().execute();
 			break;
 		}
 		return true;
 	}
 
+	/**
+	 * Convenience method to setup variables in the onCreate.<br/>
+	 * Makes onCreate tidier to look at
+	 */
 	private void instantiateVariables() {
 		INSTANCE = this;
 
 		mJsonR = new TflJsonReader(getCacheDir());
-		//	Send the request to prepare the JSON data while other stuff goes on
-		mJsonR.prepareStationsList();
 
 		book = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Book.otf");
 		bold = Typeface.createFromAsset(getAssets(), "fonts/Quicksand_Bold.otf");
@@ -148,16 +151,15 @@ public class WheresMyTrain extends Activity {
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
 
-		//	Get the prepared JSON data now to fill the spinners
-		SLContainer sList = mJsonR.getStationsList();
-
-		//	Initialise the adapters
-		mLineAdapter = new LinesSpinnerAdapter(sList.lines);
 	}
 
+	/**
+	 * Convenience method to setup the Spinners in the onCreate.<br/>
+	 * Makes onCreate tidier to look at
+	 */
 	private void setupSpinners() {
-		//	Set the adapters onto the Lines Spinner
-		linesSpinner.setAdapter(mLineAdapter);
+		//	Call an Asynchronous Task to instantiate the Stations List
+		new PrepareStationsList().execute();
 
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -178,7 +180,7 @@ public class WheresMyTrain extends Activity {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				refreshPredictions();
+				new RefreshPredictions().execute();
 				//	Edit the title bar every time station is changed to reflect the changes
 				if (customTitleBarSupported) refreshTitleBar();
 			}
@@ -186,16 +188,56 @@ public class WheresMyTrain extends Activity {
 			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 	}
-	
-	private void refreshPredictions() {
-		mJsonR.preparePredictionsDetailed(line.linecode, station.stationcode);
-		DPContainer sPredictions = mJsonR.getPredictionsDetailed();
-		//	Because of how tfl.php sends predictions data, there is only ever ONE station in stations array
-		mPlatformAdapter = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);
-		//	(Re)set the adapter onto the ExpandableListView
-		predictionsList.setAdapter(mPlatformAdapter);
+
+	/**
+	 * AsyncTask sub-class to achieve a non-blocking manner in which to get the stations list,
+	 * even if the internet connection is a little bit slow on the mobile side.<br/>
+	 * Stations List can sometimes take several seconds to process on the server-side alone,
+	 * for which amount of time, the UI thread would be blocked otherwise.<br/>
+	 * Will not block the UI thread, which is the important part.
+	 * @author Filipe De Sousa
+	 */
+	private class PrepareStationsList extends AsyncTask<Void, Void, SLContainer> {
+		@Override
+		protected SLContainer doInBackground(Void... params) {
+			//	Send the request to prepare the JSON data while other stuff goes on
+			mJsonR.prepareStationsList();
+			//	Get the prepared JSON data now to fill the spinners
+			return mJsonR.getStationsList();
+		}
+		@Override
+		protected void onPostExecute(SLContainer result) {
+			//	Initialise the Lines Spinner adapter
+			mLineAdapter = new LinesSpinnerAdapter(result.lines);
+			//	Set the adapter onto the Lines Spinner
+			linesSpinner.setAdapter(mLineAdapter);			
+		}
 	}
 	
+	/**
+	 * AsyncTask sub-class to achieve a non-blocking manner in which to get detailed predictions,
+	 * even if the internet connection is a little bit slow on the mobile side.<br/>
+	 * Will not block the UI thread, which is the important part.
+	 * @author Filipe De Sousa
+	 */
+	private class RefreshPredictions extends AsyncTask<Void, Void, DPContainer> {
+		@Override
+		protected DPContainer doInBackground(Void... params) {
+			mJsonR.preparePredictionsDetailed(line.linecode, station.stationcode);
+			return mJsonR.getPredictionsDetailed();
+		}
+		@Override
+		protected void onPostExecute(DPContainer result) {
+			//	Because of how tfl.php sends predictions data, there is only ever ONE station in stations array
+			mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms);
+			//	(Re)set the adapter onto the ExpandableListView
+			predictionsList.setAdapter(mPlatformAdapter);
+		}
+	}
+
+	/**
+	 * Utility method to do the initial instantiation and setup of the custom title bar
+	 */
 	private void setupCustomTitleBar() {
 		//	Setup the custom title bar
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
@@ -207,7 +249,10 @@ public class WheresMyTrain extends Activity {
 		stationTitle.setTypeface(bold);
 		refreshTitleBar();
 	}
-	
+
+	/**
+	 * Convenience method to refresh the text and colour of the title bar
+	 */
 	private void refreshTitleBar() {
 		//	Set colours and text of widgets
 		titleBar.setBackgroundColor(textColour);
@@ -235,6 +280,11 @@ public class WheresMyTrain extends Activity {
 		Toast.makeText(INSTANCE.getApplicationContext(), message, Toast.LENGTH_LONG);
 	}
 
+	/**
+	 * Convenience method to get the right colour for the right train line
+	 * @param linecode - the ID of the train line to find the colour for
+	 * @return the integer colour code for the given train line
+	 */
 	public int getLineColour(String linecode) {
 		Resources r = getResources();
 		int colour = 0;
@@ -253,10 +303,18 @@ public class WheresMyTrain extends Activity {
 		return colour;
 	}
 
+	/**
+	 * Simple getter for text colour
+	 * @return integer value that textColour is set to
+	 */
 	public int getTextColour() {
 		return textColour;
 	}
 
+	/**
+	 * Simple setter for text colour
+	 * @param textColour integer value to set textColour to
+	 */
 	public void setTextColour(int textColour) {
 		this.textColour = textColour;
 	}

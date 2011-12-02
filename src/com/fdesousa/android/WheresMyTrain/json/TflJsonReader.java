@@ -145,6 +145,7 @@ public class TflJsonReader {
 		URI uri = makeUri(PREDICTION_DETAILED, line, station, false);
 		//	Instantiate, set the newest URI to fetch and parse
 		handler = new DPHandler(uri);
+		//	TODO: Replace with AsyncTask for fetching, parsing the data
 		//	Start the thread for fetching and parsing
 		handler.start();
 	}
