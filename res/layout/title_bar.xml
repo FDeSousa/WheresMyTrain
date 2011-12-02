@@ -11,7 +11,8 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center_vertical|left"
         android:layout_weight=".5"
-        android:text="line" />
+        android:text="line"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:id="@+id/text_station"
@@ -19,6 +20,7 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center_vertical|right"
         android:layout_weight=".5"
-        android:text="station" />
+        android:text="station"
+        android:textColor="#ffffffff" />
 
 </LinearLayout>

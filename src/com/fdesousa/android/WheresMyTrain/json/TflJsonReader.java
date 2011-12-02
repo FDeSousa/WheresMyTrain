@@ -27,17 +27,16 @@ import java.util.List;
 import android.util.Log;
 
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.information.Station;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPContainer;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPHandler;
-import com.fdesousa.android.WheresMyTrain.json.LineStatus.LSContainer;
-import com.fdesousa.android.WheresMyTrain.json.LineStatus.LSHandler;
-import com.fdesousa.android.WheresMyTrain.json.StationStatus.SSContainer;
-import com.fdesousa.android.WheresMyTrain.json.StationStatus.SSHandler;
-import com.fdesousa.android.WheresMyTrain.json.StationsList.SLContainer;
-import com.fdesousa.android.WheresMyTrain.json.StationsList.SLHandler;
-import com.fdesousa.android.WheresMyTrain.json.SummaryPredictions.SPContainer;
-import com.fdesousa.android.WheresMyTrain.json.SummaryPredictions.SPHandler;
+import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPContainer;
+import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPHandler;
+import com.fdesousa.android.WheresMyTrain.requests.LineStatus.LSContainer;
+import com.fdesousa.android.WheresMyTrain.requests.LineStatus.LSHandler;
+import com.fdesousa.android.WheresMyTrain.requests.StationStatus.SSContainer;
+import com.fdesousa.android.WheresMyTrain.requests.StationStatus.SSHandler;
+import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
+import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLHandler;
+import com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions.SPContainer;
+import com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions.SPHandler;
 
 /**
  * Complete class to automate sending a request, parsing the response JSON.

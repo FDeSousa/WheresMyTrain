@@ -19,16 +19,22 @@ package com.fdesousa.android.WheresMyTrain;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+import com.fdesousa.android.WheresMyTrain.UiElements.LinesSpinnerAdapter;
+import com.fdesousa.android.WheresMyTrain.UiElements.PlatformsExpListAdapter;
+import com.fdesousa.android.WheresMyTrain.UiElements.StationsSpinnerAdapter;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonReader;
-import com.fdesousa.android.WheresMyTrain.json.DetailedPredictions.DPContainer;
-import com.fdesousa.android.WheresMyTrain.json.StationsList.SLContainer;
-import com.fdesousa.android.WheresMyTrain.json.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.json.StationsList.SLStation;
+import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPContainer;
+import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
+import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
 
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -57,6 +63,14 @@ public class WheresMyTrain extends Activity {
 	private Spinner stationsSpinner;
 	/**	Expandable List used for display Platforms and predicted Trains' destination and timing	*/
 	private ExpandableListView predictionsList;
+	
+	//	Adapters for Spinners and ExpandableListView widgets
+	/**	Instance of the Adapter for LinesSpinner												*/
+	private LinesSpinnerAdapter mLineAdapter;
+	/**	Instance of the Adapter for StationsSpinner												*/
+	private StationsSpinnerAdapter mStationAdapter;
+	/**	Instance of the Adapter for PredictionsList												*/
+	private PlatformsExpListAdapter mPlatformAdapter;
 
 	//	Custom title bar widgets
 	/**	View instance for the custom Title bar. Useful for changing background colours.
@@ -96,6 +110,25 @@ public class WheresMyTrain extends Activity {
 		setupSpinners();
 		if (customTitleBarSupported) setupCustomTitleBar();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater mInflater = getMenuInflater();
+		mInflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.more:
+		case R.id.set_default:
+		case R.id.refresh:
+			refreshPredictions();
+			break;
+		}
+		return true;
+	}
 
 	private void instantiateVariables() {
 		INSTANCE = this;
@@ -114,13 +147,16 @@ public class WheresMyTrain extends Activity {
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
+
+		//	Get the prepared JSON data now to fill the spinners
+		SLContainer sList = mJsonR.getStationsList();
+
+		//	Initialise the adapters
+		mLineAdapter = new LinesSpinnerAdapter(sList.lines);
 	}
 
 	private void setupSpinners() {
-		//	Get the prepared JSON data now to fill the spinners
-		SLContainer sList = mJsonR.getStationsList();
-		//	Displays stylised list of TfL lines
-		LinesSpinnerAdapter mLineAdapter = new LinesSpinnerAdapter(sList.lines);
+		//	Set the adapters onto the Lines Spinner
 		linesSpinner.setAdapter(mLineAdapter);
 
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -128,13 +164,12 @@ public class WheresMyTrain extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				//	Handle the item selected by setting the second spinner with the correct stations
 				line = (SLLine) parent.getItemAtPosition(pos);
-				StationsSpinnerAdapter mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode);
+				//	Update the data set and reset the adapter
+				mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode);
 				stationsSpinner.setAdapter(mStationAdapter);
 			}
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// Do nothing
-			}
+			@Override	// Do nothing
+			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 
 		stationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -143,20 +178,22 @@ public class WheresMyTrain extends Activity {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				mJsonR.preparePredictionsDetailed(line.linecode, station.stationcode);
-				DPContainer sPredictions = mJsonR.getPredictionsDetailed();
-				//	Always get the first element in sPredictions.stations as tfl.php only includes 1 station
-				//+ per Detailed Predictions request, but places it into an array.
-				PlatformsExpListAdapter platformsList = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);
-				predictionsList.setAdapter(platformsList);
+				refreshPredictions();
 				//	Edit the title bar every time station is changed to reflect the changes
-				if (customTitleBarSupported) editTitleBar();
+				if (customTitleBarSupported) refreshTitleBar();
 			}
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// Do nothing	
-			}
+			@Override	// Do nothing
+			public void onNothingSelected(AdapterView<?> parent) {}
 		});
+	}
+	
+	private void refreshPredictions() {
+		mJsonR.preparePredictionsDetailed(line.linecode, station.stationcode);
+		DPContainer sPredictions = mJsonR.getPredictionsDetailed();
+		//	Because of how tfl.php sends predictions data, there is only ever ONE station in stations array
+		mPlatformAdapter = new PlatformsExpListAdapter(sPredictions.stations.get(0).platforms);
+		//	(Re)set the adapter onto the ExpandableListView
+		predictionsList.setAdapter(mPlatformAdapter);
 	}
 	
 	private void setupCustomTitleBar() {
@@ -165,18 +202,29 @@ public class WheresMyTrain extends Activity {
 		//	Get the widget instances
 		titleBar = findViewById(R.id.custom_title_bar);
 		lineTitle = (TextView) findViewById(R.id.text_line);
+		lineTitle.setTypeface(bold);
 		stationTitle = (TextView) findViewById(R.id.text_station);
-		//	Set colours and text of widgets
-		titleBar.setBackgroundColor(textColour);
-		if (line != null) lineTitle.setText(line.linename);
-		if (station != null) stationTitle.setText(station.stationname);
+		stationTitle.setTypeface(bold);
+		refreshTitleBar();
 	}
 	
-	private void editTitleBar() {
+	private void refreshTitleBar() {
 		//	Set colours and text of widgets
-		if (line != null) lineTitle.setText(line.linename);
-		if (station != null) stationTitle.setText(station.stationname);
 		titleBar.setBackgroundColor(textColour);
+		if (line != null) {
+			if (line.linename.length() > 20) {
+				lineTitle.setText(line.linename.substring(0, 20));
+			} else {
+				lineTitle.setText(line.linename);				
+			}
+		}
+		if (station != null) {
+			if (station.stationname.length() > 20) {
+				stationTitle.setText(station.stationname.substring(0, 20));
+			} else {
+				stationTitle.setText(station.stationname);				
+			}
+		}
 	}
 
 	/**
