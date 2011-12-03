@@ -1,33 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="45dip"
-    android:weightSum="1.0"
-    android:orientation="horizontal"
-    android:background="#ffffffff" >
+    android:layout_height="wrap_content"
+	android:background="#ffffffff"
+    android:orientation="vertical"
+    android:weightSum="1.0" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight=".70"
+        android:weightSum="1.0" >
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="0sp"
+            android:layout_height="20sp"
+            android:layout_marginLeft="5sp"
+            android:layout_marginTop="5sp"
+            android:layout_weight=".70"
+            android:gravity="center_vertical|left"
+            android:text="Destination Name"
+            android:textColor="#ff000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvTimeTo"
+            android:layout_width="0sp"
+            android:layout_height="20sp"
+            android:layout_marginRight="5sp"
+            android:layout_marginTop="5sp"
+            android:layout_weight=".30"
+            android:gravity="center_vertical|right"
+            android:text="Time:To"
+            android:textColor="#ff000000"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/tvDestination"
-        android:layout_width="0dip"
-        android:layout_height="45dip"
-        android:layout_weight=".70"
-        android:gravity="center_vertical|left"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:text="Children"
-        android:textColor="#ffCCCC22"
-        android:textSize="15dip" />
-    
-    <TextView
-        android:id="@+id/tvTimeTo"
-        android:layout_width="0dip"
-        android:layout_height="45dip"
+        android:id="@+id/tvLocation"
+        android:layout_width="fill_parent"
+        android:layout_height="12sp"
         android:layout_weight=".30"
-        android:gravity="center_vertical|right"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:text="Children"
-        android:textColor="#ffCCCC22"
-        android:textSize="15dip" />
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="5sp"
+        android:layout_marginBottom="5sp"
+        android:gravity="center_vertical|left"
+        android:text="Location"
+        android:textColor="#ff000000"
+        android:textSize="10sp" />
 
 </LinearLayout>

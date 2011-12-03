@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="45dip"
+    android:layout_height="40sp"
     android:orientation="vertical"
     android:background="#ffffffff" >
 
     <TextView
         android:id="@+id/tvGroup"
         android:layout_width="fill_parent"
-        android:layout_height="45dip"
-        android:gravity="center_vertical|center"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
+        android:layout_height="30sp"
+        android:gravity="center_vertical"
+        android:layout_margin="5sp"
+        android:paddingLeft="35sp"
         android:text="Groups"
         android:textColor="#ff000000"
-        android:textSize="17dip" />
+        android:textSize="14sp" />
 
 </LinearLayout>

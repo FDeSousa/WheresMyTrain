@@ -24,4 +24,21 @@ import java.util.ArrayList;
 public class LSContainer {
 	public String requesttype;
 	public ArrayList<LSLine> lines = new ArrayList<LSLine>();
+	
+	/**
+	 * Very simple, slow, arraylist search. Loops through each line to find
+	 * the line with the matching linename
+	 * @param linename - the name of the line to search for
+	 * @return instance of matching line, or null if not found
+	 */
+	public LSLine searchByLinename(String linename) {
+		//	If there's nothing to search through, exit early
+		if (lines == null || lines.isEmpty()) return null;
+		//	Search with foreach for the right line
+		for (LSLine line : lines) {
+			if (line.linename.equals(linename)) return line;
+		}
+		//	If nothing has been found, return null
+		return null;
+	}
 }

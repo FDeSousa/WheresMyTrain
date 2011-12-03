@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/refresh"
         android:title="Refresh" />
-    <item android:id="@+id/set_default"
-        android:title="Set default station" />
-    <item android:id="@+id/more"
-        android:title="More" />
+    <item android:id="@+id/about"
+        android:title="About" />
+    <item android:id="@+id/exit"
+        android:title="Exit" />
 </menu>

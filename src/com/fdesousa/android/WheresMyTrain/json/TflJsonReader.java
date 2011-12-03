@@ -81,11 +81,9 @@ public class TflJsonReader {
 	/**	Useful String value that evaluates to true in PHP when type-casting to boolean	*/
 	private static final String PHP_TRUE_VALUE = "1";
 
-	//	Private instances that should not be revealed directly to other classes
+	//	Private instances
 	/**	File pointing to the application's cache folder									*/
 	private final File cacheDir;
-	/**	Instance of TflJsonHandler for fetching and parsing JSON requests				*/
-	private TflJsonHandler handler;
 
 	/**
 	 * Very basic constructor, just sets the cache directory's location
@@ -123,8 +121,9 @@ public class TflJsonReader {
 	/**
 	 * Convenience method, simply joins to the handler's Thread, logs any
 	 * interruption that might occur.
+	 * @param handler - the TflJsonHandler instance to stop execution of
 	 */
-	private void stopHandler() {
+	private void stopHandler(TflJsonHandler handler) {
 		//	Wait for thread to finish before returning
 		try {
 			handler.join();
@@ -133,110 +132,142 @@ public class TflJsonReader {
 		}
 	}
 
+	//	--------------------------------------------------
 	//	Detailed Predictions methods
+	private TflJsonHandler dp_handler;
+
 	/**
-	 * Utility method to begin preparations of Detailed Predictions.<br/>
-	 * Makes the URI, instantiates the handler, starts new Thread.
-	 * @param line - the unique line code for the request
-	 * @param station - the unique station code for the request
+	 * 
+	 * @param line
+	 * @param station
+	 * @return
 	 */
-	public void preparePredictionsDetailed(final String line, final String station) {
+	public DPContainer getPredictionsDetailed(final String line, final String station) {
 		//	Parses String "PredictionDetailed/line/station"
 		URI uri = makeUri(PREDICTION_DETAILED, line, station, false);
 		//	Instantiate, set the newest URI to fetch and parse
-		handler = new DPHandler(uri);
-		//	TODO: Replace with AsyncTask for fetching, parsing the data
+		dp_handler = new DPHandler(uri);
 		//	Start the thread for fetching and parsing
-		handler.start();
+		dp_handler.start();
+		stopHandler(dp_handler);
+		return (DPContainer) dp_handler.getContainer();
 	}
 
 	/**
-	 * Method to return the results obtained from the request.
-	 * Type-casted for convenience.
+	 * 
+	 * @return
 	 */
-	public DPContainer getPredictionsDetailed() {
-		stopHandler();
-		return (DPContainer) handler.getContainer();
+	public DPContainer refreshPredictionsDetailed() {
+		dp_handler.start();
+		stopHandler(dp_handler);
+		return (DPContainer) dp_handler.getContainer();
 	}
 
+	//	--------------------------------------------------
 	//	Summary Predictions methods
-	/**
-	 * Utility method to begin preparations of Detailed Predictions.<br/>
-	 * Makes the URI, instantiates the handler, starts new Thread.
-	 * @param line - the unique line code for the request
-	 * @param station - the unique station code for the request
-	 */
-	public void preparePredictionsSummary(final String line) {
-		//	Parses String "PredictionSummary/line"
-		URI uri = makeUri(PREDICTION_SUMMARY, line, null, false);
-		handler = new SPHandler(uri);
-		handler.start();
-	}
+	private TflJsonHandler sp_handler;
 
 	/**
-	 * Method to return the results obtained from the request.
-	 * Type-casted for convenience.
+	 * 
+	 * @param line
+	 * @return
 	 */
 	public SPContainer getPredictionsSummary(final String line) {
-		stopHandler();
-		return (SPContainer) handler.getContainer();
+		//	Parses String "PredictionSummary/line"
+		URI uri = makeUri(PREDICTION_SUMMARY, line, null, false);
+		sp_handler = new SPHandler(uri);
+		sp_handler.start();
+		stopHandler(sp_handler);
+		return (SPContainer) sp_handler.getContainer();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public SPContainer refreshPredictionsSummary() {
+		sp_handler.start();
+		stopHandler(sp_handler);
+		return (SPContainer) sp_handler.getContainer();
+	}
+
+	//	--------------------------------------------------
 	//	Station Status methods
+	private TflJsonHandler ss_handler;
+
 	/**
-	 * Utility method to begin preparations of Station Status.<br/>
-	 * Makes the URI, instantiates the handler, starts new Thread.
+	 * 
+	 * @param incidentsOnly
+	 * @return
 	 */
-	public void prepareStationStatus(final boolean incidentsOnly) {
+	public SSContainer getStationStatus(final boolean incidentsOnly) {
 		URI uri = makeUri(LINE_STATUS, null, null, incidentsOnly);
-		handler = new SSHandler(uri);
-		handler.start();
-	}
-	/**
-	 * Method to return the results obtained from the request.
-	 * Type-casted for convenience.
-	 */
-	public SSContainer getStationStatus() {
-		stopHandler();
-		return (SSContainer) handler.getContainer();
+		ss_handler = new SSHandler(uri);
+		ss_handler.start();
+		stopHandler(ss_handler);
+		return (SSContainer) ss_handler.getContainer();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public SSContainer refreshStationStatus() {
+		ss_handler.start();
+		stopHandler(ss_handler);
+		return (SSContainer) ss_handler.getContainer();
+	}
+
+	//	--------------------------------------------------
 	//	Line Status methods
+	private TflJsonHandler ls_handler;
+
 	/**
-	 * Utility method to begin preparations of Line Status.<br/>
-	 * Makes the URI, instantiates the handler, starts new Thread.
+	 * Utility method to handle the request and parsing of JSON for Line Status.<br/>
+	 * @param incidentsOnly - true to only fetch lines with incidents, false to fetch all
+	 * @return instance of LSContainer with the requested results
 	 */
-	public void prepareLineStatus(final boolean incidentsOnly) {
+	public LSContainer getLineStatus(final boolean incidentsOnly) {
 		URI uri = makeUri(LINE_STATUS, null, null, incidentsOnly);
-		handler = new LSHandler(uri);
-		handler.start();
-	}
-	/**
-	 * Method to return the results obtained from the request.
-	 * Type-casted for convenience.
-	 */
-	public LSContainer getLineStatus() {
-		stopHandler();
-		return (LSContainer) handler.getContainer();
+		ls_handler = new LSHandler(uri);
+		ls_handler.start();
+		stopHandler(ls_handler);
+		return (LSContainer) ls_handler.getContainer();
 	}
 
+	/**
+	 * Convenience method to refresh the line status, without making a completely new request
+	 * @return instance of LSContainer with the requested results
+	 */
+	public LSContainer refreshLineStatus() {
+		ls_handler.start();
+		stopHandler(ls_handler);
+		return (LSContainer) ls_handler.getContainer();
+	}
+
+	//	--------------------------------------------------
 	//	Stations List methods
-	/**
-	 * Utility method to begin preparations of Stations List.<br/>
-	 * Makes the URI, instantiates the handler, starts new Thread.
-	 */
-	public void prepareStationsList() {
-		URI uri = makeUri(STATIONS_LIST, null, null, false);
-		handler = new SLHandler(cacheDir, uri);
-		handler.start();		
-	}
+	private TflJsonHandler sl_handler;
 
 	/**
-	 * Method to return the results obtained from the request.
-	 * Type-casted for convenience.
+	 * 
+	 * @return
 	 */
 	public SLContainer getStationsList() {
-		stopHandler();
-		return (SLContainer) handler.getContainer();
+		URI uri = makeUri(STATIONS_LIST, null, null, false);
+		sl_handler = new SLHandler(cacheDir, uri);
+		sl_handler.start();
+		stopHandler(sl_handler);
+		return (SLContainer) sl_handler.getContainer();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public SLContainer refreshStationsList() {
+		sl_handler.start();
+		stopHandler(sl_handler);
+		return (SLContainer) sl_handler.getContainer();
 	}
 }

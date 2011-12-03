@@ -45,7 +45,7 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 	
 	public StationsSpinnerAdapter(List<SLStation> stations, String linecode) {
 		this.stations = stations;
-		this.colour = WheresMyTrain.INSTANCE.getLineColour(linecode);
+		this.colour = WheresMyTrain.UI_CONTROLLER.getLineColour(linecode);
 		
 	}
 	
@@ -72,17 +72,16 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SLStation station = (SLStation) getItem(position);
-		WheresMyTrain w = WheresMyTrain.INSTANCE;
-		w.setTextColour(colour);
+		WheresMyTrain.UI_CONTROLLER.setTextColour(colour);
 		
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 
         tv.setTextColor(colour);
-        tv.setTypeface(w.book);
+        tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
         tv.setText(station.stationname);
 
         return convertView;

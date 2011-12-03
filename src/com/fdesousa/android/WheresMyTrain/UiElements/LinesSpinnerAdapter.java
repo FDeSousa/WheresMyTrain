@@ -68,17 +68,16 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		WheresMyTrain w = WheresMyTrain.INSTANCE;
 		SLLine line = (SLLine) getItem(position);
 		
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) w.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
-		int colour = w.getLineColour(line.linecode);
+		int colour = WheresMyTrain.UI_CONTROLLER.getLineColour(line.linecode);
 		tv.setTextColor(colour);
-		tv.setTypeface(w.book);
+		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
 		tv.setText(line.linename);
 		
 		return convertView;
