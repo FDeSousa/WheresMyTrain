@@ -1,5 +1,21 @@
 package com.fdesousa.android.WheresMyTrain.UiElements;
 
+/******************************************************************************
+ * Copyright 2011 Filipe De Sousa
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
+
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
@@ -10,6 +26,8 @@ import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,10 +49,11 @@ public class UiController {
 	private Resources resources;
 	
 	public UiController(Resources resources, AssetManager assetManager) {
-		buildExitConfirmationDialog();
 		this.resources = resources;
 		book = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Book.otf");
 		bold = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Bold.otf");
+		buildExitConfirmationDialog();
+		buildAboutDialog();
 	}
 
 	//	Quit dialog variables, builder and methods
@@ -67,6 +86,27 @@ public class UiController {
 	 */
 	public void displayExitConfirmationDialog() {
 		exitConfirmation.show();
+	}
+	
+	//	About dialog variables, builder and methods
+	private AlertDialog aboutDialog;
+	
+	private void buildAboutDialog() {
+		String title = String.format("About %s", resources.getString(R.string.app_name));
+		final SpannableString s = new SpannableString(resources.getString(R.string.about_text));
+		Linkify.addLinks(s, Linkify.ALL);
+
+		aboutDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
+				.setTitle(title)
+				.setMessage(s)
+				.setCancelable(true)
+				.setIcon(R.drawable.ic_launcher)
+				.setPositiveButton(resources.getString(android.R.string.ok), null)
+				.create();
+	}
+	
+	public void displayAboutDialog() {
+		aboutDialog.show();
 	}
 	
 	//	Custom title bar widgets and methods

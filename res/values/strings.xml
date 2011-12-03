@@ -20,5 +20,23 @@
     <string name="no_trip_train">255</string>
     <string name="lines_prompt">Underground Lines</string>
     <string name="stations_prompt">Train Stations</string>
+    <string name="about_text">
+Where\'s My Train?!\n
+Copyright 2011 Filipe De Sousa\n\n
+tfl.php\n
+Copyright 2011 Filipe De Sousa\n\n
+Where\'s My Train?! uses Transport for London data feeds via tfl.php (trains.desousa.com.pt)\n\n
+Licensed under the Apache License, Version 2.0 (the "License");\n
+you may not use this file except in compliance with the License.\n
+You may obtain a copy of the License at\n\n
+http://www.apache.org/licenses/LICENSE-2.0\n\n
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n
+See the License for the specific language governing permissions and limitations under the License.\n\n
+Source codes for both Where\'s My Train?! and tfl.php are available on Github:\n
+Where\'s My Train?!:\n
+https://github.com/FDeSousa/WheresMyTrain\n
+tfl.php:\n
+https://github.com/FDeSousa/tfl.php\n
+	</string>
 
 </resources>
