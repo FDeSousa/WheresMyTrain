@@ -23,6 +23,13 @@ import java.net.URI;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
+/**
+ * <b>SPHandler : TflJsonHandler</b>
+ * <p>Handler of Summary Predictions requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Summary Predictions.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SPHandler extends TflJsonHandler {
 	private SPContainer summarypredictions;
 

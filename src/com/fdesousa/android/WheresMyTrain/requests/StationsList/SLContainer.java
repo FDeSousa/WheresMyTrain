@@ -22,6 +22,13 @@ package com.fdesousa.android.WheresMyTrain.requests.StationsList;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <b>SLContainer</b>
+ * <p>Container of Stations List.<br/>
+ * Used when parsing JSON with GSON.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SLContainer {
 	public String requesttype;
 	public List<SLLine> lines = new ArrayList<SLLine>();

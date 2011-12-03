@@ -22,6 +22,13 @@ package com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <b>DPContainer</b>
+ * <p>Container of Detailed Predictions.<br/>
+ * Used when parsing JSON with GSON.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class DPContainer {
 	public String requesttype;
 	public DPInformation information;

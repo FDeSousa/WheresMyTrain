@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions;
 
 import java.util.ArrayList;
 
+/**
+ * <b>SPStation</b>
+ * <p>Instance of Station in Summary Predictions requests.<br/>
+ * Stores an instance of Station from Summary Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SPStation {
 	public String stationcode;
 	public String stationname;

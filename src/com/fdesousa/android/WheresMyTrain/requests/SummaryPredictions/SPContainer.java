@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions;
 
 import java.util.ArrayList;
 
+/**
+ * <b>SPContainer</b>
+ * <p>Container of Summary Predictions.<br/>
+ * Used when parsing JSON with GSON.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SPContainer {
 	public String requesttype;
 	public String created;

@@ -24,6 +24,13 @@ import java.net.URI;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
+/**
+ * <b>LSHandler : TflJsonHandler</b>
+ * <p>Handler of Line Status requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Line Status.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class LSHandler extends TflJsonHandler {
 	private LSContainer linesstatus;
 

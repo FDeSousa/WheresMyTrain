@@ -24,6 +24,13 @@ import java.net.URI;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
+/**
+ * <b>DPHandler : TflJsonHandler</b>
+ * <p>Handler of Detailed Predictions requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Detailed Predictions.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class DPHandler extends TflJsonHandler {
 	private DPContainer detailedpredictions;
 

@@ -29,6 +29,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+/**
+ * <b>TflJsonFetcher</b>
+ * <p>Class intended to allow an easy manner in which to fetch JSON from the server<br/>
+ * Provides just one static utility method which gets a stream from the server</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class TflJsonFetcher {
 
 	/**

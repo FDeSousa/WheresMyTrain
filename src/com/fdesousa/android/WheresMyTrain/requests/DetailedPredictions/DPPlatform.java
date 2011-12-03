@@ -22,6 +22,13 @@ package com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <b>DPPlatform</b>
+ * <p>Instance of Platform in Detailed Predictions requests.<br/>
+ * Stores an instance of Platform from Detailed Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class DPPlatform {
 	public String platformname;
 	public String platformnumber;

@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>SPTrain</b>
+ * <p>Instance of Train in Summary Predictions requests.<br/>
+ * Stores an instance of Train from Summary Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SPTrain {
 	public String trainnumber;
 	public String tripno;

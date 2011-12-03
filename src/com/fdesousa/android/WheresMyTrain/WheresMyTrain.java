@@ -46,6 +46,13 @@ import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
 
+/**
+ * <b>WheresMyTrain : Activity</b>
+ * <p>Main Activity for the app, instantiating and controlling most UI elements.<br/>
+ * Provides access to application resources, assets, UI widgets, useful instances.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class WheresMyTrain extends Activity {
 
 	//	Useful logging variables
@@ -238,7 +245,7 @@ public class WheresMyTrain extends Activity {
 		protected DPContainer doInBackground(Void... params) {
 			//	Send the request to prepare the JSON data while other stuff goes on
 			//	Get the prepared JSON data now to fill the spinners
-			return mJsonR.getPredictionsDetailed(line.linecode, station.stationcode);
+			return mJsonR.getDetailedPredictions(line.linecode, station.stationcode);
 		}
 		@Override
 		protected void onPostExecute(DPContainer result) {
@@ -298,9 +305,11 @@ public class WheresMyTrain extends Activity {
 				//	Set the status message either way
 				serviceStatus.setText(singleLine.description);
 			}
-		} else if (line.linecode.equals("h")) {	//	Hammersmith & City, Circle
-			//	Due to how H&C and Circle lines are handled by TfL in predictions,
-			//+	we need to search for two line status instances, compare, and show
+		} else {
+			/*	Hammersmith & City, Circle lines together
+			 *	Due to how H&C and Circle lines are handled by TfL in predictions,
+			 *	we need to search for two line status instances, compare, and show
+			 */
 			;
 		}
 

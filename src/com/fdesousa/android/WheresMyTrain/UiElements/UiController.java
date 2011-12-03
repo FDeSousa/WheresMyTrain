@@ -13,6 +13,14 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * <b>UiController</b>
+ * <p>Convenience and utility class for handling some UI widgets, and useful vatiables.<br/>
+ * Provides access to useful variables (i.e. Typefaces, Application Resources, etc.) and
+ * controls certain UI widgets for the application.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class UiController {
 	//	Fonts to use for all text
 	/**	Quicksand Book font to be used for standard dialogs and text, not bold, not italic		*/

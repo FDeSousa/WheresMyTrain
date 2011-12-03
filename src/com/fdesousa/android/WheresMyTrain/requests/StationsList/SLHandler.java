@@ -32,6 +32,13 @@ import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.json.TflJsonHandler;
 import com.google.gson.Gson;
 
+/**
+ * <b>SLHandler : TflJsonHandler</b>
+ * <p>Handler of Stations List requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Stations List.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SLHandler extends TflJsonHandler {
 	private SLContainer stationslist;
 	private File cacheFile;

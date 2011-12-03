@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.StationsList;
 
 import java.util.ArrayList;
 
+/**
+ * <b>SLLine</b>
+ * <p>Instance of Line in Stations List requests.<br/>
+ * Stores an instance of Line from Stations List request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SLLine {
 	public String linecode;
 	public String linename;

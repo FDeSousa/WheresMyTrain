@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.StationsList;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>SLStation</b>
+ * <p>Instance of Station in Station List requests.<br/>
+ * Stores an instance of Station from Station List request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SLStation {
 	public String stationcode;
 	public String stationname;

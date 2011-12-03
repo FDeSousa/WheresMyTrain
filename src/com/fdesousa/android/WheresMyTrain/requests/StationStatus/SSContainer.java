@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.StationStatus;
 
 import java.util.ArrayList;
 
+/**
+ * <b>SSContainer</b>
+ * <p>Container of Station Status.<br/>
+ * Used when parsing JSON with GSON.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SSContainer {
 	public String requesttype;
 	public ArrayList<SSStation> stations = new ArrayList<SSStation>();

@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>DPInformation</b>
+ * <p>Instance of Information from Detailed Predictions requests<br/>
+ * Stores an instance of Information from Detailed Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class DPInformation {
 	public String created;
 	public String linecode;

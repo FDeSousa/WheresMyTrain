@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.StationStatus;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>SSStation</b>
+ * <p>Instance of Station in Station Status requests.<br/>
+ * Stores an instance of Station from Station Status request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SSStation {
 	public String id;
 	public String details;

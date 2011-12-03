@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>DPTrain</b>
+ * <p>Instance of Train in Detailed Predictions requests.<br/>
+ * Stores an instance of Train from Detailed Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class DPTrain {
 	public String lcid;
 	public String secondsto;

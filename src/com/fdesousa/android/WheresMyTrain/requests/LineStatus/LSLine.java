@@ -19,6 +19,13 @@ package com.fdesousa.android.WheresMyTrain.requests.LineStatus;
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************************************/
 
+/**
+ * <b>LSLine</b>
+ * <p>Instance of Line in Line Status requests.<br/>
+ * Stores an instance of Line from Line Status request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class LSLine {
 	public String id;
 	public String details;

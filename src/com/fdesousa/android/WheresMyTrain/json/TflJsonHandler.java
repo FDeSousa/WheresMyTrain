@@ -29,12 +29,12 @@ import android.util.Log;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 
 /**
- * Superclass of a JSON Handler.<br/>
+ * <b><i>TflJsonHandler</i></b>
+ * <p>Superclass of a JSON Handler.<br/>
  * Provides the basic utility and convenience methods for all the handlers,
- * allows easy beginning of Threads, fetching and parsing.
+ * allows easy beginning of Threads, fetching and parsing.</p>
  * @author Filipe De Sousa
- * @param <T>
- *
+ * @version 0.7
  */
 public abstract class TflJsonHandler extends Thread {
 	protected URI uri;

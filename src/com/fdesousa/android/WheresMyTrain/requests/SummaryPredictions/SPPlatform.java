@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions;
 
 import java.util.ArrayList;
 
+/**
+ * <b>SPPlatform</b>
+ * <p>Instance of Platform in Summary Predictions requests.<br/>
+ * Stores an instance of Platform from Summary Predictions request JSON syntax.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class SPPlatform {
 	public String platformname;
 	public String platformcode;

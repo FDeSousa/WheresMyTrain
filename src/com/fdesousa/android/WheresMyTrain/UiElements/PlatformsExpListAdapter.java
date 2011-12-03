@@ -34,9 +34,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 /**
- * cf. http://techdroid.kbeanie.com/2010/09/expandablelistview-on-android.html
+ * <b>PlatformsExpListAdapter : BaseExpandableListAdapter</b>
+ * <p>Adapter to handle using ExpandableList widget with:<ul>
+ * <li>Group: DPPlatform</li>
+ * <li>Child: DPTrain</li>
+ * </ul>
+ * cf. http://techdroid.kbeanie.com/2010/09/expandablelistview-on-android.html</p>
  * @author Filipe De Sousa
- *
+ * @version 0.7
  */
 public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 

@@ -34,9 +34,11 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 /**
- * Simple class to handle use a list of SLStation with Android Spinner widget
- * cf. http://stackoverflow.com/questions/6562236/
+ * <b>StationsSpinnerAdapter ; SpinnerAdapter</b>
+ * <p>Adapter to handle using a list of SLStation with Android Spinner widget<br/>
+ * cf. http://stackoverflow.com/questions/6562236/</p>
  * @author Filipe De Sousa
+ * @version 0.7
  */
 public class StationsSpinnerAdapter implements SpinnerAdapter {
 

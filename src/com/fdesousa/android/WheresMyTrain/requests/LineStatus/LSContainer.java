@@ -21,6 +21,13 @@ package com.fdesousa.android.WheresMyTrain.requests.LineStatus;
 
 import java.util.ArrayList;
 
+/**
+ * <b>LSContainer</b>
+ * <p>Container of Line Status.<br/>
+ * Used when parsing JSON with GSON.</p>
+ * @author Filipe De Sousa
+ * @version 0.7
+ */
 public class LSContainer {
 	public String requesttype;
 	public ArrayList<LSLine> lines = new ArrayList<LSLine>();
