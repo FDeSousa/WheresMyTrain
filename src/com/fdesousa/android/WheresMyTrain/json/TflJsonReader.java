@@ -42,12 +42,6 @@ import com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions.SPHandler;
  * @version 0.7
  */
 public class TflJsonReader {
-	//	Diagnostic values, useful for other classes, hence public
-	/**	Value representing "out of service", provided in destcode value					*/
-	public static final String OUT_OF_SERVICE = "546";
-	/**	Value representing "no trip", provided in tripno value							*/
-	public static final String NO_TRIP = "255";
-
 	//	Internal query values, only useful in this class, hence private
 	/**	URL divider for beginning of Query arguments									*/
 	private static final char QUERY = '?';
@@ -119,11 +113,16 @@ public class TflJsonReader {
 	 * @param handler - the TflJsonHandler instance to stop execution of
 	 */
 	private void stopHandler(TflJsonHandler handler) {
-		//	Wait for thread to finish before returning
-		try {
-			handler.join();
-		} catch (InterruptedException e) {
-			Log.e(WheresMyTrain.TAG, e.getMessage());
+		//	I dislike using while(true), so use a boolean variable instead
+		boolean running = true;
+		while (running) {
+			//	Wait for thread to finish before returning
+			try {
+				handler.join();
+				running = false;
+			} catch (InterruptedException e) {
+				Log.e(WheresMyTrain.TAG, e.getMessage());
+			}
 		}
 	}
 

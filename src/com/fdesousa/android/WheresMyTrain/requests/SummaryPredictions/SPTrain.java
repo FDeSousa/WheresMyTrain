@@ -24,9 +24,9 @@ package com.fdesousa.android.WheresMyTrain.requests.SummaryPredictions;
  * @version 0.7
  */
 public class SPTrain {
-	public String trainnumber;
-	public String tripno;
-	public String destcode;
+	public int trainnumber;
+	public int tripno;
+	public int destcode;
 	public String destination;
 	public String timeto;
 	public String location;

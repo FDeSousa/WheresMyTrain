@@ -24,12 +24,12 @@ package com.fdesousa.android.WheresMyTrain.requests.LineStatus;
  * @version 0.7
  */
 public class LSLine {
-	public String id;
+	public int id;
 	public String details;
-	public String lineid;
+	public int lineid;
 	public String linename;
 	public String statusid;
 	public String status;
 	public String description;
-	public String active;
+	public boolean active;
 }

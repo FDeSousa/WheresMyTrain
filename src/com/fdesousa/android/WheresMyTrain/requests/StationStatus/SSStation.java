@@ -24,11 +24,11 @@ package com.fdesousa.android.WheresMyTrain.requests.StationStatus;
  * @version 0.7
  */
 public class SSStation {
-	public String id;
+	public int id;
 	public String details;
 	public String stationname;
 	public String statusid;
 	public String status;
 	public String description;
-	public String active;
+	public boolean active;
 }

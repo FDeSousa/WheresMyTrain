@@ -29,8 +29,8 @@ public class DPTrain {
 	public String timeto;
 	public String location;
 	public String destination;
-	public String destcode;
-	public String tripno;
+	public int destcode;
+	public int tripno;
 	
 	@Override
 	public String toString() {

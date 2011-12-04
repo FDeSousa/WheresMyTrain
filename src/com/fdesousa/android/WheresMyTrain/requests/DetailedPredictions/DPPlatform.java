@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class DPPlatform {
 	public String platformname;
-	public String platformnumber;
+	public int platformnumber;
 	public List<DPTrain> trains = new ArrayList<DPTrain>();
 	
 	@Override

@@ -27,6 +27,6 @@ import java.util.ArrayList;
  */
 public class SPPlatform {
 	public String platformname;
-	public String platformcode;
+	public int platformcode;
 	public ArrayList<SPTrain> trains = new ArrayList<SPTrain>();
 }
