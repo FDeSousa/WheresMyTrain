@@ -16,6 +16,7 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
+import com.fdesousa.android.WheresMyTrain.StandardCodes;
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
@@ -54,11 +55,12 @@ public class UiController {
 		bold = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Bold.otf");
 		buildExitConfirmationDialog();
 		buildAboutDialog();
+		buildLineStatusDialog();
 	}
 
 	//	Quit dialog variables, builder and methods
 	private DialogInterface.OnClickListener exitConfirmationDialogClickListener;
-	private AlertDialog.Builder exitConfirmation;
+	private AlertDialog exitConfirmation;
 
 	/**
 	 * Method to build the Exit Confirmation dialog showed when pressing the back button.
@@ -77,7 +79,8 @@ public class UiController {
 		exitConfirmation = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
 			.setMessage("Exit Where's My Train?")
 			.setPositiveButton(android.R.string.yes, exitConfirmationDialogClickListener)
-			.setNegativeButton(android.R.string.no, exitConfirmationDialogClickListener);
+			.setNegativeButton(android.R.string.no, exitConfirmationDialogClickListener)
+			.create();
 		//	Setup of Dialog finished
 	}
 
@@ -107,6 +110,25 @@ public class UiController {
 	
 	public void displayAboutDialog() {
 		aboutDialog.show();
+	}
+	
+	//	Line Status information dialog variables, builder and methods
+	private AlertDialog lineStatusDialog;
+	
+	private void buildLineStatusDialog() {
+		lineStatusDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
+				.setCancelable(true)
+				.setPositiveButton(resources.getString(android.R.string.ok), null)
+				.create();
+	}
+
+	public void setLineStatusDialogText(String title, String message) {
+		lineStatusDialog.setTitle(title);
+		lineStatusDialog.setMessage(message);
+	}
+	
+	public void showLineStatusDialog() {
+		lineStatusDialog.show();
 	}
 	
 	//	Custom title bar widgets and methods
@@ -164,16 +186,16 @@ public class UiController {
 	public int getLineColour(String linecode) {
 		int colour = 0;
 
-		if (linecode.equals("b"))		colour = resources.getColor(R.color.bakerloo_colour);
-		else if (linecode.equals("c"))	colour = resources.getColor(R.color.central_colour);
-		else if (linecode.equals("d"))	colour = resources.getColor(R.color.district_colour);
-		else if (linecode.equals("h"))	colour = resources.getColor(R.color.hammersmith_colour);
-		else if (linecode.equals("j"))	colour = resources.getColor(R.color.jubilee_colour);
-		else if (linecode.equals("m"))	colour = resources.getColor(R.color.metropolitan_colour);
-		else if (linecode.equals("n"))	colour = resources.getColor(R.color.northern_colour);
-		else if (linecode.equals("p"))	colour = resources.getColor(R.color.piccadilly_colour);
-		else if (linecode.equals("v"))	colour = resources.getColor(R.color.victoria_colour);
-		else if (linecode.equals("w"))	colour = resources.getColor(R.color.waterloo_colour);
+		if (linecode.equals(StandardCodes.BAKERLOO_CODE))			colour = resources.getColor(R.color.bakerloo_colour);
+		else if (linecode.equals(StandardCodes.CENTRAL_CODE))		colour = resources.getColor(R.color.central_colour);
+		else if (linecode.equals(StandardCodes.DISTRICT_CODE))		colour = resources.getColor(R.color.district_colour);
+		else if (linecode.equals(StandardCodes.HAMMERSMITH_CODE))	colour = resources.getColor(R.color.hammersmith_colour);
+		else if (linecode.equals(StandardCodes.JUBILEE_CODE))		colour = resources.getColor(R.color.jubilee_colour);
+		else if (linecode.equals(StandardCodes.METROPOLITAN_CODE))	colour = resources.getColor(R.color.metropolitan_colour);
+		else if (linecode.equals(StandardCodes.NORTHERN_CODE))		colour = resources.getColor(R.color.northern_colour);
+		else if (linecode.equals(StandardCodes.PICCADILLY_CODE))	colour = resources.getColor(R.color.piccadilly_colour);
+		else if (linecode.equals(StandardCodes.VICTORIA_CODE))		colour = resources.getColor(R.color.victoria_colour);
+		else if (linecode.equals(StandardCodes.WATERLOO_CODE))		colour = resources.getColor(R.color.waterloo_colour);
 
 		return colour;
 	}
