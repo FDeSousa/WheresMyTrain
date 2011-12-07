@@ -58,6 +58,8 @@ public final class StandardCodes {
 	public static final String GOOD_SERVICE_CODE = "GS";
 	/**	Part Closure	*/
 	public static final String PART_CLOSURE_CODE = "PC";
+	/**	Severe Delays	*/
+	public static final String SEVERE_DELAYS_CODE = "SD";
 	/**	Line Closed		*/
 	public static final String CLOSED_CODE = "CS";
 	

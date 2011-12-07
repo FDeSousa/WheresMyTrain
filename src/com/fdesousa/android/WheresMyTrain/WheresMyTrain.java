@@ -382,7 +382,8 @@ public class WheresMyTrain extends Activity {
 		if (statusid.equals(StandardCodes.GOOD_SERVICE_CODE)) {
 			//	If Good Service (GS code), button is green
 			serviceStatus.setBackgroundResource(R.drawable.btn_green_matte);
-		} else if (statusid.equals(StandardCodes.CLOSED_CODE)) {
+		} else if (statusid.equals(StandardCodes.CLOSED_CODE) ||
+				statusid.equals(StandardCodes.SEVERE_DELAYS_CODE)) {
 			//	If Closed (CS code), button is red
 			serviceStatus.setBackgroundResource(R.drawable.btn_red_matte);
 		} else {
