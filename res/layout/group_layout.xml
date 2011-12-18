@@ -11,7 +11,7 @@
         android:layout_height="30dip"
         android:gravity="center_vertical"
         android:layout_margin="5dip"
-        android:paddingLeft="35dip"
+        android:paddingLeft="0dip"
         android:text="Groups"
         android:textColor="#ff000000"
         android:textSize="14sp" />

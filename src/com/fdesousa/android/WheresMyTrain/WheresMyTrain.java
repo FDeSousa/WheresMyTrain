@@ -43,6 +43,7 @@ import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
 
+@SuppressWarnings("rawtypes")
 /**
  * <b>WheresMyTrain : Activity</b>
  * <p>Main Activity for the app, instantiating and controlling most UI elements.<br/>
@@ -124,9 +125,16 @@ public class WheresMyTrain extends Activity {
 			break;
 		case R.id.refresh:
 			//	Refresh the predictions
-			new RefreshPredictions().execute();
+			if (refreshPredictions instanceof GetPredictions) {
+				refreshPredictions.cancel(true);
+			}
+			refreshPredictions = new GetPredictions().execute();
+
 			//	Also refresh line status
-			new RefreshLineStatus().execute();
+			if (refreshLineStatus instanceof GetLineStatus) {
+				refreshLineStatus.cancel(true);
+			}
+			refreshLineStatus = new GetLineStatus().execute();
 			break;
 		}
 		return true;
@@ -168,7 +176,10 @@ public class WheresMyTrain extends Activity {
 		//	First of all, reset the line status button
 		resetLineStatusButton();
 		//	Call an Asynchronous Task to instantiate the Stations List
-		new PrepareStationsList().execute();
+		if (prepareStationsList instanceof PrepareStationsList) {
+			prepareStationsList.cancel(true);
+		}
+		prepareStationsList = new PrepareStationsList().execute();
 
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -177,7 +188,10 @@ public class WheresMyTrain extends Activity {
 				line = (SLLine) parent.getItemAtPosition(pos);
 				setupStationsSpinner();
 				//	Refresh the line status too, since a line has been selected now
-				new RefreshLineStatus().execute();
+				if (refreshLineStatus instanceof GetLineStatus) {
+					refreshLineStatus.cancel(true);
+				}
+				refreshLineStatus = new GetLineStatus().execute();
 			}
 			@Override	// Do nothing
 			public void onNothingSelected(AdapterView<?> parent) {}
@@ -189,7 +203,10 @@ public class WheresMyTrain extends Activity {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				new RefreshPredictions().execute();
+				if (refreshPredictions instanceof GetPredictions) {
+					refreshPredictions.cancel(true);
+				}
+				refreshPredictions = new GetPredictions().execute();
 				//	Edit the title bar every time station is changed to reflect the changes
 				if (customTitleBar) UI_CONTROLLER.refreshTitleBar(line, station);
 			}
@@ -209,6 +226,8 @@ public class WheresMyTrain extends Activity {
 	}
 
 	//	Fetch, parse, display the list of lines and stations
+	/**	To avoid conflicts, have a copy of the AsyncTask to cancel if needed	*/
+	private AsyncTask prepareStationsList;
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get the stations list,
 	 * even if the Internet connection is a little bit slow on the mobile side.<br/>
@@ -234,13 +253,15 @@ public class WheresMyTrain extends Activity {
 	}
 
 	//	Refresh the detailed predictions
+	/**	To avoid conflicts, have a copy of the AsyncTask to cancel if needed	*/
+	private AsyncTask refreshPredictions;
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get detailed predictions,
 	 * even if the internet connection is a little bit slow on the mobile side.<br/>
 	 * Will not block the UI thread, which is the important part.
 	 * @author Filipe De Sousa
 	 */
-	private class RefreshPredictions extends AsyncTask<Void, Void, DPContainer> {
+	private class GetPredictions extends AsyncTask<Void, Void, DPContainer> {
 		@Override
 		protected void onPreExecute() {
 			//	Hide the expandable list view, to make sure old predictions aren't shown
@@ -250,7 +271,7 @@ public class WheresMyTrain extends Activity {
 		protected DPContainer doInBackground(Void... params) {
 			//	Send the request to prepare the JSON data while other stuff goes on
 			//	Get the prepared JSON data now to fill the spinners
-			return mJsonR.getDetailedPredictions(line.linecode, station.stationcode);
+			return mJsonR.getDetailedPredictions(line.linecode,station.stationcode);
 		}
 		@Override
 		protected void onPostExecute(DPContainer result) {
@@ -264,13 +285,15 @@ public class WheresMyTrain extends Activity {
 	}
 
 	//	Refresh the line status
+	/**	To avoid conflicts, have a copy of the AsyncTask to cancel if needed	*/
+	private AsyncTask refreshLineStatus;
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get line status,
 	 * even if the internet connection is a little bit slow on the mobile side.<br/>
 	 * Will not block the UI thread, which is the important part.
 	 * @author Filipe De Sousa
 	 */
-	private class RefreshLineStatus extends AsyncTask<Void, Void, LSContainer> {
+	private class GetLineStatus extends AsyncTask<Void, Void, LSContainer> {
 		@Override
 		protected void onPreExecute() {
 			//	Just clean up the line status button
@@ -291,7 +314,7 @@ public class WheresMyTrain extends Activity {
 
 	private void resetLineStatusButton() {
 		//	Reset the status button to black and white, unknown status
-		serviceStatus.setBackgroundResource(R.drawable.btn_white_matte);
+		serviceStatus.setBackgroundResource(R.drawable.btn_white_basic);
 		serviceStatus.setTextColor(Color.BLACK);
 		serviceStatus.setTypeface(UI_CONTROLLER.book);
 		serviceStatus.setText("Unknown Status");
@@ -363,7 +386,7 @@ public class WheresMyTrain extends Activity {
 				//	Details are easy, just construct the String again, decide whether to use details or description
 				details = String.format("%s\n\n%s Line:\n%s", details, StandardCodes.CIRCLE_NAME,
 						decideMessageChoice(cLine.details, cLine.description));
-				
+
 				//	Determine which status description to use now
 				if (! cLine.statusid.equals(StandardCodes.GOOD_SERVICE_CODE) && ! cLine.statusid.equals(statusid)) {
 					/* If Circle line statusid isn't GS, and isn't the same as current statusid,
@@ -381,24 +404,24 @@ public class WheresMyTrain extends Activity {
 		//	Determine button colour to use depending upon service status ID
 		if (statusid.equals(StandardCodes.GOOD_SERVICE_CODE)) {
 			//	If Good Service (GS code), button is green
-			serviceStatus.setBackgroundResource(R.drawable.btn_green_matte);
+			serviceStatus.setBackgroundResource(R.drawable.btn_green_basic);
 		} else if (statusid.equals(StandardCodes.CLOSED_CODE) ||
 				statusid.equals(StandardCodes.SEVERE_DELAYS_CODE)) {
 			//	If Closed (CS code), button is red
-			serviceStatus.setBackgroundResource(R.drawable.btn_red_matte);
+			serviceStatus.setBackgroundResource(R.drawable.btn_red_basic);
 		} else {
 			//	Otherwise, button is orange, assume part-closure/delays/unknown
-			serviceStatus.setBackgroundResource(R.drawable.btn_orange_matte);
+			serviceStatus.setBackgroundResource(R.drawable.btn_orange_basic);
 		}
 		//	Set the status message either way
 		serviceStatus.setText(description);
 		//	Setup the appropriate text colour
 		serviceStatus.setTextColor(Color.WHITE);
-		
+
 		//	Now setup the line status dialog's title and message
 		UI_CONTROLLER.setLineStatusDialogText(title, details);
 	}
-	
+
 	/**
 	 * Convenience method to decide if details string is too short/is empty.<br/>
 	 * If so, return the description string instead. Useful for line status dialog
@@ -427,7 +450,7 @@ public class WheresMyTrain extends Activity {
 	public void showLineStatus(View v) {
 		UI_CONTROLLER.showLineStatusDialog();
 	}
-	
+
 	//	Other methods
 	/**
 	 * Simple, easy, dirty static method for showing Toast messages from any class

@@ -64,8 +64,16 @@ public final class StandardCodes {
 	public static final String CLOSED_CODE = "CS";
 	
 	//	Out-of-service and no-trip trains carry one or both of these codes
+	/**	Value representing "no destination", provided in train's destcode value	*/
+	public static final int UNKNOWN_DESTINATION = 0;
 	/**	Value representing "out of service", provided in train's destcode value	*/
 	public static final int OUT_OF_SERVICE = 546;
 	/**	Value representing "no trip", provided in train's tripno value			*/
 	public static final int NO_TRIP = 255;
+	
+	//	Simple replacement strings for certain situations
+	/**	Replacement string for condition of OUT_OF_SERVICE and NO_TRIP with destination "Unknown"	*/
+	public static final String CHECK_FRONT = "Check front of train";
+	/**	Replacement string for condition of empty Location string									*/
+	public static final String NO_LOCATION = "Location unknown";
 }

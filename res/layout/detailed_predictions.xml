@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffffff"
+    android:background="#FFFFFFFF"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -16,59 +16,44 @@
 
         <TextView
             android:id="@+id/text_line"
-            android:layout_width="0dip"
-            android:layout_height="20dip"
             android:layout_gravity="center_vertical|left"
             android:gravity="left"
-            android:layout_margin="5dip"
-            android:layout_weight=".5"
             android:text="line"
-            android:textColor="#ffffffff"
-            android:textSize="14sp" />
+            style="@style/TitleBarText" />
 
         <TextView
             android:id="@+id/text_station"
-            android:layout_width="0dip"
-            android:layout_height="20dip"
             android:layout_gravity="center_vertical|right"
             android:gravity="right"
-            android:layout_margin="5dip"
-            android:layout_weight=".5"
             android:text="station"
-            android:textColor="#ffffffff"
-            android:textSize="14sp" />
+            style="@style/TitleBarText" />
     </LinearLayout>
 
     <Spinner
         android:id="@+id/lines_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="40dip"
-        android:layout_margin="5dip"
-        android:background="@drawable/spinner"
+        style="@style/ChoiceSpinner"
         android:prompt="@string/lines_prompt" />
 
     <Spinner
         android:id="@+id/stations_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="40dip"
-        android:layout_margin="5dip"
-        android:background="@drawable/spinner"
+        style="@style/ChoiceSpinner"
         android:prompt="@string/stations_prompt" />
 
     <Button
         android:id="@+id/service_status"
-        android:layout_width="fill_parent"
-        android:layout_height="40dip"
-        android:layout_margin="5dip"
-        android:textSize="14sp"
         android:onClick="showLineStatus"
-        android:text="Good Service" />
+        style="@style/ButtonText" />
 
     <ExpandableListView
         android:id="@+id/platforms_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:drawSelectorOnTop="true"
+        android:groupIndicator="@drawable/exp_list_grp_ind"
+        android:divider="@android:color/black"
+        android:childDivider="@android:color/transparent"
+        android:indicatorLeft="0dip"
+        android:indicatorRight="310dip"
         android:scrollbars="none" />
 
 </LinearLayout>

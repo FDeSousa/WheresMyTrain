@@ -19,6 +19,8 @@ package com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fdesousa.android.WheresMyTrain.StandardCodes;
+
 /**
  * <b>DPPlatform</b>
  * <p>Instance of Platform in Detailed Predictions requests.<br/>
@@ -30,23 +32,43 @@ public class DPPlatform {
 	public String platformname;
 	public int platformnumber;
 	public List<DPTrain> trains = new ArrayList<DPTrain>();
+
+	/**
+	 * Utility method to make a shallow clone of this Platform, and filter its List
+	 * of the unnecessary trains information (out of service/no trip trains)
+	 * @return copy of this object, with filtered trains List
+	 */
+	public DPPlatform filterAndClone() {
+		DPPlatform platform = new DPPlatform();
+		platform.platformname = this.platformname;
+		platform.platformnumber = this.platformnumber;
+		
+		//	Copied basic information, now filter list of trains
+		for (DPTrain train : trains) {
+			if (train.destcode != StandardCodes.OUT_OF_SERVICE &&
+					train.tripno != StandardCodes.NO_TRIP) {
+				platform.trains.add(train);
+			}
+		}
+		return platform;
+	}
 	
 	@Override
 	public String toString() {
 		StringBuilder out = new StringBuilder();
-		
+
 		out.append("\n\t\tplatformname:");
 		out.append(platformname);
 		out.append("\n\t\tplatformnumber:");
 		out.append(platformnumber);
 		out.append("\n\t\ttrains:{");
-		
+
 		for (DPTrain train : trains) {
 			out.append(train.toString());
 		}
-		
+
 		out.append("\n\t\t}");
-		
+
 		return out.toString();
 	}
 }

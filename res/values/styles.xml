@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<style name="TitleBarText">
+	    <item name="android:layout_width">0dip</item>
+	    <item name="android:layout_height">20dip</item>
+	    <item name="android:layout_margin">5dip</item>
+	    <item name="android:layout_weight">.5</item>
+	    <item name="android:textColor">#FFFFFFFF</item>
+	    <item name="android:textSize">14sp</item>
+	</style>
+
+	<style name="ChoiceSpinner">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">40dip</item>
+	    <item name="android:background">@drawable/spinner</item>
+	    <item name="android:textColor">@color/northern_colour</item>
+	</style>
 
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:textColor">@color/northern_colour</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:shadowColor">#00000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingRight">15dp</item>
-        <item name="android:onClick">answerButton</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:text">Unknown Status</item>
+        <item name="android:background">@drawable/btn_white_basic</item>
     </style>
-
-    <style name="CurrentQuestionText">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#FFFFFFFF</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:lines">4</item>
-        <item name="android:text"></item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-    </style>
-
-    <style name="CurrentQuestionNumberText">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#FFDDDDDD</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:lines">1</item>
-        <item name="android:text"></item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-    </style>
-
 </resources>

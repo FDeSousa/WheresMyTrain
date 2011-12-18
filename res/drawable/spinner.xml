@@ -5,24 +5,24 @@
 		android:state_enabled="true"
 		android:state_pressed="true"
 		android:state_focused="false"
-		android:drawable="@drawable/spnr_blue_matte" />
+		android:drawable="@drawable/spnr_blue_basic" />
 		
 	<item
 		android:state_enabled="true"
 		android:state_pressed="false"
 		android:state_focused="true"
-		android:drawable="@drawable/spnr_blue_matte" />
+		android:drawable="@drawable/spnr_blue_basic" />
 	
 	<item
 		android:state_enabled="true"
 		android:state_pressed="true"
 		android:state_focused="true"
-		android:drawable="@drawable/spnr_blue_matte" />
+		android:drawable="@drawable/spnr_blue_basic" />
 
 	<item
 		android:state_enabled="true"
 		android:state_pressed="false"
 		android:state_focused="false"
-		android:drawable="@drawable/spnr_white_matte" />
+		android:drawable="@drawable/spnr_white_basic" />
 
 </selector>

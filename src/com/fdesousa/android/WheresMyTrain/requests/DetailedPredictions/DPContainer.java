@@ -30,7 +30,7 @@ public class DPContainer {
 	public String requesttype;
 	public DPInformation information;
 	public List<DPStation> stations = new ArrayList<DPStation>();
-	
+
 	/**
 	 * Using for early-on diagnostics, just to avoid the slow ADB debugger
 	 * (non-Javadoc)
@@ -45,11 +45,11 @@ public class DPContainer {
 		sb.append("\ninformation:{");
 		sb.append(information.toString());
 		sb.append("\nstations:{");
-		
+
 		for (DPStation station : stations) {
 			sb.append(station.toString());
 		}
-		
+
 		sb.append("\n}");
 		return sb.toString();
 	}

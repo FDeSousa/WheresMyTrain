@@ -16,9 +16,11 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.R;
+import com.fdesousa.android.WheresMyTrain.StandardCodes;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPPlatform;
 import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPTrain;
@@ -45,7 +47,10 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	private List<DPPlatform> platforms;
 
 	public PlatformsExpListAdapter(List<DPPlatform> platforms) {
-		this.platforms = platforms;
+		this.platforms = new ArrayList<DPPlatform>();
+		for (DPPlatform platform : platforms) {
+			this.platforms.add(platform.filterAndClone());
+		}
 		notifyDataSetChanged();
 	}
 
@@ -72,10 +77,16 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		TextView tvDest = (TextView) convertView.findViewById(R.id.tvDestination);
 		tvDest.setTextColor(textColour);
 		tvDest.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
+
+		//	Check destcode does not match Unknown distination first
+		if (train.destcode == StandardCodes.UNKNOWN_DESTINATION) {
+			//	If so, advise to check front of the train instead
+			tvDest.setText(StandardCodes.CHECK_FRONT);
 		//	Just to make sure it's not too long, cut down length of the string to 25 characters
-		if (train.destination.length() > 25) {
-			tvDest.setText(train.destination.substring(0, 25));			
+		} else if (train.destination.length() > 30) {
+			tvDest.setText(train.destination.substring(0, 30));
 		} else {
+			//	Otherwise, just slam the string in anyway
 			tvDest.setText(train.destination);
 		}
 
@@ -94,8 +105,14 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		TextView tvLoc = (TextView) convertView.findViewById(R.id.tvLocation);
 		tvLoc.setTextColor(textColour);
 		tvLoc.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
-		tvLoc.setText(train.location);
-
+		//	Make sure there is something to display first 
+		if (train.location.length() > 0) {
+			//	If so, display it
+			tvLoc.setText(train.location);
+		} else {
+			//	If not, advise the user that location is unknown
+			tvLoc.setText(StandardCodes.NO_LOCATION);
+		}
 		return convertView;
 	}
 
