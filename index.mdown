@@ -1,3 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="train.css" />
+<title>Where's My Train?!</title>
+<!-- Google Analytics script -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27288276-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+
 # Where's My Train?!
 ## Introduction
 An Android application that shows you the next few trains for almost any line and station part of the Transport for London underground network (due to limitations from TfL, DLR and Overground are not included in predictions. Upgrades are being made, and these two lines have yet to be added).  
@@ -30,15 +48,10 @@ Would like to add:
 *	Interactive Underground map
 *	Use of GPS to find current location and station
 
-## Platform
-Android 1.6+  
-There's some iffy workings with the back button pre-Android 2.1, as this overrides onBackPressed, which was added in the Android 2.1 SDK, but otherwise it seems to work well even on an older Android OS version.  
-I have no Android 1.5 or below devices, so I can't test on-device, though these are so rare now, I doubt it's a particularly big issue.
-
 ***
 
-## Where can I find out more about the project?
-This Github page, but also on the mini-site and project home page: [wmt.desousa.com.pt](http://wmt.desousa.com.pt).
+## Where can I find the project?
+On my Github account, but more specifically, [right here.](https://github.com/FDeSousa/WheresMyTrain/)
 
 ***
 
@@ -53,3 +66,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
 See the License for the specific language governing permissions and limitations under the License.
+
+<div id="nonFooter">
+<div id="content">
+***
+## About me
+I'm Filipe, recent Computing grad that's just trying to find something to do while looking for work.  
+Visit my main page at [desousa.com.pt](http://desousa.com.pt)  
+View my [projects on github](https://github.com/FDeSousa)
+</div>
+</div>
+<div id="footer">
+Email me: <filipe-noidontneedviagrathanks@desousa.com.pt>
+</div>
+
+</body>
+</html>
