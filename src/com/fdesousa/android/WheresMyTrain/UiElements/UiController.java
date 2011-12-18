@@ -157,6 +157,19 @@ public class UiController {
 	}
 
 	/**
+	 * Convenience method to make the custom title bar disappear.<br/>
+	 * Useful when custom title bar is not supported. Makes view invisible, take up no space
+	 * @param gone - true to make view disappear, false to make it visible
+	 */
+	public void setCustomTitleBarVisibility(boolean gone) {
+		if (gone) {
+			titleBar.setVisibility(View.GONE);
+		} else {
+			titleBar.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
 	 * Convenience method to refresh the text and colour of the title bar
 	 */
 	public void refreshTitleBar(SLLine line, SLStation station) {

@@ -159,5 +159,9 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return false;
 	}
-
+	
+	public void clearList() {
+		platforms.clear();
+		notifyDataSetChanged();
+	}
 }

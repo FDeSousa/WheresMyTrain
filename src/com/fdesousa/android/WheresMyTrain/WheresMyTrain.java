@@ -16,7 +16,7 @@ package com.fdesousa.android.WheresMyTrain;
  * limitations under the License.
  *****************************************************************************/
 
-import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,6 +41,8 @@ import com.fdesousa.android.WheresMyTrain.requests.LineStatus.LSLine;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
 import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
 @SuppressWarnings("rawtypes")
 /**
@@ -51,7 +52,7 @@ import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class WheresMyTrain extends Activity {
+public class WheresMyTrain extends ExpandableListActivity {
 	//	Useful logging variables
 	/**	Tag to be used when Logging an exception/error/anything at all							*/
 	public static final String TAG = "WheresMyTrain";
@@ -68,7 +69,7 @@ public class WheresMyTrain extends Activity {
 	/**	Button for displaying service status to the user										*/
 	private Button serviceStatus;
 	/**	Expandable List used for display Platforms and predicted Trains' destination and timing	*/
-	private ExpandableListView predictionsList;
+	private PullToRefreshExpandableListView predictionsList;
 
 	//	Adapters for Spinners and ExpandableListView widgets
 	/**	Instance of the Adapter for LinesSpinner												*/
@@ -101,7 +102,8 @@ public class WheresMyTrain extends Activity {
 		//	Now it's time to instantiate and setup things
 		instantiateVariables();
 		setupWidgets();
-		//	Check if we have removed the title bar, then setup the custom one
+		//	Check if we are able to use and view the custom title bar, then set it up
+		UI_CONTROLLER.setCustomTitleBarVisibility(!customTitleBar);
 		if (customTitleBar) UI_CONTROLLER.setupCustomTitleBar(line, station);
 	}
 
@@ -125,16 +127,16 @@ public class WheresMyTrain extends Activity {
 			break;
 		case R.id.refresh:
 			//	Refresh the predictions
-			if (refreshPredictions instanceof GetPredictions) {
-				refreshPredictions.cancel(true);
+			if (getPredictions instanceof GetPredictions) {
+				getPredictions.cancel(true);
 			}
-			refreshPredictions = new GetPredictions().execute();
+			getPredictions = new GetPredictions().execute();
 
 			//	Also refresh line status
-			if (refreshLineStatus instanceof GetLineStatus) {
-				refreshLineStatus.cancel(true);
+			if (getLineStatus instanceof GetLineStatus) {
+				getLineStatus.cancel(true);
 			}
-			refreshLineStatus = new GetLineStatus().execute();
+			getLineStatus = new GetLineStatus().execute();
 			break;
 		}
 		return true;
@@ -164,7 +166,7 @@ public class WheresMyTrain extends Activity {
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
 		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
 		serviceStatus = (Button) findViewById(R.id.service_status);
-		predictionsList = (ExpandableListView) findViewById(R.id.platforms_list);
+		predictionsList = (PullToRefreshExpandableListView) findViewById(R.id.platforms_list);
 	}
 
 	//	Spinners related methods
@@ -181,6 +183,7 @@ public class WheresMyTrain extends Activity {
 		}
 		prepareStationsList = new PrepareStationsList().execute();
 
+		//	Set the OnItemSelectedListener for Lines Spinner
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -188,30 +191,51 @@ public class WheresMyTrain extends Activity {
 				line = (SLLine) parent.getItemAtPosition(pos);
 				setupStationsSpinner();
 				//	Refresh the line status too, since a line has been selected now
-				if (refreshLineStatus instanceof GetLineStatus) {
-					refreshLineStatus.cancel(true);
+				if (getLineStatus instanceof GetLineStatus) {
+					getLineStatus.cancel(true);
 				}
-				refreshLineStatus = new GetLineStatus().execute();
+				getLineStatus = new GetLineStatus().execute();
 			}
 			@Override	// Do nothing
 			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 
+		//	Set the OnItemSelectedListener for Stations Spinner
 		stationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				if (refreshPredictions instanceof GetPredictions) {
-					refreshPredictions.cancel(true);
+				if (getPredictions instanceof GetPredictions) {
+					getPredictions.cancel(true);
 				}
-				refreshPredictions = new GetPredictions().execute();
+				getPredictions = new GetPredictions().execute();
 				//	Edit the title bar every time station is changed to reflect the changes
 				if (customTitleBar) UI_CONTROLLER.refreshTitleBar(line, station);
 			}
 			@Override	// Do nothing
 			public void onNothingSelected(AdapterView<?> parent) {}
+		});
+
+		//	Finally, set the OnRefreshListener for Predictions List
+		predictionsList.setOnRefreshListener(new OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				//	Check if there's already an instance, if so, cancel for safety
+				if (getPredictions instanceof GetPredictions) {
+					getPredictions.cancel(true);
+				}
+				//	Then instantiate a-new and execute the request
+				getPredictions = new GetPredictions().execute();
+
+				//	Refresh the line status too, since we're refreshing everything
+				if (getLineStatus instanceof GetLineStatus) {
+					getLineStatus.cancel(true);
+				}
+				//	Instantiate a-new and execute this request too
+				getLineStatus = new GetLineStatus().execute();
+			}
 		});
 	}
 
@@ -252,9 +276,9 @@ public class WheresMyTrain extends Activity {
 		}
 	}
 
-	//	Refresh the detailed predictions
+	//	Get/Refresh the detailed predictions
 	/**	To avoid conflicts, have a copy of the AsyncTask to cancel if needed	*/
-	private AsyncTask refreshPredictions;
+	private AsyncTask getPredictions;
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get detailed predictions,
 	 * even if the internet connection is a little bit slow on the mobile side.<br/>
@@ -264,8 +288,10 @@ public class WheresMyTrain extends Activity {
 	private class GetPredictions extends AsyncTask<Void, Void, DPContainer> {
 		@Override
 		protected void onPreExecute() {
-			//	Hide the expandable list view, to make sure old predictions aren't shown
-			predictionsList.setVisibility(View.INVISIBLE);
+			if (mPlatformAdapter instanceof PlatformsExpListAdapter) {
+				//	Clean out the list when refreshing, to rid ourselves of any old data hanging about
+				mPlatformAdapter.clearList();
+			}
 		}
 		@Override
 		protected DPContainer doInBackground(Void... params) {
@@ -280,13 +306,18 @@ public class WheresMyTrain extends Activity {
 			//	Show the expandable list view, to show new predictions
 			predictionsList.setVisibility(View.VISIBLE);
 			//	(Re)set the adapter onto the ExpandableListView
-			predictionsList.setAdapter(mPlatformAdapter);
+			setListAdapter(mPlatformAdapter);
+
+			//	Tell the Pull-To-Refresh library we're done with the task
+			predictionsList.onRefreshComplete();
+
+			super.onPostExecute(result);
 		}
 	}
 
-	//	Refresh the line status
+	//	Get/Refresh the line status
 	/**	To avoid conflicts, have a copy of the AsyncTask to cancel if needed	*/
-	private AsyncTask refreshLineStatus;
+	private AsyncTask getLineStatus;
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get line status,
 	 * even if the internet connection is a little bit slow on the mobile side.<br/>
