@@ -103,7 +103,6 @@ public class WheresMyTrain extends ExpandableListActivity {
 		instantiateVariables();
 		setupWidgets();
 		//	Check if we are able to use and view the custom title bar, then set it up
-		UI_CONTROLLER.setCustomTitleBarVisibility(!customTitleBar);
 		if (customTitleBar) UI_CONTROLLER.setupCustomTitleBar(line, station);
 	}
 
