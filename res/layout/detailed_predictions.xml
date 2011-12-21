@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFFFFFFF"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -11,21 +11,18 @@
         android:layout_width="fill_parent"
         android:layout_height="25dip"
         android:gravity="center_vertical|center_horizontal"
-        android:background="#ff000000"
         android:weightSum="1.0" >
 
         <TextView
             android:id="@+id/text_line"
             android:layout_gravity="center_vertical|left"
             android:gravity="left"
-            android:text="line"
             style="@style/TitleBarText" />
 
         <TextView
             android:id="@+id/text_station"
             android:layout_gravity="center_vertical|right"
             android:gravity="right"
-            android:text="station"
             style="@style/TitleBarText" />
     </LinearLayout>
 
@@ -49,10 +46,11 @@
         android:id="@+id/platforms_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@android:color/white"
         android:drawSelectorOnTop="true"
         android:groupIndicator="@drawable/exp_list_grp_ind"
-        android:divider="@android:color/black"
-        android:childDivider="@android:color/transparent"
+        android:divider="@android:color/white"
+        android:childDivider="@android:color/white"
         android:indicatorLeft="0dip"
         android:indicatorRight="310dip"
         android:scrollbars="none"

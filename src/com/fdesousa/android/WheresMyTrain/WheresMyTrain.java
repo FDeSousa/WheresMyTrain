@@ -17,7 +17,10 @@ package com.fdesousa.android.WheresMyTrain;
  *****************************************************************************/
 
 import android.app.ExpandableListActivity;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -90,6 +93,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 	//	Anything else
 	/**	Simple boolean for determining whether the Custom Title bar window feature is enabled	*/
 	private boolean customTitleBar;
+	/**	Simple boolean for determining if connectivity is available								*/
+	private boolean connected;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -99,6 +104,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//	Set the content view to our main layout
 		setContentView(R.layout.detailed_predictions);
+		//	Check the connectivity
+		checkConnectivity();
 		//	Now it's time to instantiate and setup things
 		instantiateVariables();
 		setupWidgets();
@@ -146,6 +153,23 @@ public class WheresMyTrain extends ExpandableListActivity {
 		//	Display the finish confirmation dialog
 		UI_CONTROLLER.displayExitConfirmationDialog();
 	}
+	
+	//	Check connectivity
+	/**
+	 * Utility method to check out the connectivity status when launching the application
+	 */
+	private void checkConnectivity() {
+		final ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		final NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		
+		if (mobile.isAvailable() || wifi.isAvailable()) {
+			connected = true;
+		} else {
+			displayToast("No connection available");
+			connected = false;
+		}
+	}
 
 	//	Convenience method for instantiation
 	/**
@@ -188,12 +212,14 @@ public class WheresMyTrain extends ExpandableListActivity {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				//	Handle the item selected by setting the second spinner with the correct stations
 				line = (SLLine) parent.getItemAtPosition(pos);
-				setupStationsSpinner();
-				//	Refresh the line status too, since a line has been selected now
-				if (getLineStatus instanceof GetLineStatus) {
-					getLineStatus.cancel(true);
+				if (connected) {
+					setupStationsSpinner();
+					//	Refresh the line status too, since a line has been selected now
+					if (getLineStatus instanceof GetLineStatus) {
+						getLineStatus.cancel(true);
+					}
+					getLineStatus = new GetLineStatus().execute();
 				}
-				getLineStatus = new GetLineStatus().execute();
 			}
 			@Override	// Do nothing
 			public void onNothingSelected(AdapterView<?> parent) {}
@@ -206,12 +232,14 @@ public class WheresMyTrain extends ExpandableListActivity {
 				//	Handle the selected item by getting detailed predictions for that line & station
 				//+	choice, displaying that in the ExpandableListView
 				station = (SLStation) parent.getItemAtPosition(pos);
-				if (getPredictions instanceof GetPredictions) {
-					getPredictions.cancel(true);
+				if (connected) {
+					if (getPredictions instanceof GetPredictions) {
+						getPredictions.cancel(true);
+					}
+					getPredictions = new GetPredictions().execute();
+					//	Edit the title bar every time station is changed to reflect the changes
+					if (customTitleBar) UI_CONTROLLER.refreshTitleBar(line, station);
 				}
-				getPredictions = new GetPredictions().execute();
-				//	Edit the title bar every time station is changed to reflect the changes
-				if (customTitleBar) UI_CONTROLLER.refreshTitleBar(line, station);
 			}
 			@Override	// Do nothing
 			public void onNothingSelected(AdapterView<?> parent) {}
@@ -221,19 +249,20 @@ public class WheresMyTrain extends ExpandableListActivity {
 		predictionsList.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				//	Check if there's already an instance, if so, cancel for safety
-				if (getPredictions instanceof GetPredictions) {
-					getPredictions.cancel(true);
+				if (connected) {
+					//	Check if there's already an instance, if so, cancel for safety
+					if (getPredictions instanceof GetPredictions) {
+						getPredictions.cancel(true);
+					}
+					//	Then instantiate a-new and execute the request
+					getPredictions = new GetPredictions().execute();
+					//	Refresh the line status too, since we're refreshing everything
+					if (getLineStatus instanceof GetLineStatus) {
+						getLineStatus.cancel(true);
+					}
+					//	Instantiate a-new and execute this request too
+					getLineStatus = new GetLineStatus().execute();
 				}
-				//	Then instantiate a-new and execute the request
-				getPredictions = new GetPredictions().execute();
-
-				//	Refresh the line status too, since we're refreshing everything
-				if (getLineStatus instanceof GetLineStatus) {
-					getLineStatus.cancel(true);
-				}
-				//	Instantiate a-new and execute this request too
-				getLineStatus = new GetLineStatus().execute();
 			}
 		});
 	}

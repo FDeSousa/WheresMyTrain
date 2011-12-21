@@ -2,22 +2,7 @@
 <resources>
 
     <string name="app_name">Where\'s My Train?!</string>
-    
-    <!-- Strings related to TfL network below -->
-    <!-- The current base URL defined in the TfL API documentation for all queries -->
-    <string name="base_url">http://cloud.tfl.gov.uk/TrackerNet/</string>
-    <string name="prediction_detailed">PredictionDetailed</string>
-    <string name="prediction_summary">PredictionSummary</string>
-    <string name="station_status">StationStatus</string>
-    <string name="line_status">LineStatus</string>
-    <!-- An optional part for URL of station or line status calls -->
-    <string name="incidents_only">IncidentsOnly</string>
 
-    <!-- Useful codes for checking status of trains or lines -->
-    <!-- If Train's D value is this, it is out of service -->
-    <string name="out_of_service_train">546</string>
-    <!-- If Train's L value is this, it has no trip -->
-    <string name="no_trip_train">255</string>
     <string name="lines_prompt">Underground Lines</string>
     <string name="stations_prompt">Train Stations</string>
     <string name="about_text">

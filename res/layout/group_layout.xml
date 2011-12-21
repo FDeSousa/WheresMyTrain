@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="40dip"
-    android:orientation="vertical"
-    android:background="#ffffffff" >
+    android:background="@android:color/white"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tvGroup"
         android:layout_width="fill_parent"
-        android:layout_height="30dip"
+        android:layout_height="35dip"
+        android:background="@android:color/transparent"
         android:gravity="center_vertical"
         android:layout_margin="5dip"
         android:paddingLeft="0dip"
-        android:text="Groups"
         android:textColor="#ff000000"
         android:textSize="14sp" />
 

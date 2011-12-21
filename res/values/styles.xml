@@ -11,14 +11,14 @@
 
 	<style name="ChoiceSpinner">
 	    <item name="android:layout_width">fill_parent</item>
-	    <item name="android:layout_height">40dip</item>
+	    <item name="android:layout_height">45dip</item>
 	    <item name="android:background">@drawable/spinner</item>
 	    <item name="android:textColor">@color/northern_colour</item>
 	</style>
 
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_height">45dip</item>
         <item name="android:textColor">@color/northern_colour</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">14sp</item>
