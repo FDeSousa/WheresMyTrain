@@ -31,19 +31,18 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
-
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
+import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPContainer;
+import com.fdesousa.android.WheresMyTrain.Library.requests.LineStatus.LSContainer;
+import com.fdesousa.android.WheresMyTrain.Library.requests.LineStatus.LSLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLContainer;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
 import com.fdesousa.android.WheresMyTrain.UiElements.LinesSpinnerAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.PlatformsExpListAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.StationsSpinnerAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
-import com.fdesousa.android.WheresMyTrain.json.TflJsonReader;
-import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPContainer;
-import com.fdesousa.android.WheresMyTrain.requests.LineStatus.LSContainer;
-import com.fdesousa.android.WheresMyTrain.requests.LineStatus.LSLine;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLContainer;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
@@ -104,6 +103,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//	Set the content view to our main layout
 		setContentView(R.layout.detailed_predictions);
+		//	Give LibraryMain a Context instance
+		LibraryMain.setContext(this.getBaseContext());
 		//	Check the connectivity
 		checkConnectivity();
 		//	Now it's time to instantiate and setup things
@@ -166,7 +167,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		if (mobile.isAvailable() || wifi.isAvailable()) {
 			connected = true;
 		} else {
-			displayToast("No connection available");
+			LibraryMain.displayToast("No connection available");
 			connected = false;
 		}
 	}
@@ -395,7 +396,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		//	One-sentence long description of status, or usually empty if Good Service
 		String details = "";
 
-		if (! line.linecode.equals(StandardCodes.HAMMERSMITH_CODE)) {
+		if (! line.linecode.equals(LibraryMain.HAMMERSMITH_CODE)) {
 			/*	These lines:
 			 *	Bakerloo, Central, District, Jubilee, Metropolitan, Northern, Piccadilly, Victoria, Waterloo & City
 			 *	get treated in the same way. Search for the line name, place description in Button text
@@ -403,8 +404,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 			LSLine singleLine;
 			String linename = line.linename;
 			//	Waterloo and City line uses ampersand in detailed predictions, but "and" in line status
-			if (line.linecode.equals(StandardCodes.WATERLOO_CODE))
-				linename = StandardCodes.WATERLOO_NAME;
+			if (line.linecode.equals(LibraryMain.WATERLOO_CODE))
+				linename = LibraryMain.WATERLOO_NAME;
 
 			//	Search for the line, check the result isn't null
 			if ((singleLine = linestatus.searchByLinename(linename)) != null) {
@@ -426,28 +427,28 @@ public class WheresMyTrain extends ExpandableListActivity {
 			LSLine cLine;
 
 			//	Get the line status for Hammersmith & City line
-			if ((hLine = linestatus.searchByLinename(StandardCodes.HAMMERSMITH_NAME)) != null) {
+			if ((hLine = linestatus.searchByLinename(LibraryMain.HAMMERSMITH_NAME)) != null) {
 				//	Just determine whether the description is empty
 				statusid = hLine.statusid;
 				description = hLine.description;
 				//	Format the message string for the dialog, decide whether to use details/description
-				details = String.format("%s Line:\n%s", StandardCodes.HAMMERSMITH_NAME,
+				details = String.format("%s Line:\n%s", LibraryMain.HAMMERSMITH_NAME,
 						decideMessageChoice(hLine.details, hLine.description));
 			} else {
 				//	If nothing is returned, make up status, pretending it's all good
-				statusid = StandardCodes.GOOD_SERVICE_CODE;
+				statusid = LibraryMain.GOOD_SERVICE_CODE;
 				description = "Good Service";
-				details = String.format("%s Line:\n%s", StandardCodes.HAMMERSMITH_NAME, "Good Service");
+				details = String.format("%s Line:\n%s", LibraryMain.HAMMERSMITH_NAME, "Good Service");
 			}
 
 			//	Get the line status for Circle line
-			if ((cLine = linestatus.searchByLinename(StandardCodes.CIRCLE_NAME)) != null) {
+			if ((cLine = linestatus.searchByLinename(LibraryMain.CIRCLE_NAME)) != null) {
 				//	Details are easy, just construct the String again, decide whether to use details or description
-				details = String.format("%s\n\n%s Line:\n%s", details, StandardCodes.CIRCLE_NAME,
+				details = String.format("%s\n\n%s Line:\n%s", details, LibraryMain.CIRCLE_NAME,
 						decideMessageChoice(cLine.details, cLine.description));
 
 				//	Determine which status description to use now
-				if (! cLine.statusid.equals(StandardCodes.GOOD_SERVICE_CODE) && ! cLine.statusid.equals(statusid)) {
+				if (! cLine.statusid.equals(LibraryMain.GOOD_SERVICE_CODE) && ! cLine.statusid.equals(statusid)) {
 					/* If Circle line statusid isn't GS, and isn't the same as current statusid,
 					 * likely to be worse than H&C, set it as statusid
 					 */
@@ -456,16 +457,16 @@ public class WheresMyTrain extends ExpandableListActivity {
 				}
 			} else {
 				//	If Circle line isn't found, assume Good Service, make up details
-				details = String.format("%s\n\n%s Line:\n%s", details, StandardCodes.CIRCLE_NAME, "Good Service");
+				details = String.format("%s\n\n%s Line:\n%s", details, LibraryMain.CIRCLE_NAME, "Good Service");
 			}
 		}
 
 		//	Determine button colour to use depending upon service status ID
-		if (statusid.equals(StandardCodes.GOOD_SERVICE_CODE)) {
+		if (statusid.equals(LibraryMain.GOOD_SERVICE_CODE)) {
 			//	If Good Service (GS code), button is green
 			serviceStatus.setBackgroundResource(R.drawable.btn_green_basic);
-		} else if (statusid.equals(StandardCodes.CLOSED_CODE) ||
-				statusid.equals(StandardCodes.SEVERE_DELAYS_CODE)) {
+		} else if (statusid.equals(LibraryMain.CLOSED_CODE) ||
+				statusid.equals(LibraryMain.SEVERE_DELAYS_CODE)) {
 			//	If Closed (CS code), button is red
 			serviceStatus.setBackgroundResource(R.drawable.btn_red_basic);
 		} else {
@@ -508,14 +509,5 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	public void showLineStatus(View v) {
 		UI_CONTROLLER.showLineStatusDialog();
-	}
-
-	//	Other methods
-	/**
-	 * Simple, easy, dirty static method for showing Toast messages from any class
-	 * @param message - String to display to the user
-	 */
-	public final static void displayToast(final String message) {
-		Toast.makeText(INSTANCE.getApplicationContext(), message, Toast.LENGTH_LONG);
 	}
 }

@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
 
 import android.content.Context;
 import android.database.DataSetObserver;

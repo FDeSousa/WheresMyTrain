@@ -16,11 +16,11 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
-import com.fdesousa.android.WheresMyTrain.StandardCodes;
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.requests.StationsList.SLStation;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -199,16 +199,16 @@ public class UiController {
 	public int getLineColour(String linecode) {
 		int colour = 0;
 
-		if (linecode.equals(StandardCodes.BAKERLOO_CODE))			colour = resources.getColor(R.color.bakerloo_colour);
-		else if (linecode.equals(StandardCodes.CENTRAL_CODE))		colour = resources.getColor(R.color.central_colour);
-		else if (linecode.equals(StandardCodes.DISTRICT_CODE))		colour = resources.getColor(R.color.district_colour);
-		else if (linecode.equals(StandardCodes.HAMMERSMITH_CODE))	colour = resources.getColor(R.color.hammersmith_colour);
-		else if (linecode.equals(StandardCodes.JUBILEE_CODE))		colour = resources.getColor(R.color.jubilee_colour);
-		else if (linecode.equals(StandardCodes.METROPOLITAN_CODE))	colour = resources.getColor(R.color.metropolitan_colour);
-		else if (linecode.equals(StandardCodes.NORTHERN_CODE))		colour = resources.getColor(R.color.northern_colour);
-		else if (linecode.equals(StandardCodes.PICCADILLY_CODE))	colour = resources.getColor(R.color.piccadilly_colour);
-		else if (linecode.equals(StandardCodes.VICTORIA_CODE))		colour = resources.getColor(R.color.victoria_colour);
-		else if (linecode.equals(StandardCodes.WATERLOO_CODE))		colour = resources.getColor(R.color.waterloo_colour);
+		if (linecode.equals(LibraryMain.BAKERLOO_CODE))			colour = resources.getColor(R.color.bakerloo_colour);
+		else if (linecode.equals(LibraryMain.CENTRAL_CODE))		colour = resources.getColor(R.color.central_colour);
+		else if (linecode.equals(LibraryMain.DISTRICT_CODE))		colour = resources.getColor(R.color.district_colour);
+		else if (linecode.equals(LibraryMain.HAMMERSMITH_CODE))	colour = resources.getColor(R.color.hammersmith_colour);
+		else if (linecode.equals(LibraryMain.JUBILEE_CODE))		colour = resources.getColor(R.color.jubilee_colour);
+		else if (linecode.equals(LibraryMain.METROPOLITAN_CODE))	colour = resources.getColor(R.color.metropolitan_colour);
+		else if (linecode.equals(LibraryMain.NORTHERN_CODE))		colour = resources.getColor(R.color.northern_colour);
+		else if (linecode.equals(LibraryMain.PICCADILLY_CODE))	colour = resources.getColor(R.color.piccadilly_colour);
+		else if (linecode.equals(LibraryMain.VICTORIA_CODE))		colour = resources.getColor(R.color.victoria_colour);
+		else if (linecode.equals(LibraryMain.WATERLOO_CODE))		colour = resources.getColor(R.color.waterloo_colour);
 
 		return colour;
 	}

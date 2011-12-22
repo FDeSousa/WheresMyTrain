@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.StandardCodes;
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPPlatform;
-import com.fdesousa.android.WheresMyTrain.requests.DetailedPredictions.DPTrain;
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPPlatform;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPTrain;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -79,9 +79,9 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		tvDest.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
 
 		//	Check destcode does not match Unknown distination first
-		if (train.destcode == StandardCodes.UNKNOWN_DESTINATION) {
+		if (train.destcode == LibraryMain.UNKNOWN_DESTINATION) {
 			//	If so, advise to check front of the train instead
-			tvDest.setText(StandardCodes.CHECK_FRONT);
+			tvDest.setText(LibraryMain.CHECK_FRONT);
 		//	Just to make sure it's not too long, cut down length of the string to 25 characters
 		} else if (train.destination.length() > 30) {
 			tvDest.setText(train.destination.substring(0, 30));
@@ -111,7 +111,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 			tvLoc.setText(train.location);
 		} else {
 			//	If not, advise the user that location is unknown
-			tvLoc.setText(StandardCodes.NO_LOCATION);
+			tvLoc.setText(LibraryMain.NO_LOCATION);
 		}
 		return convertView;
 	}
