@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="8dip"
+    android:background="@drawable/widget_shape" >
+    
+    <TextView
+        android:id="@+id/op"
+        style="@android:style/TextAppearance.Small"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="4dip"
+        android:text="Temp text"
+        android:textColor="#FFFFFFFF"
+         />
+</LinearLayout>

@@ -16,12 +16,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
-import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
@@ -32,56 +26,80 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fdesousa.android.WheresMyTrain.R;
+import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
+
 /**
  * <b>UiController</b>
- * <p>Convenience and utility class for handling some UI widgets, and useful vatiables.<br/>
- * Provides access to useful variables (i.e. Typefaces, Application Resources, etc.) and
- * controls certain UI widgets for the application.</p>
+ * <p>
+ * Convenience and utility class for handling some UI widgets, and useful
+ * vatiables.<br/>
+ * Provides access to useful variables (i.e. Typefaces, Application Resources,
+ * etc.) and controls certain UI widgets for the application.
+ * </p>
+ * 
  * @author Filipe De Sousa
  * @version 0.7
  */
 public class UiController {
-	//	Fonts to use for all text
-	/**	Quicksand Book font to be used for standard dialogs and text, not bold, not italic		*/
+	// Fonts to use for all text
+	/**
+	 * Quicksand Book font to be used for standard dialogs and text, not bold,
+	 * not italic
+	 */
 	public Typeface book;
-	/**	Quicksand Bold font to be used for headers, extra emphasis. Bold as name suggests		*/
+	/**
+	 * Quicksand Bold font to be used for headers, extra emphasis. Bold as name
+	 * suggests
+	 */
 	public Typeface bold;
-	
+
 	private Resources resources;
-	
+
 	public UiController(Resources resources, AssetManager assetManager) {
 		this.resources = resources;
-		book = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Book.otf");
-		bold = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Bold.otf");
+		book = Typeface.createFromAsset(assetManager,
+				"fonts/Quicksand_Book.otf");
+		bold = Typeface.createFromAsset(assetManager,
+				"fonts/Quicksand_Bold.otf");
 		buildExitConfirmationDialog();
 		buildAboutDialog();
 		buildLineStatusDialog();
 	}
 
-	//	Quit dialog variables, builder and methods
+	// Quit dialog variables, builder and methods
 	private DialogInterface.OnClickListener exitConfirmationDialogClickListener;
 	private AlertDialog exitConfirmation;
 
 	/**
-	 * Method to build the Exit Confirmation dialog showed when pressing the back button.
+	 * Method to build the Exit Confirmation dialog showed when pressing the
+	 * back button.
 	 */
 	private void buildExitConfirmationDialog() {
-		//	Setup the quitDialogClickListener so we know what to do when back is pressed
+		// Setup the quitDialogClickListener so we know what to do when back is
+		// pressed
 		exitConfirmationDialogClickListener = new DialogInterface.OnClickListener() {
-			@Override public void onClick(DialogInterface dialog, int which) {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
-				case DialogInterface.BUTTON_POSITIVE: WheresMyTrain.INSTANCE.finish();
-				case DialogInterface.BUTTON_NEGATIVE: dialog.cancel();
+				case DialogInterface.BUTTON_POSITIVE:
+					WheresMyTrain.INSTANCE.finish();
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.cancel();
 				}
 			}
 		};
-		//	Setup the AlertDialog.Builder to display the dialog later
+		// Setup the AlertDialog.Builder to display the dialog later
 		exitConfirmation = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
-			.setMessage("Exit Where's My Train?")
-			.setPositiveButton(android.R.string.yes, exitConfirmationDialogClickListener)
-			.setNegativeButton(android.R.string.no, exitConfirmationDialogClickListener)
-			.create();
-		//	Setup of Dialog finished
+				.setMessage("Exit Where's My Train?")
+				.setPositiveButton(android.R.string.yes,
+						exitConfirmationDialogClickListener)
+				.setNegativeButton(android.R.string.no,
+						exitConfirmationDialogClickListener).create();
+		// Setup of Dialog finished
 	}
 
 	/**
@@ -90,13 +108,15 @@ public class UiController {
 	public void displayExitConfirmationDialog() {
 		exitConfirmation.show();
 	}
-	
-	//	About dialog variables, builder and methods
+
+	// About dialog variables, builder and methods
 	private AlertDialog aboutDialog;
-	
+
 	private void buildAboutDialog() {
-		String title = String.format("About %s", resources.getString(R.string.app_name));
-		final SpannableString s = new SpannableString(resources.getString(R.string.about_text));
+		String title = String.format("About %s",
+				resources.getString(R.string.app_name));
+		final SpannableString s = new SpannableString(
+				resources.getString(R.string.about_text));
 		Linkify.addLinks(s, Linkify.ALL);
 
 		aboutDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
@@ -104,50 +124,52 @@ public class UiController {
 				.setMessage(s)
 				.setCancelable(true)
 				.setIcon(R.drawable.ic_launcher)
-				.setPositiveButton(resources.getString(android.R.string.ok), null)
-				.create();
+				.setPositiveButton(resources.getString(android.R.string.ok),
+						null).create();
 	}
-	
+
 	public void displayAboutDialog() {
 		aboutDialog.show();
 	}
-	
-	//	Line Status information dialog variables, builder and methods
+
+	// Line Status information dialog variables, builder and methods
 	private AlertDialog lineStatusDialog;
-	
+
 	private void buildLineStatusDialog() {
 		lineStatusDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
 				.setCancelable(true)
-				.setPositiveButton(resources.getString(android.R.string.ok), null)
-				.create();
+				.setPositiveButton(resources.getString(android.R.string.ok),
+						null).create();
 	}
 
 	public void setLineStatusDialogText(String title, String message) {
 		lineStatusDialog.setTitle(title);
 		lineStatusDialog.setMessage(message);
 	}
-	
+
 	public void showLineStatusDialog() {
 		lineStatusDialog.show();
 	}
-	
-	//	Custom title bar widgets and methods
-	/**	View instance for the custom Title bar. Useful for changing background colours.
-	 *	As it is only used for changing background colour, which is generic to all Views,
-	 *	we save the type-casting calling for that
+
+	// Custom title bar widgets and methods
+	/**
+	 * View instance for the custom Title bar. Useful for changing background
+	 * colours. As it is only used for changing background colour, which is
+	 * generic to all Views, we save the type-casting calling for that
 	 */
 	private View titleBar;
-	/**	TextView instance for the line textview in our custom title bar							*/
+	/** TextView instance for the line textview in our custom title bar */
 	private TextView lineTitle;
-	/**	TextView instance for the station textview in our custom title bar						*/
+	/** TextView instance for the station textview in our custom title bar */
 	private TextView stationTitle;
-	
+
 	/**
-	 * Utility method to do the initial instantiation and setup of the custom title bar
+	 * Utility method to do the initial instantiation and setup of the custom
+	 * title bar
 	 */
 	public void setupCustomTitleBar(SLLine line, SLStation station) {
 		WheresMyTrain w = WheresMyTrain.INSTANCE;
-		//	Get the widget instances
+		// Get the widget instances
 		titleBar = w.findViewById(R.id.custom_title_bar);
 		lineTitle = (TextView) w.findViewById(R.id.text_line);
 		lineTitle.setTypeface(bold);
@@ -158,8 +180,11 @@ public class UiController {
 
 	/**
 	 * Convenience method to make the custom title bar disappear.<br/>
-	 * Useful when custom title bar is not supported. Makes view invisible, take up no space
-	 * @param gone - true to make view disappear, false to make it visible
+	 * Useful when custom title bar is not supported. Makes view invisible, take
+	 * up no space
+	 * 
+	 * @param gone
+	 *            - true to make view disappear, false to make it visible
 	 */
 	public void setCustomTitleBarVisibility(boolean gone) {
 		if (gone) {
@@ -173,51 +198,67 @@ public class UiController {
 	 * Convenience method to refresh the text and colour of the title bar
 	 */
 	public void refreshTitleBar(SLLine line, SLStation station) {
-		//	Set colours and text of widgets
+		// Set colours and text of widgets
 		titleBar.setBackgroundColor(textColour);
 		if (line != null) {
 			if (line.linename.length() > 15) {
 				lineTitle.setText(line.linename.substring(0, 15));
 			} else {
-				lineTitle.setText(line.linename);				
+				lineTitle.setText(line.linename);
 			}
 		}
 		if (station != null) {
 			if (station.stationname.length() > 15) {
 				stationTitle.setText(station.stationname.substring(0, 15));
 			} else {
-				stationTitle.setText(station.stationname);				
+				stationTitle.setText(station.stationname);
 			}
 		}
 	}
-	
+
 	/**
 	 * Convenience method to get the right colour for the right train line
-	 * @param linecode - the ID of the train line to find the colour for
+	 * 
+	 * @param linecode
+	 *            - the ID of the train line to find the colour for
 	 * @return the integer colour code for the given train line
 	 */
 	public int getLineColour(String linecode) {
 		int colour = 0;
 
-		if (linecode.equals(LibraryMain.BAKERLOO_CODE))			colour = resources.getColor(R.color.bakerloo_colour);
-		else if (linecode.equals(LibraryMain.CENTRAL_CODE))		colour = resources.getColor(R.color.central_colour);
-		else if (linecode.equals(LibraryMain.DISTRICT_CODE))		colour = resources.getColor(R.color.district_colour);
-		else if (linecode.equals(LibraryMain.HAMMERSMITH_CODE))	colour = resources.getColor(R.color.hammersmith_colour);
-		else if (linecode.equals(LibraryMain.JUBILEE_CODE))		colour = resources.getColor(R.color.jubilee_colour);
-		else if (linecode.equals(LibraryMain.METROPOLITAN_CODE))	colour = resources.getColor(R.color.metropolitan_colour);
-		else if (linecode.equals(LibraryMain.NORTHERN_CODE))		colour = resources.getColor(R.color.northern_colour);
-		else if (linecode.equals(LibraryMain.PICCADILLY_CODE))	colour = resources.getColor(R.color.piccadilly_colour);
-		else if (linecode.equals(LibraryMain.VICTORIA_CODE))		colour = resources.getColor(R.color.victoria_colour);
-		else if (linecode.equals(LibraryMain.WATERLOO_CODE))		colour = resources.getColor(R.color.waterloo_colour);
+		if (linecode.equals(LibraryMain.BAKERLOO_CODE))
+			colour = resources.getColor(R.color.bakerloo_colour);
+		else if (linecode.equals(LibraryMain.CENTRAL_CODE))
+			colour = resources.getColor(R.color.central_colour);
+		else if (linecode.equals(LibraryMain.DISTRICT_CODE))
+			colour = resources.getColor(R.color.district_colour);
+		else if (linecode.equals(LibraryMain.HAMMERSMITH_CODE))
+			colour = resources.getColor(R.color.hammersmith_colour);
+		else if (linecode.equals(LibraryMain.JUBILEE_CODE))
+			colour = resources.getColor(R.color.jubilee_colour);
+		else if (linecode.equals(LibraryMain.METROPOLITAN_CODE))
+			colour = resources.getColor(R.color.metropolitan_colour);
+		else if (linecode.equals(LibraryMain.NORTHERN_CODE))
+			colour = resources.getColor(R.color.northern_colour);
+		else if (linecode.equals(LibraryMain.PICCADILLY_CODE))
+			colour = resources.getColor(R.color.piccadilly_colour);
+		else if (linecode.equals(LibraryMain.VICTORIA_CODE))
+			colour = resources.getColor(R.color.victoria_colour);
+		else if (linecode.equals(LibraryMain.WATERLOO_CODE))
+			colour = resources.getColor(R.color.waterloo_colour);
 
 		return colour;
 	}
-	
 
-	/**	Current text colour for on-screen widgets to use. Dependent upon the current Line		*/
+	/**
+	 * Current text colour for on-screen widgets to use. Dependent upon the
+	 * current Line
+	 */
 	private int textColour;
+
 	/**
 	 * Simple getter for text colour
+	 * 
 	 * @return integer value that textColour is set to
 	 */
 	public int getTextColour() {
@@ -226,7 +267,9 @@ public class UiController {
 
 	/**
 	 * Simple setter for text colour
-	 * @param textColour integer value to set textColour to
+	 * 
+	 * @param textColour
+	 *            integer value to set textColour to
 	 */
 	public void setTextColour(int textColour) {
 		this.textColour = textColour;

@@ -19,12 +19,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPPlatform;
-import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPTrain;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +26,23 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.fdesousa.android.WheresMyTrain.R;
+import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPPlatform;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPTrain;
+
 /**
  * <b>PlatformsExpListAdapter : BaseExpandableListAdapter</b>
- * <p>Adapter to handle using ExpandableList widget with:<ul>
+ * <p>
+ * Adapter to handle using ExpandableList widget with:
+ * <ul>
  * <li>Group: DPPlatform</li>
  * <li>Child: DPTrain</li>
  * </ul>
- * cf. http://techdroid.kbeanie.com/2010/09/expandablelistview-on-android.html</p>
+ * cf. http://techdroid.kbeanie.com/2010/09/expandablelistview-on-android.html
+ * </p>
+ * 
  * @author Filipe De Sousa
  * @version 0.7
  */
@@ -65,52 +69,56 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
 		int textColour = WheresMyTrain.UI_CONTROLLER.getTextColour();
 		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.child_layout, null);
 		}
-		//	Show the destination name
-		TextView tvDest = (TextView) convertView.findViewById(R.id.tvDestination);
+		// Show the destination name
+		TextView tvDest = (TextView) convertView
+				.findViewById(R.id.tvDestination);
 		tvDest.setTextColor(textColour);
 		tvDest.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
 
-		//	Check destcode does not match Unknown distination first
+		// Check destcode does not match Unknown distination first
 		if (train.destcode == LibraryMain.UNKNOWN_DESTINATION) {
-			//	If so, advise to check front of the train instead
+			// If so, advise to check front of the train instead
 			tvDest.setText(LibraryMain.CHECK_FRONT);
-		//	Just to make sure it's not too long, cut down length of the string to 25 characters
+			// Just to make sure it's not too long, cut down length of the
+			// string to 25 characters
 		} else if (train.destination.length() > 30) {
 			tvDest.setText(train.destination.substring(0, 30));
 		} else {
-			//	Otherwise, just slam the string in anyway
+			// Otherwise, just slam the string in anyway
 			tvDest.setText(train.destination);
 		}
 
-		//	Show how long is predicted until train arrives
+		// Show how long is predicted until train arrives
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
 		tvTime.setTextColor(textColour);
 		tvTime.setTypeface(WheresMyTrain.UI_CONTROLLER.bold);
 		if (train.timeto.equals("-")) {
-			//	Indicates "At platform", so show nothing
+			// Indicates "At platform", so show nothing
 			tvTime.setText("");
 		} else {
-			tvTime.setText(train.timeto);			
+			tvTime.setText(train.timeto);
 		}
-		
-		//	Show the location of the train
+
+		// Show the location of the train
 		TextView tvLoc = (TextView) convertView.findViewById(R.id.tvLocation);
 		tvLoc.setTextColor(textColour);
 		tvLoc.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
-		//	Make sure there is something to display first 
+		// Make sure there is something to display first
 		if (train.location.length() > 0) {
-			//	If so, display it
+			// If so, display it
 			tvLoc.setText(train.location);
 		} else {
-			//	If not, advise the user that location is unknown
+			// If not, advise the user that location is unknown
 			tvLoc.setText(LibraryMain.NO_LOCATION);
 		}
 		return convertView;
@@ -137,16 +145,18 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
 		DPPlatform platform = (DPPlatform) getGroup(groupPosition);
 		if (convertView == null) {
-			LayoutInflater inflator = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflator = (LayoutInflater) WheresMyTrain.INSTANCE
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflator.inflate(R.layout.group_layout, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.tvGroup);
 		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.bold);
 		tv.setText(platform.platformname);
-		
+
 		return convertView;
 	}
 
@@ -159,7 +169,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return false;
 	}
-	
+
 	public void clearList() {
 		platforms.clear();
 		notifyDataSetChanged();

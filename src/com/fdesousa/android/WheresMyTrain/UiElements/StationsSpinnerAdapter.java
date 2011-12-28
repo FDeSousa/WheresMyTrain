@@ -18,10 +18,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 
 import java.util.List;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -30,10 +26,17 @@ import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.fdesousa.android.WheresMyTrain.R;
+import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
+
 /**
  * <b>StationsSpinnerAdapter ; SpinnerAdapter</b>
- * <p>Adapter to handle using a list of SLStation with Android Spinner widget<br/>
- * cf. http://stackoverflow.com/questions/6562236/</p>
+ * <p>
+ * Adapter to handle using a list of SLStation with Android Spinner widget<br/>
+ * cf. http://stackoverflow.com/questions/6562236/
+ * </p>
+ * 
  * @author Filipe De Sousa
  * @version 0.7
  */
@@ -41,13 +44,13 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 
 	private List<SLStation> stations;
 	private int colour;
-	
+
 	public StationsSpinnerAdapter(List<SLStation> stations, String linecode) {
 		this.stations = stations;
 		this.colour = WheresMyTrain.UI_CONTROLLER.getLineColour(linecode);
-		
+
 	}
-	
+
 	@Override
 	public int getCount() {
 		return stations.size();
@@ -72,18 +75,19 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SLStation station = (SLStation) getItem(position);
 		WheresMyTrain.UI_CONTROLLER.setTextColour(colour);
-		
+
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.spinner_row, null);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 
-        tv.setTextColor(colour);
-        tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
-        tv.setText(station.stationname);
+		tv.setTextColor(colour);
+		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
+		tv.setText(station.stationname);
 
-        return convertView;
+		return convertView;
 	}
 
 	@Override

@@ -18,10 +18,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 
 import java.util.List;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -30,10 +26,17 @@ import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.fdesousa.android.WheresMyTrain.R;
+import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
+
 /**
  * <b>LinesSpinnerAdapter ; SpinnerAdapter</b>
- * <p>Adapter to handle using a list of SLLine with Android Spinner widget<br/>
- * cf. http://stackoverflow.com/questions/6562236/</p>
+ * <p>
+ * Adapter to handle using a list of SLLine with Android Spinner widget<br/>
+ * cf. http://stackoverflow.com/questions/6562236/
+ * </p>
+ * 
  * @author Filipe De Sousa
  * @version 0.7
  */
@@ -68,17 +71,18 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SLLine line = (SLLine) getItem(position);
-		
+
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.spinner_row, null);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
 		int colour = WheresMyTrain.UI_CONTROLLER.getLineColour(line.linecode);
 		tv.setTextColor(colour);
 		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
 		tv.setText(line.linename);
-		
+
 		return convertView;
 	}
 
