@@ -43,7 +43,7 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStatio
 import com.fdesousa.android.WheresMyTrain.UiElements.LinesSpinnerAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.PlatformsExpListAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.StationsSpinnerAdapter;
-import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
+import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerMain;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
@@ -65,7 +65,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	public static WheresMyTrain INSTANCE;
 	/** Instance of UiController for setting up, and controlling, all of the UI */
-	public static UiController UI_CONTROLLER;
+	public static UiControllerMain UI_CONTROLLER;
 
 	// Main view widgets
 	/** Spinner used for selecting Underground Line - colour-coded text choices */
@@ -135,7 +135,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Check if we are able to use and view the custom title bar, then set
 		// it up
 		if (customTitleBar)
-			UI_CONTROLLER.setupCustomTitleBar(line, station);
+			UI_CONTROLLER.setupMainTitleBar(line, station);
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	private void instantiateVariables() {
 		INSTANCE = this;
-		UI_CONTROLLER = new UiController(getResources(), getAssets());
+		UI_CONTROLLER = new UiControllerMain(getResources(), getAssets());
 
 		mJsonR = new TflJsonReader(getCacheDir());
 
@@ -277,7 +277,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 							// Edit the title bar every time station is changed
 							// to reflect the changes
 							if (customTitleBar)
-								UI_CONTROLLER.refreshTitleBar(line, station);
+								UI_CONTROLLER.refreshMainTitleBar(line, station);
 						}
 					}
 

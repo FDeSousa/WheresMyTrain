@@ -16,35 +16,28 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.text.SpannableString;
-import android.text.util.Linkify;
-import android.view.View;
-import android.widget.TextView;
-
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
 
 /**
  * <b>UiController</b>
  * <p>
  * Convenience and utility class for handling some UI widgets, and useful
- * vatiables.<br/>
+ * variables.<br/>
  * Provides access to useful variables (i.e. Typefaces, Application Resources,
- * etc.) and controls certain UI widgets for the application.
+ * etc.) and controls certain UI widgets for the application.<br/>
+ * As UiControllerMain and UiControllerConfig were originally unrelated, but
+ * doing roughly the same job, just for separate activities, this super-class was
+ * written, just to ease the load a little bit.
  * </p>
  * 
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class UiController {
+public abstract class UiController {
 	// Fonts to use for all text
 	/**
 	 * Quicksand Book font to be used for standard dialogs and text, not bold,
@@ -57,165 +50,16 @@ public class UiController {
 	 */
 	public Typeface bold;
 
-	private Resources resources;
+	protected Resources resources;
 
 	public UiController(Resources resources, AssetManager assetManager) {
 		this.resources = resources;
-		book = Typeface.createFromAsset(assetManager,
-				"fonts/Quicksand_Book.otf");
-		bold = Typeface.createFromAsset(assetManager,
-				"fonts/Quicksand_Bold.otf");
-		buildExitConfirmationDialog();
-		buildAboutDialog();
-		buildLineStatusDialog();
+		book = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Book.otf");
+		bold = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Bold.otf");
 	}
 
-	// Quit dialog variables, builder and methods
-	private DialogInterface.OnClickListener exitConfirmationDialogClickListener;
-	private AlertDialog exitConfirmation;
-
-	/**
-	 * Method to build the Exit Confirmation dialog showed when pressing the
-	 * back button.
-	 */
-	private void buildExitConfirmationDialog() {
-		// Setup the quitDialogClickListener so we know what to do when back is
-		// pressed
-		exitConfirmationDialogClickListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					WheresMyTrain.INSTANCE.finish();
-				case DialogInterface.BUTTON_NEGATIVE:
-					dialog.cancel();
-				}
-			}
-		};
-		// Setup the AlertDialog.Builder to display the dialog later
-		exitConfirmation = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
-				.setMessage("Exit Where's My Train?")
-				.setPositiveButton(android.R.string.yes,
-						exitConfirmationDialogClickListener)
-				.setNegativeButton(android.R.string.no,
-						exitConfirmationDialogClickListener).create();
-		// Setup of Dialog finished
-	}
-
-	/**
-	 * Convenience method to display the Exit confirmation dialog
-	 */
-	public void displayExitConfirmationDialog() {
-		exitConfirmation.show();
-	}
-
-	// About dialog variables, builder and methods
-	private AlertDialog aboutDialog;
-
-	private void buildAboutDialog() {
-		String title = String.format("About %s",
-				resources.getString(R.string.app_name));
-		final SpannableString s = new SpannableString(
-				resources.getString(R.string.about_text));
-		Linkify.addLinks(s, Linkify.ALL);
-
-		aboutDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
-				.setTitle(title)
-				.setMessage(s)
-				.setCancelable(true)
-				.setIcon(R.drawable.ic_launcher)
-				.setPositiveButton(resources.getString(android.R.string.ok),
-						null).create();
-	}
-
-	public void displayAboutDialog() {
-		aboutDialog.show();
-	}
-
-	// Line Status information dialog variables, builder and methods
-	private AlertDialog lineStatusDialog;
-
-	private void buildLineStatusDialog() {
-		lineStatusDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
-				.setCancelable(true)
-				.setPositiveButton(resources.getString(android.R.string.ok),
-						null).create();
-	}
-
-	public void setLineStatusDialogText(String title, String message) {
-		lineStatusDialog.setTitle(title);
-		lineStatusDialog.setMessage(message);
-	}
-
-	public void showLineStatusDialog() {
-		lineStatusDialog.show();
-	}
-
-	// Custom title bar widgets and methods
-	/**
-	 * View instance for the custom Title bar. Useful for changing background
-	 * colours. As it is only used for changing background colour, which is
-	 * generic to all Views, we save the type-casting calling for that
-	 */
-	private View titleBar;
-	/** TextView instance for the line textview in our custom title bar */
-	private TextView lineTitle;
-	/** TextView instance for the station textview in our custom title bar */
-	private TextView stationTitle;
-
-	/**
-	 * Utility method to do the initial instantiation and setup of the custom
-	 * title bar
-	 */
-	public void setupCustomTitleBar(SLLine line, SLStation station) {
-		WheresMyTrain w = WheresMyTrain.INSTANCE;
-		// Get the widget instances
-		titleBar = w.findViewById(R.id.custom_title_bar);
-		lineTitle = (TextView) w.findViewById(R.id.text_line);
-		lineTitle.setTypeface(bold);
-		stationTitle = (TextView) w.findViewById(R.id.text_station);
-		stationTitle.setTypeface(bold);
-		refreshTitleBar(line, station);
-	}
-
-	/**
-	 * Convenience method to make the custom title bar disappear.<br/>
-	 * Useful when custom title bar is not supported. Makes view invisible, take
-	 * up no space
-	 * 
-	 * @param gone
-	 *            - true to make view disappear, false to make it visible
-	 */
-	public void setCustomTitleBarVisibility(boolean gone) {
-		if (gone) {
-			titleBar.setVisibility(View.GONE);
-		} else {
-			titleBar.setVisibility(View.VISIBLE);
-		}
-	}
-
-	/**
-	 * Convenience method to refresh the text and colour of the title bar
-	 */
-	public void refreshTitleBar(SLLine line, SLStation station) {
-		// Set colours and text of widgets
-		titleBar.setBackgroundColor(textColour);
-		if (line != null) {
-			if (line.linename.length() > 15) {
-				lineTitle.setText(line.linename.substring(0, 15));
-			} else {
-				lineTitle.setText(line.linename);
-			}
-		}
-		if (station != null) {
-			if (station.stationname.length() > 15) {
-				stationTitle.setText(station.stationname.substring(0, 15));
-			} else {
-				stationTitle.setText(station.stationname);
-			}
-		}
-	}
-
+	// ----------------------------------------------------------------------
+	//	Colours, colours and more colours
 	/**
 	 * Convenience method to get the right colour for the right train line
 	 * 
@@ -254,7 +98,7 @@ public class UiController {
 	 * Current text colour for on-screen widgets to use. Dependent upon the
 	 * current Line
 	 */
-	private int textColour;
+	protected int textColour;
 
 	/**
 	 * Simple getter for text colour

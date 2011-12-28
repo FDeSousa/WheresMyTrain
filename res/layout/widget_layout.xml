@@ -7,7 +7,7 @@
     android:background="@drawable/widget_shape" >
     
     <TextView
-        android:id="@+id/op"
+        android:id="@+id/text_widget"
         style="@android:style/TextAppearance.Small"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
