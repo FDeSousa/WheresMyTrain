@@ -18,6 +18,9 @@ package com.fdesousa.android.WheresMyTrain.Library.requests.StationsList;
 
 import java.util.ArrayList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * <b>SLLine</b>
  * <p>Instance of Line in Stations List requests.<br/>
@@ -25,8 +28,48 @@ import java.util.ArrayList;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLLine {
+public class SLLine implements Parcelable {
 	public String linecode;
 	public String linename;
-	public ArrayList<SLStation> stations = new ArrayList<SLStation>();
+	public ArrayList<SLStation> stations;
+
+	//	Need a Creator for reading from a Parcel at some point
+	public static final Parcelable.Creator<SLLine> CREATOR = new Parcelable.Creator<SLLine>() {
+		@Override
+		public SLLine createFromParcel(Parcel source) {
+			return new SLLine(source);
+		}
+		@Override
+		public SLLine[] newArray(int size) {
+			return new SLLine[size];
+		}
+	};
+
+	public SLLine() {
+		stations = new ArrayList<SLStation>();
+	}
+
+	public SLLine(Parcel in) {
+		this();
+		this.readFromParcel(in);
+	}
+
+	private void readFromParcel(Parcel in) {
+		this.linecode = in.readString();
+		this.linename = in.readString();
+		in.readTypedList(stations, SLStation.CREATOR);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(linecode);
+		dest.writeString(linename);
+		dest.writeTypedList(stations);
+	}
+
 }

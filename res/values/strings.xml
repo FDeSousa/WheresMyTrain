@@ -23,5 +23,9 @@ https://github.com/FDeSousa/WheresMyTrain\n
 tfl.php:\n
 https://github.com/FDeSousa/tfl.php\n
 	</string>
+    <string name="line">Line</string>
+    <string name="station">Station</string>
+    <string name="back">Back</string>
+    <string name="refresh_button">Refresh button</string>
 
 </resources>

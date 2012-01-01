@@ -18,7 +18,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 
 import java.util.List;
 
-import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,8 +76,7 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 		WheresMyTrain.UI_CONTROLLER.setTextColour(colour);
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getLayoutInflater();
 			convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);

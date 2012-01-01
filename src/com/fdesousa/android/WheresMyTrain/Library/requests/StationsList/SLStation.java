@@ -1,5 +1,8 @@
 package com.fdesousa.android.WheresMyTrain.Library.requests.StationsList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
  *
@@ -23,19 +26,42 @@ package com.fdesousa.android.WheresMyTrain.Library.requests.StationsList;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLStation {
+public class SLStation implements Parcelable {
 	public String stationcode;
 	public String stationname;
-	/**
-	 * @param stationcode the stationcode to set
-	 */
-	public void setStationcode(String stationcode) {
-		this.stationcode = stationcode;
+
+	public SLStation() {
 	}
-	/**
-	 * @param stationname the stationname to set
-	 */
-	public void setStationname(String stationname) {
-		this.stationname = stationname;
+
+	public SLStation(Parcel in) {
+		this();
+		readFromParcel(in);
+	}
+
+	public static final Parcelable.Creator<SLStation> CREATOR = new Parcelable.Creator<SLStation>() {
+		@Override
+		public SLStation createFromParcel(Parcel source) {
+			return new SLStation(source);
+		}
+		@Override
+		public SLStation[] newArray(int size) {
+			return new SLStation[size];
+		}
+	};
+	
+	public void readFromParcel(Parcel in) {
+		this.stationcode = in.readString();
+		this.stationname = in.readString();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(stationcode);
+		dest.writeString(stationname);
 	}
 }

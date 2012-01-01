@@ -16,19 +16,16 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.text.SpannableString;
 import android.text.util.Linkify;
-import android.view.View;
 import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStation;
 
 /**
  * <b>UiControllerMain</b>
@@ -43,8 +40,9 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStatio
  */
 public class UiControllerMain extends UiController {
 
-	public UiControllerMain(Resources resources, AssetManager assetManager) {
-		super(resources, assetManager);
+	public UiControllerMain(Resources resources, AssetManager assetManager,
+			boolean titleBarVisibility, Activity activity) {
+		super(resources, assetManager, titleBarVisibility, activity);
 		buildExitConfirmationDialog();
 		buildAboutDialog();
 		buildLineStatusDialog();
@@ -67,14 +65,14 @@ public class UiControllerMain extends UiController {
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
-					WheresMyTrain.INSTANCE.finish();
+					activity.finish();
 				case DialogInterface.BUTTON_NEGATIVE:
 					dialog.cancel();
 				}
 			}
 		};
 		// Setup the AlertDialog.Builder to display the dialog later
-		exitConfirmation = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
+		exitConfirmation = new AlertDialog.Builder(activity)
 				.setMessage("Exit Where's My Train?")
 				.setPositiveButton(android.R.string.yes,
 						exitConfirmationDialogClickListener)
@@ -100,7 +98,7 @@ public class UiControllerMain extends UiController {
 				resources.getString(R.string.about_text));
 		Linkify.addLinks(s, Linkify.ALL);
 
-		aboutDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
+		aboutDialog = new AlertDialog.Builder(activity)
 				.setTitle(title)
 				.setMessage(s)
 				.setCancelable(true)
@@ -117,7 +115,7 @@ public class UiControllerMain extends UiController {
 	private AlertDialog lineStatusDialog;
 
 	private void buildLineStatusDialog() {
-		lineStatusDialog = new AlertDialog.Builder(WheresMyTrain.INSTANCE)
+		lineStatusDialog = new AlertDialog.Builder(activity)
 				.setCancelable(true)
 				.setPositiveButton(resources.getString(android.R.string.ok),
 						null).create();
@@ -134,65 +132,41 @@ public class UiControllerMain extends UiController {
 
 	// ----------------------------------------------------------------------
 	// Main Activity's Custom title bar widgets and methods
-	/**
-	 * View instance for the custom Title bar. Useful for changing background
-	 * colours. As it is only used for changing background colour, which is
-	 * generic to all Views, we save the type-casting calling for that
-	 */
-	private View titleBar;
 	/** TextView instance for the line textview in our custom title bar */
 	private TextView lineTitle;
 	/** TextView instance for the station textview in our custom title bar */
 	private TextView stationTitle;
 
-	/**
-	 * Utility method to do the initial instantiation and setup of the custom
-	 * title bar
-	 */
-	public void setupMainTitleBar(SLLine line, SLStation station) {
-		WheresMyTrain w = WheresMyTrain.INSTANCE;
+	@Override
+	protected void setupCustomTitleBar() {
 		// Get the widget instances
-		titleBar = w.findViewById(R.id.custom_title_bar);
-		lineTitle = (TextView) w.findViewById(R.id.text_line);
+		titleBar = activity.findViewById(R.id.custom_title_bar);
+		lineTitle = (TextView) activity.findViewById(R.id.text_line);
 		lineTitle.setTypeface(bold);
-		stationTitle = (TextView) w.findViewById(R.id.text_station);
+		stationTitle = (TextView) activity.findViewById(R.id.text_station);
 		stationTitle.setTypeface(bold);
-		refreshMainTitleBar(line, station);
 	}
 
-	/**
-	 * Convenience method to make the custom title bar disappear.<br/>
-	 * Useful when custom title bar is not supported. Makes view invisible, take
-	 * up no space
-	 * 
-	 * @param gone - true to make view disappear, false to make it visible
-	 */
-	public void setMainTitleBarVisibility(boolean gone) {
-		if (gone) {
-			titleBar.setVisibility(View.GONE);
-		} else {
-			titleBar.setVisibility(View.VISIBLE);
-		}
-	}
-
-	/**
-	 * Convenience method to refresh the text and colour of the title bar
-	 */
-	public void refreshMainTitleBar(SLLine line, SLStation station) {
+	@Override
+	public void refreshMainTitleBar(String... params) {
 		// Set colours and text of widgets
 		titleBar.setBackgroundColor(textColour);
+		String line = params[0];
+		String station = params[1];
+		//	Check out and cut down line
 		if (line != null) {
-			if (line.linename.length() > 15) {
-				lineTitle.setText(line.linename.substring(0, 15));
+			if (line.length() > 15) {
+				lineTitle.setText(line.substring(0, 15));
 			} else {
-				lineTitle.setText(line.linename);
+				lineTitle.setText(line);
 			}
 		}
+		//	Check out and cut down station
 		if (station != null) {
-			if (station.stationname.length() > 15) {
-				stationTitle.setText(station.stationname.substring(0, 15));
+			if (station.length() > 15) {
+				stationTitle.setText(station.substring(0, 15));
 			} else {
-				stationTitle.setText(station.stationname);
+				stationTitle.setText(station);
 			}
 		}
 	}

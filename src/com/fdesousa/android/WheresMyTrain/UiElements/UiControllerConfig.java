@@ -17,11 +17,14 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  *****************************************************************************/
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 
+import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 /**
@@ -38,20 +41,63 @@ import android.widget.TextView;
  */
 public class UiControllerConfig extends UiController {
 
-	private View titleBar;
 	private TextView lineTitle;
+	private Button backButton;
 
-	public UiControllerConfig(Resources resources, AssetManager assetManager) {
-		super(resources, assetManager);
-		setupCustomTitleBar();
+	public UiControllerConfig(Resources resources, AssetManager assetManager, 
+			boolean titleBarVisibility, Activity activity, boolean enableBack) {
+		super(resources, assetManager, titleBarVisibility, activity);
+
+		//	Set the back button's visibility GONE if it's not needed
+		if (enableBack) {
+			backButton.setVisibility(View.VISIBLE);
+		} else {
+			backButton.setVisibility(View.GONE);
+		}
 	}
 
-	private void setupCustomTitleBar() {
-		WheresMyTrain w = WheresMyTrain.INSTANCE;
+	@Override
+	protected void setupCustomTitleBar() {
 		// Get the widget instances
-		titleBar = w.findViewById(R.id.custom_title_bar_config);
-		lineTitle = (TextView) w.findViewById(R.id.text_choose_line_config);
+		titleBar = activity.findViewById(R.id.custom_title_bar_config);
+		lineTitle = (TextView) activity.findViewById(R.id.text_choose_line_config);
 		lineTitle.setTypeface(bold);
-		w.findViewById(R.id.custom_title_bar_btn_back_config).setVisibility(View.INVISIBLE);
+		backButton = (Button) activity.findViewById(R.id.custom_title_bar_btn_back_config);
+		backButton.setTypeface(bold);
+	}
+
+	@Override
+	public void refreshMainTitleBar(String... params) {
+		//	Nice and simple, just set the title bar string. Nothing special
+		lineTitle.setText(params[0]);
+	}
+	
+	public static void setWidgetTitleShape(RemoteViews remoteView, String linecode) {
+		int resource = 0;
+		
+		if (linecode.equals(LibraryMain.BAKERLOO_CODE))
+			resource = R.drawable.widget_title_shape_bakerloo;
+		else if (linecode.equals(LibraryMain.CENTRAL_CODE))
+			resource = R.drawable.widget_title_shape_central;
+		else if (linecode.equals(LibraryMain.DISTRICT_CODE))
+			resource = R.drawable.widget_title_shape_district;
+		else if (linecode.equals(LibraryMain.HAMMERSMITH_CODE))
+			resource = R.drawable.widget_title_shape_hammersmith;
+		else if (linecode.equals(LibraryMain.JUBILEE_CODE))
+			resource = R.drawable.widget_title_shape_jubilee;
+		else if (linecode.equals(LibraryMain.METROPOLITAN_CODE))
+			resource = R.drawable.widget_title_shape_metropolitan;
+		else if (linecode.equals(LibraryMain.NORTHERN_CODE))
+			resource = R.drawable.widget_title_shape_northern;
+		else if (linecode.equals(LibraryMain.PICCADILLY_CODE))
+			resource = R.drawable.widget_title_shape_piccadilly;
+		else if (linecode.equals(LibraryMain.VICTORIA_CODE))
+			resource = R.drawable.widget_title_shape_victoria;
+		else if (linecode.equals(LibraryMain.WATERLOO_CODE))
+			resource = R.drawable.widget_title_shape_waterloo;
+		else
+			resource = R.drawable.widget_title_shape_default;
+		
+		remoteView.setInt(R.id.line_station_layout_widget, "setBackgroundResource", resource);
 	}
 }

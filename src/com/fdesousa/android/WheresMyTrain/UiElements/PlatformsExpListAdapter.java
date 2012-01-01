@@ -75,8 +75,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getLayoutInflater();
 			convertView = inflater.inflate(R.layout.child_layout, null);
 		}
 		// Show the destination name

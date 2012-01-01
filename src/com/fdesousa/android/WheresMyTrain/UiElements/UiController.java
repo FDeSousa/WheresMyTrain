@@ -16,9 +16,12 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
  * limitations under the License.
  *****************************************************************************/
 
+import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.view.View;
+
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 
@@ -51,12 +54,65 @@ public abstract class UiController {
 	public Typeface bold;
 
 	protected Resources resources;
+	protected Activity activity;
 
-	public UiController(Resources resources, AssetManager assetManager) {
+	public UiController(Resources resources, AssetManager assetManager,
+			boolean titleBarVisibility, Activity activity) {
 		this.resources = resources;
+		this.activity = activity;
 		book = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Book.otf");
 		bold = Typeface.createFromAsset(assetManager, "fonts/Quicksand_Bold.otf");
+		setupCustomTitleBar();
+		//	Method makes title bar disappear if it's true, so invert the boolean
+		setCustomTitleBarVisibility(!titleBarVisibility);
 	}
+	
+	// ----------------------------------------------------------------------
+	//	Useful for the titlebar
+	/**
+	 * View instance for the custom Title bar. Useful for changing background
+	 * colours. As it is only used for changing background colour, which is
+	 * generic to all Views, we save the type-casting calling for that
+	 */
+	protected View titleBar;
+	
+	/**
+	 * Convenience method to make the custom title bar disappear.<br/>
+	 * Useful when custom title bar is not supported. Makes view invisible, take
+	 * up no space
+	 * 
+	 * @param gone - true to make view disappear, false to make it visible
+	 */
+	private void setCustomTitleBarVisibility(boolean gone) {
+		if (titleBar instanceof View) {
+			if (gone) {
+				titleBar.setVisibility(View.GONE);
+			} else {
+				titleBar.setVisibility(View.VISIBLE);
+			}
+		}
+	}
+	
+	public void setTitleBarColour(int colour) {
+		//	Check titleBar has been instantiated
+		if (titleBar instanceof View
+				//	Then check it's actually visible too
+				&& titleBar.getVisibility() == View.VISIBLE) {
+			//	Then just simply set the background colour
+			titleBar.setBackgroundColor(colour);
+		}
+	}
+
+	/**
+	 * Utility method to do the initial instantiation and setup of the custom
+	 * title bar (even if it is not displayed, though behaviour may change)
+	 */
+	protected abstract void setupCustomTitleBar();
+	
+	/**
+	 * Convenience method to refresh the text and colour of the title bar
+	 */
+	public abstract void refreshMainTitleBar(String... params);
 
 	// ----------------------------------------------------------------------
 	//	Colours, colours and more colours

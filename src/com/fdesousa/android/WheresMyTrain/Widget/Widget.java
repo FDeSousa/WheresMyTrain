@@ -5,18 +5,16 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 public class Widget extends AppWidgetProvider {
+	public static final String TAG = "com.fdesousa.android.WheresMyTrain.Widget";
+	public static final String LINE_PREFS_KEY = "line";
+	public static final String STATION_PREFS_KEY = "station";
+	public static final String LINE_COLOUR_KEY = "line_colour";
 
 	@Override
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
-		SharedPreferences settings = context.getSharedPreferences("com.fdesousa.android.WheresMyTrain.Widget", Context.MODE_PRIVATE);
-		SharedPreferences.Editor edit = settings.edit();
-		edit.putString("line", "c");
-		edit.putString("station", "bnk");
-		edit.commit();
 	}
 
 	@Override
@@ -25,15 +23,15 @@ public class Widget extends AppWidgetProvider {
 		//	Get all Ids
 		ComponentName mWidget = new ComponentName(context, Widget.class);
 		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(mWidget);
-		
+
 		//	Build the Intent to call the Service
 		Intent intent = new Intent(context.getApplicationContext(), UpdateWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-		
+
 		//	Update the widgets via the service
 		context.startService(intent);
 	}
-	
+
 	@Override
 	public void onDisabled(Context context) {
 		context.stopService(new Intent(context, UpdateWidgetService.class));

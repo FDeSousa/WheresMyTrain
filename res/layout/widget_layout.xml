@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="294dip"
+    android:layout_height="72dip"
     android:layout_margin="8dip"
-    android:background="@drawable/widget_shape" >
-    
-    <TextView
-        android:id="@+id/text_widget"
-        style="@android:style/TextAppearance.Small"
+    android:background="@drawable/widget_shape"
+    android:orientation="vertical" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/line_station_layout_widget"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_margin="4dip"
-        android:text="Temp text"
-        android:textColor="#FFFFFFFF"
-         />
+        android:layout_height="wrap_content"
+        android:background="@drawable/widget_title_shape_bakerloo"
+        android:orientation="horizontal"
+        android:weightSum="1.1" >
+
+        <TextView
+            android:id="@+id/line_text_widget"
+            style="@style/WidgetLineStationText"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="8dip"
+            android:text="@string/line" />
+
+        <TextView
+            android:id="@+id/station_text_widget"
+            style="@style/WidgetLineStationText"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|right"
+            android:paddingRight="8dip"
+            android:text="@string/station" />
+        
+        <ImageButton
+            android:id="@+id/refresh_button_widget"
+            android:layout_width="0dip"
+            android:layout_height="16dip"
+            android:layout_margin="4dip"
+            android:layout_weight=".1"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/refresh_button"
+            android:scaleType="fitCenter"
+            android:src="@drawable/refresh"
+            android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_margin="4dip"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>

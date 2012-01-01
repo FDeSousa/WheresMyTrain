@@ -119,8 +119,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		// Setup the activity, first calling super class onCreate
 		super.onCreate(savedInstanceState);
-		// Requesting window features must be done before anything else, so do
-		// it now
+		// Requesting window features must be done before anything else, so do it now
 		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Set the content view to our main layout
 		setContentView(R.layout.detailed_predictions);
@@ -132,10 +131,6 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Now it's time to instantiate and setup things
 		instantiateVariables();
 		setupWidgets();
-		// Check if we are able to use and view the custom title bar, then set
-		// it up
-		if (customTitleBar)
-			UI_CONTROLLER.setupMainTitleBar(line, station);
 	}
 
 	@Override
@@ -204,7 +199,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	private void instantiateVariables() {
 		INSTANCE = this;
-		UI_CONTROLLER = new UiControllerMain(getResources(), getAssets());
+		UI_CONTROLLER = new UiControllerMain(getResources(), getAssets(), customTitleBar, this);
 
 		mJsonR = new TflJsonReader(getCacheDir());
 
@@ -234,73 +229,63 @@ public class WheresMyTrain extends ExpandableListActivity {
 		prepareStationsList = new PrepareStationsList().execute();
 
 		// Set the OnItemSelectedListener for Lines Spinner
-		linesSpinner
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int pos, long id) {
-						// Handle the item selected by setting the second
-						// spinner with the correct stations
-						line = (SLLine) parent.getItemAtPosition(pos);
-						if (connected) {
-							setupStationsSpinner();
-							// Refresh the line status too, since a line has
-							// been selected now
-							if (getLineStatus instanceof GetLineStatus) {
-								getLineStatus.cancel(true);
-							}
-							getLineStatus = new GetLineStatus().execute();
-						}
+		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				// Handle the item selected by setting the second
+				// spinner with the correct stations
+				line = (SLLine) parent.getItemAtPosition(pos);
+				if (connected) {
+					setupStationsSpinner();
+					// Refresh the line status too, since a line has
+					// been selected now
+					if (getLineStatus instanceof GetLineStatus) {
+						getLineStatus.cancel(true);
 					}
-
-					@Override
-					// Do nothing
-					public void onNothingSelected(AdapterView<?> parent) {
-					}
-				});
+					getLineStatus = new GetLineStatus().execute();
+				}
+			}
+			@Override
+			// Do nothing
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
 
 		// Set the OnItemSelectedListener for Stations Spinner
-		stationsSpinner
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int pos, long id) {
-						// Handle the selected item by getting detailed
-						// predictions for that line & station
-						// + choice, displaying that in the ExpandableListView
-						station = (SLStation) parent.getItemAtPosition(pos);
-						if (connected) {
-							if (getPredictions instanceof GetPredictions) {
-								getPredictions.cancel(true);
-							}
-							getPredictions = new GetPredictions().execute();
-							// Edit the title bar every time station is changed
-							// to reflect the changes
-							if (customTitleBar)
-								UI_CONTROLLER.refreshMainTitleBar(line, station);
-						}
+		stationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				// Handle the selected item by getting detailed
+				// predictions for that line & station choice, 
+				// displaying that in the ExpandableListView
+				station = (SLStation) parent.getItemAtPosition(pos);
+				if (connected) {
+					if (getPredictions instanceof GetPredictions) {
+						getPredictions.cancel(true);
 					}
-
-					@Override
-					// Do nothing
-					public void onNothingSelected(AdapterView<?> parent) {
-					}
-				});
+					getPredictions = new GetPredictions().execute();
+					// Edit the title bar every time station is changed
+					// to reflect the changes
+					if (customTitleBar)
+						UI_CONTROLLER.refreshMainTitleBar(line.linename, station.stationname);
+				}
+			}
+			@Override
+			// Do nothing
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
 
 		// Finally, set the OnRefreshListener for Predictions List
 		predictionsList.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
 				if (connected) {
-					// Check if there's already an instance, if so, cancel for
-					// safety
+					// Check if there's already an instance, if so, cancel for safety
 					if (getPredictions instanceof GetPredictions) {
 						getPredictions.cancel(true);
 					}
 					// Then instantiate a-new and execute the request
 					getPredictions = new GetPredictions().execute();
-					// Refresh the line status too, since we're refreshing
-					// everything
+					// Refresh the line status too, since we're refreshing everything
 					if (getLineStatus instanceof GetLineStatus) {
 						getLineStatus.cancel(true);
 					}
@@ -317,8 +302,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	private void setupStationsSpinner() {
 		// Update the data set and reset the adapter
-		mStationAdapter = new StationsSpinnerAdapter(line.stations,
-				line.linecode);
+		mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode);
 		stationsSpinner.setAdapter(mStationAdapter);
 	}
 
@@ -338,11 +322,10 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * @author Filipe De Sousa
 	 */
 	private class PrepareStationsList extends
-			AsyncTask<Void, Void, SLContainer> {
+	AsyncTask<Void, Void, SLContainer> {
 		@Override
 		protected SLContainer doInBackground(Void... params) {
-			// Send the request to prepare the JSON data while other stuff goes
-			// on
+			// Send the request to prepare the JSON data while other stuff goes on
 			// Get the prepared JSON data now to fill the spinners
 			return mJsonR.getStationsList();
 		}

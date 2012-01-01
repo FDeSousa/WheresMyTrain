@@ -18,7 +18,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 
 import java.util.List;
 
-import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,8 +72,7 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 		SLLine line = (SLLine) getItem(position);
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = WheresMyTrain.INSTANCE.getLayoutInflater();
 			convertView = inflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
