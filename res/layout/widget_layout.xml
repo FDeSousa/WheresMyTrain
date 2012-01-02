@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/widget_title_shape_bakerloo"
         android:orientation="horizontal"
-        android:weightSum="1.0" >
+        android:weightSum="1.1" >
 
         <TextView
             android:id="@+id/line_text_widget"
@@ -41,13 +41,14 @@
             android:contentDescription="@string/refresh_button"
             android:scaleType="fitCenter"
             android:src="@drawable/refresh"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </LinearLayout>
     
     <TextView android:id="@+id/text_results_widget"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        style="@style/WidgetLineStationText"
         android:padding="8dip" />
 
 </LinearLayout>

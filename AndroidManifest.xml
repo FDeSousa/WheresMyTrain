@@ -12,7 +12,7 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-
+<!-- Main Activity-related entries -->
         <!-- The main activity for this application -->
         <activity
             android:label="@string/app_name"
@@ -23,12 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--
-TODO: Get the widget working for after release
-        COMMENT: Application's widget has to be registered to get updates
+<!-- End of Main Activity-related entries -->
+<!-- Widget-related entries -->
+        <!-- Application's widget has to be registered as receiver to get updates -->
         <receiver 
             android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
+            android:label="@string/widget_name"
             android:name=".Widget.Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -39,27 +39,27 @@ TODO: Get the widget working for after release
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        COMMENT: Naming the update service for the widget
+        <!-- Naming the update service for the widget -->
         <service
             android:name=".Widget.UpdateWidgetService"
             android:process=":com.fdesousa.android.WheresMyTrain.Widget.Updater" >
         </service>
 
-        COMMENT: Configuration activity for the widget
+		<!-- Configuration activity for the widget -->
         <activity
             android:name=".Widget.Config.Lines"
-            android:label="@string/app_name" >
+            android:label="@string/line" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        COMMENT: Secondary activity, also for configuration of the widget
+		<!-- Secondary activity, also for configuration of the widget -->
         <activity
             android:name=".Widget.Config.Stations"
-            android:label="@string/app_name" >
+            android:label="@string/station" >
         </activity>
--->
+<!-- End of Widget-related entries -->
     </application>
 
 </manifest>

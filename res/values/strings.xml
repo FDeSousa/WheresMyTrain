@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Where\'s My Train?!</string>
-
+	<string name="widget_name">Details - Where\'s My Train?!</string>
     <string name="lines_prompt">Underground Lines</string>
     <string name="stations_prompt">Train Stations</string>
     <string name="about_text">

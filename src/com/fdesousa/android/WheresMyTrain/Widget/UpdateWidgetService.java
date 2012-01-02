@@ -8,7 +8,6 @@ import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPContainer;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerConfig;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -29,14 +28,16 @@ public class UpdateWidgetService extends Service {
 
 		//	Make the view. Can be generic for all of the widgets
 		RemoteViews remoteView = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
-
+		//	Instantiate TflJsonReader once before all of the widgets are updated
+		TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 		//	Create the PendingIntent for updates when clicking the button
-		Intent update = new Intent(Widget.WIDGET_UPDATE);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, update, 0);
-		remoteView.setOnClickPendingIntent(R.id.refresh_button_widget, pendingIntent);
+		//Intent update = new Intent(Widget.WIDGET_UPDATE);
+		//PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, update, 0);
 
 		//	Loop through, updating all widgets
 		for (int widgetId : allWidgetIds) {
+			//	Set the onClickPendingIntent for each widget
+			//remoteView.setOnClickPendingIntent(R.id.refresh_button_widget, pendingIntent);
 			//	Get the values from shared preferences
 			String lineKey = Widget.LINE_PREFS_KEY + widgetId;
 			String stationKey = Widget.STATION_PREFS_KEY + widgetId;
@@ -44,7 +45,6 @@ public class UpdateWidgetService extends Service {
 			String station = settings.getString(stationKey, "chx");
 
 			//	Request and parse the data
-			TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 			DPContainer result = mJsonR.getDetailedPredictions(line, station);
 
 			//	Setup the view with the new data
@@ -57,7 +57,7 @@ public class UpdateWidgetService extends Service {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm.ss");
 			String cTime = sdf.format(new Date());
 			remoteView.setTextViewText(R.id.text_results_widget, "Updated: " + cTime);
-			
+
 			//	Finally, refresh the view
 			appWidgetManager.updateAppWidget(widgetId, remoteView);
 		}
