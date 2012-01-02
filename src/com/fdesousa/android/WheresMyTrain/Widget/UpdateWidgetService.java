@@ -29,6 +29,7 @@ public class UpdateWidgetService extends Service {
 
 		//	Make the view. Can be generic for all of the widgets
 		RemoteViews remoteView = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
+
 		//	Create the PendingIntent for updates when clicking the button
 		Intent update = new Intent(Widget.WIDGET_UPDATE);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, update, 0);
@@ -56,8 +57,6 @@ public class UpdateWidgetService extends Service {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm.ss");
 			String cTime = sdf.format(new Date());
 			remoteView.setTextViewText(R.id.text_results_widget, "Updated: " + cTime);
-
-			//	Thirdly, setup the onClickPendingIntent
 			
 			//	Finally, refresh the view
 			appWidgetManager.updateAppWidget(widgetId, remoteView);
