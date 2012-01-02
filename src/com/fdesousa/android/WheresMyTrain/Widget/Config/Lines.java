@@ -1,5 +1,7 @@
 package com.fdesousa.android.WheresMyTrain.Widget.Config;
 
+import java.util.Calendar;
+
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLContainer;
@@ -9,7 +11,9 @@ import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerConfig;
 import com.fdesousa.android.WheresMyTrain.Widget.Widget;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -85,10 +89,26 @@ public class Lines extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PICK_STATION_REQUEST && resultCode == RESULT_OK) {
+			//	Write out the results, relevant to the widget being configured only
 			writePreferences(data.getExtras());
+
+			//	Prepare the alarm service to perform the updates to the widget
+			Intent intent = new Intent(Widget.WIDGET_UPDATE);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+			AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			//	Set the start time to 2 seconds from now
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			cal.add(Calendar.SECOND, 2);
+			//	Set to repeat every 2 minutes (2 * 60 * 1000)
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 
+					cal.getTimeInMillis(), 2 * 60 * 1000, pendingIntent);
+			//	Save the AlarmManager to later be cancelled if necessary
+			Widget.saveAlarmManager(alarmManager, pendingIntent);
+
 			//	Line and station chosen, set result to OK, finish normally
-			setResult(RESULT_OK, new Intent()
-					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId));
+			setResult(RESULT_OK, new Intent().putExtra(
+					AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId));
 			finish();
 		}
 	}

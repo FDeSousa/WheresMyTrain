@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/widget_title_shape_bakerloo"
         android:orientation="horizontal"
-        android:weightSum="1.1" >
+        android:weightSum="1.0" >
 
         <TextView
             android:id="@+id/line_text_widget"
@@ -34,24 +34,20 @@
         <ImageButton
             android:id="@+id/refresh_button_widget"
             android:layout_width="0dip"
-            android:layout_height="16dip"
-            android:layout_margin="4dip"
+            android:layout_height="fill_parent"
             android:layout_weight=".1"
+            android:padding="8dip"
             android:background="@android:color/transparent"
             android:contentDescription="@string/refresh_button"
             android:scaleType="fitCenter"
             android:src="@drawable/refresh"
-            android:visibility="visible" />
-
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="16dip"
-            android:layout_height="16dip"
-            android:layout_margin="4dip"
-            android:indeterminate="true"
             android:visibility="gone" />
 
     </LinearLayout>
+    
+    <TextView android:id="@+id/text_results_widget"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="8dip" />
 
 </LinearLayout>

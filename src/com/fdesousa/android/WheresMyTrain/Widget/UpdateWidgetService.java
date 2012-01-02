@@ -1,5 +1,8 @@
 package com.fdesousa.android.WheresMyTrain.Widget;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPContainer;
@@ -11,9 +14,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.IBinder;
-import android.view.View;
 import android.widget.RemoteViews;
 
 public class UpdateWidgetService extends Service {
@@ -26,49 +27,45 @@ public class UpdateWidgetService extends Service {
 
 		SharedPreferences settings = this.getSharedPreferences(Widget.TAG, Context.MODE_PRIVATE);
 
-		//	Loop through, updating all widgets I guess?
-		for (int widgetId : allWidgetIds) {
-			//	Make the view, stop showing the refresh button
-			RemoteViews remoteView = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
+		//	Make the view. Can be generic for all of the widgets
+		RemoteViews remoteView = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
+		//	Create the PendingIntent for updates when clicking the button
+		Intent update = new Intent(Widget.WIDGET_UPDATE);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, update, 0);
+		remoteView.setOnClickPendingIntent(R.id.refresh_button_widget, pendingIntent);
 
+		//	Loop through, updating all widgets
+		for (int widgetId : allWidgetIds) {
 			//	Get the values from shared preferences
 			String lineKey = Widget.LINE_PREFS_KEY + widgetId;
 			String stationKey = Widget.STATION_PREFS_KEY + widgetId;
-			String lineColourKey = Widget.LINE_COLOUR_KEY + widgetId;
 			String line = settings.getString(lineKey, "b");
 			String station = settings.getString(stationKey, "chx");
-			int lineColour = settings.getInt(lineColourKey, 0);
 
 			//	Request and parse the data
 			TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 			DPContainer result = mJsonR.getDetailedPredictions(line, station);
 
 			//	Setup the view with the new data
+			//	First the title bar
 			remoteView.setTextViewText(R.id.line_text_widget, result.information.linename);
 			remoteView.setTextViewText(R.id.station_text_widget, result.stations.get(0).stationname);
 			UiControllerConfig.setWidgetTitleShape(remoteView, line);
+
+			//	Second the informational portion of the widget
+			SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm.ss");
+			String cTime = sdf.format(new Date());
+			remoteView.setTextViewText(R.id.text_results_widget, "Updated: " + cTime);
+
+			//	Thirdly, setup the onClickPendingIntent
+			
 			//	Finally, refresh the view
 			appWidgetManager.updateAppWidget(widgetId, remoteView);
 		}
-		stopSelf();
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-
-	public static PendingIntent makeControlPendingIntent(Context context, String command, int appWidgetId) {
-		Intent active = new Intent(context, UpdateWidgetService.class);
-		active.setAction(command);
-		active.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		// Uri data makes PendingIntent unique, to avoid updating on FLAG_UPDATE_CURRENT
-		// If there are multiple widgets, they won't override each other
-		Uri data = Uri.withAppendedPath(
-				Uri.parse("://widget/id/#" + command + appWidgetId),
-				String.valueOf(appWidgetId));
-		active.setData(data);
-		return(PendingIntent.getService(context, 0, active, PendingIntent.FLAG_UPDATE_CURRENT));
-	}
-
 }
