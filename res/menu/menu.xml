@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/refresh"
-        android:title="Refresh" />
+        android:title="Refresh"
+        android:icon="@drawable/ic_menu_rotate" />
     <item android:id="@+id/about"
-        android:title="About" />
+        android:title="About"
+        android:icon="@drawable/ic_menu_about" />
     <item android:id="@+id/exit"
-        android:title="Exit" />
+        android:title="Exit"
+        android:icon="@drawable/ic_menu_stop" />
 </menu>

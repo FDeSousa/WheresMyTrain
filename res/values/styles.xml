@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Style used for the custom title bar textviews used in the app -->
 	<style name="TitleBarText">
 	    <item name="android:layout_width">0dip</item>
 	    <item name="android:layout_height">20dip</item>
@@ -9,13 +10,15 @@
 	    <item name="android:textSize">14sp</item>
 	</style>
 
+	<!-- Style used predominantly for spinners -->
 	<style name="ChoiceSpinner">
 	    <item name="android:layout_width">fill_parent</item>
-	    <item name="android:layout_height">45dip</item>
+	    <item name="android:layout_height">55dip</item>
 	    <item name="android:background">@drawable/spinner</item>
 	    <item name="android:textColor">@color/northern_colour</item>
 	</style>
 
+	<!-- Style used on buttons -->
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">45dip</item>
@@ -25,7 +28,8 @@
         <item name="android:text">Unknown Status</item>
         <item name="android:background">@drawable/btn_white_basic</item>
     </style>
-    
+
+    <!-- Style used on the Widget for displaying line and station textviews -->
     <style name="WidgetLineStationText">
 	    <item name="android:layout_width">0dip</item>
 	    <item name="android:layout_height">16dip</item>

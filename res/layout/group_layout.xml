@@ -5,6 +5,8 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <!-- Single TextView in each ExpandableListView group -->
+    <!-- TextView to display the full name of the platform; the grouping entity -->
     <TextView
         android:id="@+id/tvGroup"
         android:layout_width="fill_parent"
@@ -14,6 +16,6 @@
         android:layout_margin="5dip"
         android:paddingLeft="0dip"
         android:textColor="#ff000000"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

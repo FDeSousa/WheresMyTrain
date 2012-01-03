@@ -2,16 +2,27 @@
 <resources>
 
     <!-- Web safe colour values from TfL for LU lines -->
+    <!-- TfL Bakerloo Line colour -->
 	<color name="bakerloo_colour">#ff996633</color>
+	<!-- TfL Central Line colour -->
 	<color name="central_colour">#ffcc3333</color>
+	<!-- TfL Circle Line colour -->
 	<color name="circle_colour">#ffffcc00</color>
+	<!-- TfL District Line colour -->
 	<color name="district_colour">#ff006633</color>
+	<!-- TfL Hammersmith Line colour -->
 	<color name="hammersmith_colour">#ffcc9999</color>
+	<!-- TfL Jubilee Line colour -->
 	<color name="jubilee_colour">#ff868f98</color>
+	<!-- TfL Metropolitan Line colour -->
 	<color name="metropolitan_colour">#ff660066</color>
+	<!-- TfL Northern Line colour -->
 	<color name="northern_colour">#ff000000</color>
+	<!-- TfL Piccadilly Line colour -->
 	<color name="piccadilly_colour">#ff000099</color>
+	<!-- TfL Victoria Line colour -->
 	<color name="victoria_colour">#ff0099cc</color>
+	<!-- TfL Waterloo Line colour -->
 	<color name="waterloo_colour">#ff66cccc</color>
     
 </resources>

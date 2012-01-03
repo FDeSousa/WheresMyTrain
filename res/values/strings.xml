@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Application name -->
     <string name="app_name">Where\'s My Train?!</string>
+    <!-- Widget name -->
 	<string name="widget_name">Details - Where\'s My Train?!</string>
+	<!-- Prompt used in spinner selection for underground lines -->
     <string name="lines_prompt">Underground Lines</string>
+    <!-- Prompt used in spinner selection for train stations -->
     <string name="stations_prompt">Train Stations</string>
+    <!-- Text displayed in About dialog -->
     <string name="about_text">
 Where\'s My Train?!\n
 Copyright 2011 Filipe De Sousa\n\n
@@ -23,9 +28,13 @@ https://github.com/FDeSousa/WheresMyTrain\n
 tfl.php:\n
 https://github.com/FDeSousa/tfl.php\n
 	</string>
+	<!-- Generic Line text for basic prompts -->
     <string name="line">Line</string>
+    <!--  Generic Station text for basic prompts -->
     <string name="station">Station</string>
+    <!-- Generic Back text for displaying on back buttons/prompts -->
     <string name="back">Back</string>
+    <!-- Generic Refresh text for displaying on buttons -->
     <string name="refresh_button">Refresh button</string>
 
 </resources>

@@ -5,6 +5,7 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <!-- Custom Title Bar layout -->
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/custom_title_bar"
@@ -13,12 +14,14 @@
         android:gravity="center_vertical|center_horizontal"
         android:weightSum="1.0" >
 
+        <!-- TextView for displaying the Line Name -->
         <TextView
             android:id="@+id/text_line"
             android:layout_gravity="center_vertical|left"
             android:gravity="left"
             style="@style/TitleBarText" />
 
+        <!-- TextView for displaying the Station Name -->
         <TextView
             android:id="@+id/text_station"
             android:layout_gravity="center_vertical|right"
@@ -26,21 +29,26 @@
             style="@style/TitleBarText" />
     </LinearLayout>
 
+    <!-- Spinner for choosing Line -->
     <Spinner
         android:id="@+id/lines_spinner"
         style="@style/ChoiceSpinner"
         android:prompt="@string/lines_prompt" />
 
+    <!-- Spinner for choosing Station -->
     <Spinner
         android:id="@+id/stations_spinner"
         style="@style/ChoiceSpinner"
         android:prompt="@string/stations_prompt" />
 
+    <!-- Button displaying the service status, with service status dialog attached -->
     <Button
         android:id="@+id/service_status"
         android:onClick="showLineStatus"
         style="@style/ButtonText" />
 
+    <!-- Custom control from Android-PullToRefresh library -->
+    <!-- ExpandableListView for platforms and trains predictions, with pull-to-refresh capability -->
     <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
         xmlns:ptr="http://schemas.android.com/apk/res/com.fdesousa.android.WheresMyTrain"
         android:id="@+id/platforms_list"

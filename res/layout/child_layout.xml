@@ -5,6 +5,7 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <!-- Top row of child row layout in ExpandableListView -->
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -13,6 +14,7 @@
         android:orientation="horizontal"
         android:weightSum="1.0" >
 
+        <!-- TextView to display the intended destination of the train -->
         <TextView
             android:id="@+id/tvDestination"
             android:layout_width="0dip"
@@ -24,6 +26,7 @@
             android:textColor="#ff000000"
             android:textSize="14sp" />
 
+        <!-- TextView to display the estimated time left until train arrives at platform -->
         <TextView
             android:id="@+id/tvTimeTo"
             android:layout_width="0dip"
@@ -36,6 +39,7 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <!-- TextView to display the current location of the train on bottom row of layout -->
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="fill_parent"
