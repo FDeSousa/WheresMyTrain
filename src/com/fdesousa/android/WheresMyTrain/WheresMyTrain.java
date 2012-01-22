@@ -17,10 +17,7 @@ package com.fdesousa.android.WheresMyTrain;
  *****************************************************************************/
 
 import android.app.ExpandableListActivity;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +30,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
+import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonFetcher;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPContainer;
 import com.fdesousa.android.WheresMyTrain.Library.requests.LineStatus.LSContainer;
@@ -127,7 +125,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Give LibraryMain a Context instance
 		LibraryMain.setContext(this.getBaseContext());
 		// Check the connectivity
-		checkConnectivity();
+		this.connected = TflJsonFetcher.isReachable(this);
 		// Now it's time to instantiate and setup things
 		instantiateVariables();
 		setupWidgets();
@@ -172,24 +170,6 @@ public class WheresMyTrain extends ExpandableListActivity {
 	public void onBackPressed() {
 		// Display the finish confirmation dialog
 		UI_CONTROLLER.displayExitConfirmationDialog();
-	}
-
-	// Check connectivity
-	/**
-	 * Utility method to check out the connectivity status when launching the
-	 * application
-	 */
-	private void checkConnectivity() {
-		final ConnectivityManager connMgr = (ConnectivityManager) this
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		final NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
-
-		if (netInfo != null && netInfo.isConnected()) {
-			connected = true;
-		} else {
-			LibraryMain.displayToast("No connection available");
-			connected = false;
-		}
 	}
 
 	// Convenience method for instantiation

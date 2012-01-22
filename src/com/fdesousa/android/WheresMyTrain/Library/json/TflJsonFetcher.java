@@ -18,13 +18,21 @@ package com.fdesousa.android.WheresMyTrain.Library.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
-
+import java.net.URL;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+
+import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 
 /**
  * <b>TflJsonFetcher</b>
@@ -51,5 +59,42 @@ public class TflJsonFetcher {
 		HttpEntity entity = httpresponse.getEntity();
 
 		return entity.getContent();
+	}
+
+	/**
+	 * Convenience method to ascertain whether connectivity is available, and
+	 * whether or not the server is reachable
+	 * @param context - Context instance used for getting connectivity service
+	 * @return true if server is reachable, false otherwise
+	 */
+	public static boolean isReachable(Context context) {
+		//	First, check we have any sort of connectivity
+		final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
+
+		if (netInfo != null && netInfo.isConnected()) {
+			//	Some sort of connection is open, check if server is reachable
+			try {
+				URL url = new URL(TflJsonReader.BASE_URL);
+				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+				urlc.setRequestProperty("User-Agent", "Android Application");
+				urlc.setRequestProperty("Connection", "close");
+				urlc.setConnectTimeout(10 * 1000); // Ten seconds timeout in milliseconds
+				urlc.connect();
+				if (urlc.getResponseCode() == 200) {
+					return true;
+				} else {
+					LibraryMain.displayToast("Could not reach server");
+					return false;
+				}
+			} catch (IOException e) {
+				LibraryMain.displayToast("Could not reach server");
+				Log.e("TflJsonFetcher", e.getMessage());
+				return false;
+			}
+		} else {
+			LibraryMain.displayToast("No connection available");
+			return false;
+		}
 	}
 }

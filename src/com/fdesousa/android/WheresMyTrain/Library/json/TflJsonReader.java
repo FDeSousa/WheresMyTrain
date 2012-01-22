@@ -48,7 +48,7 @@ public class TflJsonReader {
 	/**	URL divider of URL arguments, to be used after Query marker						*/
 	private static final char ARG_DIV = '&';
 	/**	The base URL used for all TfL requests											*/
-	private static final String BASE_URL = "http://trains.desousa.com.pt/tfl.php";
+	protected static final String BASE_URL = "http://trains.desousa.com.pt/tfl.php";
 	/**	The base for the request type URL argument										*/
 	private static final String REQUEST_ARG = "request=";
 	/**	The base for the line code URL argument											*/
