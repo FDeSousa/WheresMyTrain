@@ -62,7 +62,7 @@ public class TflJsonFetcher {
 	}
 
 	/**
-	 * Convenience method to ascertain whether connectivity is available, and
+	 * Utility method to ascertain whether connectivity is available, and
 	 * whether or not the server is reachable
 	 * @param context - Context instance used for getting connectivity service
 	 * @return true if server is reachable, false otherwise
