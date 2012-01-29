@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 
 /**
@@ -75,7 +76,7 @@ public class TflJsonFetcher {
 		if (netInfo != null && netInfo.isConnected()) {
 			//	Some sort of connection is open, check if server is reachable
 			try {
-				URL url = new URL(TflJsonReader.BASE_URL);
+				URL url = new URL(TflJsonReader.URL_HOST);
 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 				urlc.setRequestProperty("User-Agent", "Android Application");
 				urlc.setRequestProperty("Connection", "close");
@@ -89,7 +90,7 @@ public class TflJsonFetcher {
 				}
 			} catch (IOException e) {
 				LibraryMain.displayToast("Could not reach server");
-				Log.e("TflJsonFetcher", e.getMessage());
+				Log.e(WheresMyTrain.TAG + "TflJsonFetcher", e.getMessage());
 				return false;
 			}
 		} else {

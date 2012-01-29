@@ -48,7 +48,9 @@ public class TflJsonReader {
 	/**	URL divider of URL arguments, to be used after Query marker						*/
 	private static final char ARG_DIV = '&';
 	/**	The base URL used for all TfL requests											*/
-	protected static final String BASE_URL = "http://trains.desousa.com.pt/tfl.php";
+	protected static final String URL_HOST = "http://trains.desousa.com.pt";
+	/*	The relative path to the PHP script to send requests to							*/
+	private static final String URL_PATH = "/tfl.php";
 	/**	The base for the request type URL argument										*/
 	private static final String REQUEST_ARG = "request=";
 	/**	The base for the line code URL argument											*/
@@ -99,7 +101,7 @@ public class TflJsonReader {
 			//	If incidentsOnly is true, add it
 			if (incidentsOnly) arguments += ARG_DIV + INCIDENTS_ARG + PHP_TRUE_VALUE;
 			//	Now make the URI with base and query elements
-			return new URI(BASE_URL + QUERY + arguments);
+			return new URI(URL_HOST + URL_PATH + QUERY + arguments);
 		} catch (URISyntaxException e) {
 			Log.e(LibraryMain.TAG, e.getMessage());
 			LibraryMain.displayToast("Entered URL is not valid");

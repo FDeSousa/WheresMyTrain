@@ -28,6 +28,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonFetcher;
@@ -45,7 +46,6 @@ import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerMain;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
-@SuppressWarnings("rawtypes")
 /**
  * <b>WheresMyTrain : Activity</b>
  * <p>Main Activity for the app, instantiating and controlling most UI elements.<br/>
@@ -56,7 +56,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 public class WheresMyTrain extends ExpandableListActivity {
 	// Useful logging variables
 	/** Tag to be used when Logging an exception/error/anything at all */
-	public static final String TAG = "WheresMyTrain";
+	public static final String TAG = "com.fdesousa.android.WheresMyTrain";
 	/**
 	 * Current instance of this activity. Quick and dirty access to resources,
 	 * context, etc.
@@ -125,10 +125,20 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Give LibraryMain a Context instance
 		LibraryMain.setContext(this.getBaseContext());
 		// Check the connectivity
+		checkConnectivity();
+		if (this.connected) {
+			// Now it's time to instantiate and setup things
+			instantiateVariables();
+			setupWidgets();			
+		}
+	}
+
+	private void checkConnectivity() {
 		this.connected = TflJsonFetcher.isReachable(this);
-		// Now it's time to instantiate and setup things
-		instantiateVariables();
-		setupWidgets();
+		
+		if (!this.connected) {
+			Toast.makeText(this, "Server is unreachable. Check connectivity", Toast.LENGTH_LONG);
+		}
 	}
 
 	@Override
@@ -288,7 +298,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 
 	// Fetch, parse, display the list of lines and stations
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask prepareStationsList;
+	private AsyncTask<Void, Void, SLContainer> prepareStationsList;
 
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get the
@@ -301,8 +311,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * 
 	 * @author Filipe De Sousa
 	 */
-	private class PrepareStationsList extends
-	AsyncTask<Void, Void, SLContainer> {
+	private class PrepareStationsList extends AsyncTask<Void, Void, SLContainer> {
 		@Override
 		protected SLContainer doInBackground(Void... params) {
 			// Send the request to prepare the JSON data while other stuff goes on
@@ -321,7 +330,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 
 	// Get/Refresh the detailed predictions
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask getPredictions;
+	private AsyncTask<Void, Void, DPContainer> getPredictions;
 
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get
@@ -354,8 +363,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		protected void onPostExecute(DPContainer result) {
 			// Because of how tfl.php sends predictions data, there is only ever
 			// ONE station in stations array
-			mPlatformAdapter = new PlatformsExpListAdapter(
-					result.stations.get(0).platforms);
+			mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms);
 			// Show the expandable list view, to show new predictions
 			predictionsList.setVisibility(View.VISIBLE);
 			// (Re)set the adapter onto the ExpandableListView
@@ -370,7 +378,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 
 	// Get/Refresh the line status
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask getLineStatus;
+	private AsyncTask<Void, Void, LSContainer> getLineStatus;
 
 	/**
 	 * AsyncTask sub-class to achieve a non-blocking manner in which to get line
