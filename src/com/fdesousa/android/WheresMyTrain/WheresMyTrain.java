@@ -42,6 +42,7 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLStatio
 import com.fdesousa.android.WheresMyTrain.UiElements.LinesSpinnerAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.PlatformsExpListAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.StationsSpinnerAdapter;
+import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerMain;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
@@ -61,9 +62,9 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * Current instance of this activity. Quick and dirty access to resources,
 	 * context, etc.
 	 */
-	public static WheresMyTrain INSTANCE;
+	//public static WheresMyTrain INSTANCE;
 	/** Instance of UiController for setting up, and controlling, all of the UI */
-	public static UiControllerMain UI_CONTROLLER;
+	private UiController uiController;
 
 	// Main view widgets
 	/** Spinner used for selecting Underground Line - colour-coded text choices */
@@ -153,11 +154,13 @@ public class WheresMyTrain extends ExpandableListActivity {
 		switch (item.getItemId()) {
 		case R.id.about:
 			// Display about dialog
-			UI_CONTROLLER.displayAboutDialog();
+			if (uiController instanceof UiControllerMain)
+				((UiControllerMain) uiController).displayAboutDialog();
 			break;
 		case R.id.exit:
 			// Display the finish confirmation dialog
-			UI_CONTROLLER.displayExitConfirmationDialog();
+			if (uiController instanceof UiControllerMain)
+				((UiControllerMain) uiController).displayExitConfirmationDialog();
 			break;
 		case R.id.refresh:
 			// Refresh the predictions
@@ -179,7 +182,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 	@Override
 	public void onBackPressed() {
 		// Display the finish confirmation dialog
-		UI_CONTROLLER.displayExitConfirmationDialog();
+		if (uiController instanceof UiControllerMain)
+			((UiControllerMain) uiController).displayExitConfirmationDialog();
 	}
 
 	// Convenience method for instantiation
@@ -188,14 +192,14 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * Makes onCreate tidier to look at
 	 */
 	private void instantiateVariables() {
-		INSTANCE = this;
-		UI_CONTROLLER = new UiControllerMain(getResources(), getAssets(), customTitleBar, this);
+		//INSTANCE = this;
+		uiController = new UiControllerMain(getResources(), getAssets(), customTitleBar, this);
 
 		mJsonR = new TflJsonReader(getCacheDir());
 
 		// For safety, since Bakerloo is shown first, use Bakerloo colours to
 		// initialise
-		UI_CONTROLLER.setTextColour(UI_CONTROLLER.getLineColour("b"));
+		uiController.setTextColour(uiController.getLineColour("b"));
 
 		// Initialise the display widgets
 		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
@@ -256,7 +260,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 					// Edit the title bar every time station is changed
 					// to reflect the changes
 					if (customTitleBar)
-						UI_CONTROLLER.refreshMainTitleBar(line.linename, station.stationname);
+						if (uiController instanceof UiControllerMain)
+							((UiControllerMain) uiController).refreshMainTitleBar(line.linename, station.stationname);
 				}
 			}
 			@Override
@@ -292,7 +297,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 */
 	private void setupStationsSpinner() {
 		// Update the data set and reset the adapter
-		mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode);
+		mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode, getLayoutInflater(), uiController);
 		stationsSpinner.setAdapter(mStationAdapter);
 	}
 
@@ -322,7 +327,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		@Override
 		protected void onPostExecute(SLContainer result) {
 			// Initialise the Lines Spinner adapter
-			mLineAdapter = new LinesSpinnerAdapter(result.lines);
+			mLineAdapter = new LinesSpinnerAdapter(result.lines, WheresMyTrain.this.getLayoutInflater(), WheresMyTrain.this.uiController);
 			// Set the adapter onto the Lines Spinner
 			linesSpinner.setAdapter(mLineAdapter);
 		}
@@ -363,7 +368,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 		protected void onPostExecute(DPContainer result) {
 			// Because of how tfl.php sends predictions data, there is only ever
 			// ONE station in stations array
-			mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms);
+			mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms, WheresMyTrain.this.getLayoutInflater(), WheresMyTrain.this.uiController);
 			// Show the expandable list view, to show new predictions
 			predictionsList.setVisibility(View.VISIBLE);
 			// (Re)set the adapter onto the ExpandableListView
@@ -415,9 +420,10 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Reset the status button to black and white, unknown status
 		serviceStatus.setBackgroundResource(R.drawable.btn_white_basic);
 		serviceStatus.setTextColor(Color.BLACK);
-		serviceStatus.setTypeface(UI_CONTROLLER.book);
+		serviceStatus.setTypeface(uiController.book);
 		serviceStatus.setText("Unknown Status");
-		UI_CONTROLLER.setLineStatusDialogText("Unknown Status", "Please wait");
+		if (uiController instanceof UiControllerMain)
+			((UiControllerMain) uiController).setLineStatusDialogText("Unknown Status", "Please wait");
 	}
 
 	/**
@@ -541,18 +547,15 @@ public class WheresMyTrain extends ExpandableListActivity {
 		serviceStatus.setTextColor(Color.WHITE);
 
 		// Now setup the line status dialog's title and message
-		UI_CONTROLLER.setLineStatusDialogText(title, details);
+		if (uiController instanceof UiControllerMain)
+			((UiControllerMain) uiController).setLineStatusDialogText(title, details);
 	}
 
 	/**
 	 * Convenience method to decide if details string is too short/is empty.<br/>
-	 * If so, return the description string instead. Useful for line status
-	 * dialog
-	 * 
-	 * @param details
-	 *            - the line status details for a specific line
-	 * @param description
-	 *            - the line status description for a specific line
+	 * If so, return the description string instead. Useful for line status dialog
+	 * @param details - the line status details for a specific line
+	 * @param description - the line status description for a specific line
 	 * @return the string that should be displayed in the dialog
 	 */
 	private String decideMessageChoice(String details, String description) {
@@ -572,10 +575,10 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * OnClick method for the serviceStatus Button, as defined in layout
 	 * XML</br> Just shows the line status dialog
 	 * 
-	 * @param v
-	 *            - instance of View (generally will be the Button itself)
+	 * @param v - instance of View (generally will be the Button itself)
 	 */
 	public void showLineStatus(View v) {
-		UI_CONTROLLER.showLineStatusDialog();
+		if (uiController instanceof UiControllerMain)
+			((UiControllerMain) uiController).showLineStatusDialog();
 	}
 }

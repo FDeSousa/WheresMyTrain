@@ -19,7 +19,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPPlatform;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPTrain;
@@ -49,13 +47,17 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.D
 public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 
 	private List<DPPlatform> platforms;
+	private LayoutInflater layoutInflater;
+	private UiController uiController;
 
-	public PlatformsExpListAdapter(List<DPPlatform> platforms) {
+	public PlatformsExpListAdapter(List<DPPlatform> platforms, LayoutInflater layoutInflater, UiController uiController) {
 		this.platforms = new ArrayList<DPPlatform>();
 		for (DPPlatform platform : platforms) {
 			this.platforms.add(platform.filterAndClone());
 		}
 		notifyDataSetChanged();
+		this.layoutInflater = layoutInflater;
+		this.uiController = uiController;
 	}
 
 	@Override
@@ -71,18 +73,17 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		int textColour = WheresMyTrain.UI_CONTROLLER.getTextColour();
+		int textColour = uiController.getTextColour();
 		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) WheresMyTrain.INSTANCE.getLayoutInflater();
-			convertView = inflater.inflate(R.layout.child_layout, null);
+			convertView = layoutInflater.inflate(R.layout.child_layout, null);
 		}
 		// Show the destination name
 		TextView tvDest = (TextView) convertView
 				.findViewById(R.id.tvDestination);
 		tvDest.setTextColor(textColour);
-		tvDest.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
+		tvDest.setTypeface(uiController.book);
 
 		// Check destcode does not match Unknown distination first
 		if (train.destcode == LibraryMain.UNKNOWN_DESTINATION) {
@@ -100,7 +101,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		// Show how long is predicted until train arrives
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tvTimeTo);
 		tvTime.setTextColor(textColour);
-		tvTime.setTypeface(WheresMyTrain.UI_CONTROLLER.bold);
+		tvTime.setTypeface(uiController.bold);
 		if (train.timeto.equals("-")) {
 			// Indicates "At platform", so show nothing
 			tvTime.setText("");
@@ -111,7 +112,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 		// Show the location of the train
 		TextView tvLoc = (TextView) convertView.findViewById(R.id.tvLocation);
 		tvLoc.setTextColor(textColour);
-		tvLoc.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
+		tvLoc.setTypeface(uiController.book);
 		// Make sure there is something to display first
 		if (train.location.length() > 0) {
 			// If so, display it
@@ -148,12 +149,10 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 			View convertView, ViewGroup parent) {
 		DPPlatform platform = (DPPlatform) getGroup(groupPosition);
 		if (convertView == null) {
-			LayoutInflater inflator = (LayoutInflater) WheresMyTrain.INSTANCE
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflator.inflate(R.layout.group_layout, null);
+			convertView = layoutInflater.inflate(R.layout.group_layout, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.tvGroup);
-		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.bold);
+		tv.setTypeface(uiController.bold);
 		tv.setText(platform.platformname);
 
 		return convertView;

@@ -82,6 +82,9 @@ public class SLHandler extends TflJsonHandler {
 		parseJson();
 	}
 
+	/**
+	 * Automates parsing of JSON string into an object
+	 */
 	@Override
 	protected void parseJson() {
 		stationslist = new Gson().fromJson(json, SLContainer.class);
@@ -101,15 +104,11 @@ public class SLHandler extends TflJsonHandler {
 		return stringFromInputStream(in);
 	}
 
+	/**
+	 * Writes out JSON string to cache
+	 */
 	private void writeJsonToCache() {
 		try {
-			/*
-			 *	Write out a new cache, since the old one wasn't valid
-			 *	This is the reason why two identical lines exist:
-			 *	json = stringFromInputStream(in);
-			 *	If there was no need to save the json string into cache,
-			 *	this line would need calling only once
-			 */
 			final BufferedWriter out = new BufferedWriter(new FileWriter(cacheFile), 2048);
 			out.write(json);
 			out.close();

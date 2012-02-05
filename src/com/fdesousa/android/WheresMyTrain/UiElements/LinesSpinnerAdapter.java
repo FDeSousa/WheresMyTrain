@@ -26,7 +26,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
 
 /**
@@ -42,9 +41,13 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
 public class LinesSpinnerAdapter implements SpinnerAdapter {
 
 	private List<SLLine> lines;
+	private LayoutInflater layoutInflater;
+	private UiController uiController;
 
-	public LinesSpinnerAdapter(List<SLLine> lines) {
+	public LinesSpinnerAdapter(List<SLLine> lines, LayoutInflater layoutInflater, UiController uiController) {
 		this.lines = lines;
+		this.layoutInflater = layoutInflater;
+		this.uiController = uiController;
 	}
 
 	@Override
@@ -72,13 +75,12 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 		SLLine line = (SLLine) getItem(position);
 
 		if (convertView == null) {
-			LayoutInflater inflater = WheresMyTrain.INSTANCE.getLayoutInflater();
-			convertView = inflater.inflate(R.layout.spinner_row, null);
+			convertView = layoutInflater.inflate(R.layout.spinner_row, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.row);
-		int colour = WheresMyTrain.UI_CONTROLLER.getLineColour(line.linecode);
+		int colour = uiController.getLineColour(line.linecode);
 		tv.setTextColor(colour);
-		tv.setTypeface(WheresMyTrain.UI_CONTROLLER.book);
+		tv.setTypeface(uiController.book);
 		tv.setText(line.linename);
 
 		return convertView;
