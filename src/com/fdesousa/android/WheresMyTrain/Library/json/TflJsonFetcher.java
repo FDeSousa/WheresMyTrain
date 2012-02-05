@@ -33,7 +33,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.fdesousa.android.WheresMyTrain.WheresMyTrain;
-import com.fdesousa.android.WheresMyTrain.Library.LibraryMain;
 
 /**
  * <b>TflJsonFetcher</b>
@@ -85,16 +84,13 @@ public class TflJsonFetcher {
 				if (urlc.getResponseCode() == 200) {
 					return true;
 				} else {
-					LibraryMain.displayToast("Could not reach server");
 					return false;
 				}
 			} catch (IOException e) {
-				LibraryMain.displayToast("Could not reach server");
 				Log.e(WheresMyTrain.TAG + "TflJsonFetcher", e.getMessage());
 				return false;
 			}
 		} else {
-			LibraryMain.displayToast("No connection available");
 			return false;
 		}
 	}

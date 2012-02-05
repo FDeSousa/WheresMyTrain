@@ -104,7 +104,6 @@ public class TflJsonReader {
 			return new URI(URL_HOST + URL_PATH + QUERY + arguments);
 		} catch (URISyntaxException e) {
 			Log.e(LibraryMain.TAG, e.getMessage());
-			LibraryMain.displayToast("Entered URL is not valid");
 			return null;
 		}
 	}

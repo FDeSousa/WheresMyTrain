@@ -1,8 +1,5 @@
 package com.fdesousa.android.WheresMyTrain.Library;
 
-import android.content.Context;
-import android.widget.Toast;
-
 public final class LibraryMain {
 	//	Debug codes
 	/**	TAG String for project logs	*/
@@ -83,21 +80,4 @@ public final class LibraryMain {
 	public static final String CHECK_FRONT = "Check front of train";
 	/**	Replacement string for condition of empty Location string									*/
 	public static final String NO_LOCATION = "Location unknown";
-
-	//	Must have a context to show Toast messages, so store one here
-	private static Context context;
-	
-	/**	Basic setter for Context	*/
-	public final static void setContext(Context context) {
-		LibraryMain.context = context;
-	}
-
-	//	Simple, easy method to display Toast
-	/**
-	 * Simple, easy, dirty static method for showing Toast messages from any class
-	 * @param message - String to display to the user
-	 */
-	public final static void displayToast(final String message) {
-		Toast.makeText(context, message, Toast.LENGTH_LONG);
-	}
 }

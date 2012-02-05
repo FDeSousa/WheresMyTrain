@@ -123,8 +123,6 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// Set the content view to our main layout
 		setContentView(R.layout.detailed_predictions);
 
-		// Give LibraryMain a Context instance
-		LibraryMain.setContext(this.getBaseContext());
 		// Check the connectivity
 		checkConnectivity();
 		if (this.connected) {

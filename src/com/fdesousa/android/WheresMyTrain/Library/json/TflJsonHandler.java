@@ -63,10 +63,8 @@ public abstract class TflJsonHandler extends Thread {
 			in = TflJsonFetcher.fetchNewJson(uri);
 		} catch (IllegalStateException e) {
 			Log.e(LibraryMain.TAG, e.getMessage());
-			LibraryMain.displayToast("Problem fetching the data");
 		} catch (IOException e) {
 			Log.e(LibraryMain.TAG, e.getMessage());
-			LibraryMain.displayToast("Problem opening the data");
 		}
 		
 		String out = stringFromInputStream(in);
