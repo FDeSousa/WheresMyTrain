@@ -28,7 +28,7 @@ import com.fdesousa.google.gson.Gson;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPHandler extends TflJsonHandler {
+public class DPHandler extends TflJsonHandler<DPContainer> {
 	private DPContainer detailedpredictions;
 
 	/**
@@ -44,7 +44,7 @@ public class DPHandler extends TflJsonHandler {
 	 * @return New DPContainer instance with the fetched data
 	 */
 	@Override
-	public Object getContainer() {
+	public DPContainer getContainer() {
 		return detailedpredictions;
 	}
 

@@ -33,7 +33,7 @@ import android.util.Log;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public abstract class TflJsonHandler extends Thread {
+public abstract class TflJsonHandler<T> extends Thread {
 	protected URI uri;
 	protected String json;
 
@@ -88,7 +88,7 @@ public abstract class TflJsonHandler extends Thread {
 	 * Simple getter, returns the Container as a basic Object
 	 * @return instance of Container as basic Object
 	 */
-	public abstract Object getContainer(); 
+	public abstract T getContainer();
 	
 	/**
 	 * Utility method to convert an InputStream into a String

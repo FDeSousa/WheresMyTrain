@@ -37,7 +37,7 @@ import com.fdesousa.google.gson.Gson;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLHandler extends TflJsonHandler {
+public class SLHandler extends TflJsonHandler<SLContainer> {
 	private SLContainer stationslist;
 	private File cacheFile;
 
@@ -56,7 +56,7 @@ public class SLHandler extends TflJsonHandler {
 	 * @return New SLContainer instance with the fetched data
 	 */
 	@Override
-	public Object getContainer() {
+	public SLContainer getContainer() {
 		return stationslist;
 	}
 

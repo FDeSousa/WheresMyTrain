@@ -28,7 +28,7 @@ import com.fdesousa.google.gson.Gson;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SSHandler extends TflJsonHandler {
+public class SSHandler extends TflJsonHandler<SSContainer> {
 	private SSContainer stationsstatus;
 	
 	/**
@@ -44,7 +44,7 @@ public class SSHandler extends TflJsonHandler {
 	 * @return New SSContainer instance with the fetched data
 	 */
 	@Override
-	public Object getContainer() {
+	public SSContainer getContainer() {
 		return stationsstatus;
 	}
 

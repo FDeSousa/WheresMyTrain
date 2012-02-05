@@ -6,6 +6,7 @@ import java.util.Date;
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPContainer;
+import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DPReader;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerConfig;
 
 import android.app.Service;
@@ -28,8 +29,6 @@ public class UpdateWidgetService extends Service {
 
 		//	Make the view. Can be generic for all of the widgets
 		RemoteViews remoteView = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
-		//	Instantiate TflJsonReader once before all of the widgets are updated
-		TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
 		//	Create the PendingIntent for updates when clicking the button
 		//Intent update = new Intent(Widget.WIDGET_UPDATE);
 		//PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, update, 0);
@@ -44,8 +43,10 @@ public class UpdateWidgetService extends Service {
 			String line = settings.getString(lineKey, "b");
 			String station = settings.getString(stationKey, "chx");
 
+			//	Instantiate TflJsonReader before all of the widgets are updated
+			TflJsonReader<DPContainer> mJsonR = new DPReader(line, station);
 			//	Request and parse the data
-			DPContainer result = mJsonR.getDetailedPredictions(line, station);
+			DPContainer result = mJsonR.get();
 
 			//	Setup the view with the new data
 			//	First the title bar

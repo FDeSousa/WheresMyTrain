@@ -174,4 +174,23 @@ public abstract class UiController {
 	public void setTextColour(int textColour) {
 		this.textColour = textColour;
 	}
+	
+	/**
+	 * Convenience method to decide if details string is too short/is empty.<br/>
+	 * If so, return the description string instead. Useful for line status dialog
+	 * @param details - the line status details for a specific line
+	 * @param description - the line status description for a specific line
+	 * @return the string that should be displayed in the dialog
+	 */
+	public static final String decideMessageChoice(final String details, final String description) {
+		String outDetails;
+		if (details.length() < 1) {
+			// If so, use the description text instead, which is never empty
+			outDetails = description;
+		} else {
+			// If it's a long message, use the text
+			outDetails = details;
+		}
+		return outDetails;
+	}
 }

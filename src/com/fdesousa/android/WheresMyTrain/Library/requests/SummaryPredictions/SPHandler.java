@@ -28,7 +28,7 @@ import com.fdesousa.google.gson.Gson;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SPHandler extends TflJsonHandler {
+public class SPHandler extends TflJsonHandler<SPContainer> {
 	private SPContainer summarypredictions;
 
 	/**
@@ -44,7 +44,7 @@ public class SPHandler extends TflJsonHandler {
 	 * @return New SPContainer instance with the fetched data
 	 */
 	@Override
-	public Object getContainer() {
+	public SPContainer getContainer() {
 		return summarypredictions;
 	}
 

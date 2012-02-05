@@ -6,6 +6,7 @@ import com.fdesousa.android.WheresMyTrain.R;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLContainer;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLLine;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.SLReader;
 import com.fdesousa.android.WheresMyTrain.UiElements.LinesArrayAdapter;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerConfig;
@@ -67,8 +68,8 @@ public class Lines extends ListActivity {
 		uiController = new UiControllerConfig(getResources(), getAssets(), customTitleBar, this, false);
 		uiController.refreshMainTitleBar("Choose Underground Line");
 		//	Time to sort out the list of lines and their associated stations
-		TflJsonReader mJsonR = new TflJsonReader(getCacheDir());
-		SLContainer container = mJsonR.getStationsList();
+		TflJsonReader<SLContainer> mJsonR = new SLReader(getCacheDir());
+		SLContainer container = mJsonR.get();
 		adapter = new LinesArrayAdapter(this, container.lines, uiController);
 		//	Now set the ListAdapter so we can see this data set
 		setListAdapter(adapter);

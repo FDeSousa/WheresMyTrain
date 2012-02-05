@@ -28,7 +28,7 @@ import com.fdesousa.google.gson.Gson;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class LSHandler extends TflJsonHandler {
+public class LSHandler extends TflJsonHandler<LSContainer> {
 	private LSContainer linesstatus;
 
 	/**
@@ -44,7 +44,7 @@ public class LSHandler extends TflJsonHandler {
 	 * @return New SPContainer instance with the fetched data
 	 */
 	@Override
-	public Object getContainer() {
+	public LSContainer getContainer() {
 		return linesstatus;
 	}
 
