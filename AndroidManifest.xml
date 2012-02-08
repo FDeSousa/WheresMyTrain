@@ -40,8 +40,7 @@
         </receiver>
 
         <!-- Naming the update service for the widget -->
-        <service
-            android:name=".Widget.UpdateWidgetService"
+        <service android:name=".Widget.UpdateWidgetService"
             android:process=":com.fdesousa.android.WheresMyTrain.Widget.Updater" >
         </service>
 
@@ -55,8 +54,7 @@
         </activity>
 
 		<!-- Secondary activity, also for configuration of the widget -->
-        <activity
-            android:name=".Widget.Config.Stations"
+        <activity android:name=".Widget.Config.Stations"
             android:label="@string/station" >
         </activity>
 <!-- End of Widget-related entries -->
