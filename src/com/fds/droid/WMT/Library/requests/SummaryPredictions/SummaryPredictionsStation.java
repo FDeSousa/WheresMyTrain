@@ -16,40 +16,17 @@ package com.fds.droid.WMT.Library.requests.SummaryPredictions;
  * limitations under the License.
  *****************************************************************************/
 
-import java.net.URI;
-
-import com.fdesousa.google.gson.Gson;
-import com.fds.droid.WMT.Library.json.TflJsonHandler;
+import java.util.ArrayList;
 
 /**
- * <b>SPHandler : TflJsonHandler</b>
- * <p>Handler of Summary Predictions requests.<br/>
- * Used to parse JSON with GSON in a manner specific to Summary Predictions.</p>
+ * <b>SPStation</b>
+ * <p>Instance of Station in Summary Predictions requests.<br/>
+ * Stores an instance of Station from Summary Predictions request JSON syntax.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SPHandler extends TflJsonHandler<SPContainer> {
-	private SPContainer summarypredictions;
-
-	/**
-	 * Constructor. Sets the URI of the request
-	 * @param uri - the URI of the data to fetch
-	 */
-	public SPHandler(URI uri) {
-		super(uri);
-	}
-
-	/**
-	 * Simple getter, return the container the JSON was parsed into
-	 * @return New SPContainer instance with the fetched data
-	 */
-	@Override
-	public SPContainer getContainer() {
-		return summarypredictions;
-	}
-
-	@Override
-	protected void parseJson() {
-		summarypredictions = new Gson().fromJson(json, SPContainer.class);
-	}
+public class SummaryPredictionsStation {
+	public String stationcode;
+	public String stationname;
+	public ArrayList<SummaryPredictionsPlatform> platforms = new ArrayList<SummaryPredictionsPlatform>();
 }

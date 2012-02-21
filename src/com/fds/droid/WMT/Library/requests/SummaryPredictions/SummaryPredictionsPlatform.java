@@ -16,18 +16,17 @@ package com.fds.droid.WMT.Library.requests.SummaryPredictions;
  * limitations under the License.
  *****************************************************************************/
 
+import java.util.ArrayList;
+
 /**
- * <b>SPTrain</b>
- * <p>Instance of Train in Summary Predictions requests.<br/>
- * Stores an instance of Train from Summary Predictions request JSON syntax.</p>
+ * <b>SPPlatform</b>
+ * <p>Instance of Platform in Summary Predictions requests.<br/>
+ * Stores an instance of Platform from Summary Predictions request JSON syntax.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SPTrain {
-	public int trainnumber;
-	public int tripno;
-	public int destcode;
-	public String destination;
-	public String timeto;
-	public String location;
+public class SummaryPredictionsPlatform {
+	public String platformname;
+	public int platformcode;
+	public ArrayList<SummaryPredictionsTrain> trains = new ArrayList<SummaryPredictionsTrain>();
 }

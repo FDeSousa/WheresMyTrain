@@ -23,7 +23,7 @@ package com.fds.droid.WMT.Library.requests.DetailedPredictions;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPTrain {
+public class DetailedPredictionsTrain {
 	public String lcid;
 	public String secondsto;
 	public String timeto;

@@ -27,8 +27,8 @@ import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.droid.WMT.Library.LibraryMain;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPPlatform;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPTrain;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsPlatform;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsTrain;
 
 /**
  * <b>PlatformsExpListAdapter : BaseExpandableListAdapter</b>
@@ -45,14 +45,15 @@ import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPTrain;
  * @version 0.7
  */
 public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
-
-	private List<DPPlatform> platforms;
+	private List<DetailedPredictionsPlatform> platforms;
 	private LayoutInflater layoutInflater;
 	private UiController uiController;
 
-	public PlatformsExpListAdapter(List<DPPlatform> platforms, LayoutInflater layoutInflater, UiController uiController) {
-		this.platforms = new ArrayList<DPPlatform>();
-		for (DPPlatform platform : platforms) {
+	public PlatformsExpListAdapter(List<DetailedPredictionsPlatform> platforms,
+			LayoutInflater layoutInflater, UiController uiController) {
+
+		this.platforms = new ArrayList<DetailedPredictionsPlatform>();
+		for (DetailedPredictionsPlatform platform : platforms) {
 			this.platforms.add(platform.filterAndClone());
 		}
 		notifyDataSetChanged();
@@ -74,7 +75,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		int textColour = uiController.getTextColour();
-		DPTrain train = (DPTrain) getChild(groupPosition, childPosition);
+		DetailedPredictionsTrain train = (DetailedPredictionsTrain) getChild(groupPosition, childPosition);
 
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.child_layout, null);
@@ -147,7 +148,7 @@ public class PlatformsExpListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		DPPlatform platform = (DPPlatform) getGroup(groupPosition);
+		DetailedPredictionsPlatform platform = (DetailedPredictionsPlatform) getGroup(groupPosition);
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.group_layout, null);
 		}

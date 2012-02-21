@@ -4,7 +4,7 @@ import java.net.URI;
 
 import com.fds.droid.WMT.Library.json.TflJsonReader;
 
-public class DPReader extends TflJsonReader<DPContainer> {
+public class DetailedPredictionsReader extends TflJsonReader<DetailedPredictionsContainer> {
 	private final String line;
 	private final String station;
 
@@ -15,7 +15,7 @@ public class DPReader extends TflJsonReader<DPContainer> {
 	 * @param line - the code for the Underground line to make a request for
 	 * @param station - the code for the Underground station to make a request for
 	 */
-	public DPReader(final String line, final String station) {
+	public DetailedPredictionsReader(final String line, final String station) {
 		super();
 		this.line = line;
 		this.station = station;
@@ -26,11 +26,11 @@ public class DPReader extends TflJsonReader<DPContainer> {
 	 * @return instance of DPContainer with the requested results
 	 */
 	@Override
-	public DPContainer get() {
+	public DetailedPredictionsContainer get() {
 		//	Parses String "PredictionDetailed/line/station"
 		URI uri = makeUri(PREDICTION_DETAILED, line, station, false);
 		//	Instantiate, set the newest URI to fetch and parse
-		jsonHandler = new DPHandler(uri);
+		jsonHandler = new DetailedPredictionsHandler(uri);
 		//	Start the thread for fetching and parsing
 		jsonHandler.start();
 		stopHandler(jsonHandler);
@@ -42,7 +42,7 @@ public class DPReader extends TflJsonReader<DPContainer> {
 	 * @return instance of DPContainer with the requested results
 	 */
 	@Override
-	public DPContainer refresh() {
+	public DetailedPredictionsContainer refresh() {
 		jsonHandler.start();
 		stopHandler(jsonHandler);
 		return jsonHandler.getContainer();

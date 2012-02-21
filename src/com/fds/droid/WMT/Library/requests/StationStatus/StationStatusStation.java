@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.LineStatus;
+package com.fds.droid.WMT.Library.requests.StationStatus;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -17,17 +17,16 @@ package com.fds.droid.WMT.Library.requests.LineStatus;
  *****************************************************************************/
 
 /**
- * <b>LSLine</b>
- * <p>Instance of Line in Line Status requests.<br/>
- * Stores an instance of Line from Line Status request JSON syntax.</p>
+ * <b>SSStation</b>
+ * <p>Instance of Station in Station Status requests.<br/>
+ * Stores an instance of Station from Station Status request JSON syntax.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class LSLine {
+public class StationStatusStation {
 	public int id;
 	public String details;
-	public int lineid;
-	public String linename;
+	public String stationname;
 	public String statusid;
 	public String status;
 	public String description;

@@ -5,8 +5,8 @@ import java.util.Date;
 
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.droid.WMT.Library.json.TflJsonReader;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPContainer;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPReader;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsReader;
 import com.fds.droid.WMT.UiElements.UiControllerConfig;
 
 import android.app.Service;
@@ -44,9 +44,9 @@ public class UpdateWidgetService extends Service {
 			String station = settings.getString(stationKey, "chx");
 
 			//	Instantiate TflJsonReader before all of the widgets are updated
-			TflJsonReader<DPContainer> mJsonR = new DPReader(line, station);
+			TflJsonReader<DetailedPredictionsContainer> mJsonR = new DetailedPredictionsReader(line, station);
 			//	Request and parse the data
-			DPContainer result = mJsonR.get();
+			DetailedPredictionsContainer result = mJsonR.get();
 
 			//	Setup the view with the new data
 			//	First the title bar

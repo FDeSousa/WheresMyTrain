@@ -10,9 +10,9 @@ import com.fds.droid.WMT.UiElements.PlatformsExpListAdapter;
 import com.fds.droid.WMT.UiElements.UiController;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
-public class DPAsyncTask extends AsyncTask<Void, Void, DPContainer> {
+public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, DetailedPredictionsContainer> {
 	private PlatformsExpListAdapter mPlatformAdapter;
-	private TflJsonReader<DPContainer> mJsonR;
+	private TflJsonReader<DetailedPredictionsContainer> mJsonR;
 	private ExpandableListActivity activity;
 	private UiController uiController;
 
@@ -22,11 +22,11 @@ public class DPAsyncTask extends AsyncTask<Void, Void, DPContainer> {
 	 */
 	private PullToRefreshExpandableListView predictionsList;
 	
-	public DPAsyncTask(ExpandableListActivity activity, UiController uiController, final String line, final String station) {
+	public DetailedPredictionsAsyncTask(ExpandableListActivity activity, UiController uiController, final String line, final String station) {
 		this.activity = activity;
 		this.uiController = uiController;
 		predictionsList = (PullToRefreshExpandableListView) this.activity.findViewById(R.id.platforms_list);
-		mJsonR = new DPReader(line, station);
+		mJsonR = new DetailedPredictionsReader(line, station);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class DPAsyncTask extends AsyncTask<Void, Void, DPContainer> {
 	}
 
 	@Override
-	protected DPContainer doInBackground(Void... params) {
+	protected DetailedPredictionsContainer doInBackground(Void... params) {
 		// Send the request to prepare the JSON data while other stuff goes
 		// on
 		// Get the prepared JSON data now to fill the spinners
@@ -47,7 +47,7 @@ public class DPAsyncTask extends AsyncTask<Void, Void, DPContainer> {
 	}
 
 	@Override
-	protected void onPostExecute(DPContainer result) {
+	protected void onPostExecute(DetailedPredictionsContainer result) {
 		// Because of how tfl.php sends predictions data, there is only ever
 		// ONE station in stations array
 		mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms, activity.getLayoutInflater(), uiController);

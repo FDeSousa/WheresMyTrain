@@ -26,26 +26,26 @@ import android.os.Parcelable;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLStation implements Parcelable {
+public class StationsListStation implements Parcelable {
 	public String stationcode;
 	public String stationname;
 
-	public SLStation() {
+	public StationsListStation() {
 	}
 
-	public SLStation(Parcel in) {
+	public StationsListStation(Parcel in) {
 		this();
 		readFromParcel(in);
 	}
 
-	public static final Parcelable.Creator<SLStation> CREATOR = new Parcelable.Creator<SLStation>() {
+	public static final Parcelable.Creator<StationsListStation> CREATOR = new Parcelable.Creator<StationsListStation>() {
 		@Override
-		public SLStation createFromParcel(Parcel source) {
-			return new SLStation(source);
+		public StationsListStation createFromParcel(Parcel source) {
+			return new StationsListStation(source);
 		}
 		@Override
-		public SLStation[] newArray(int size) {
-			return new SLStation[size];
+		public StationsListStation[] newArray(int size) {
+			return new StationsListStation[size];
 		}
 	};
 	

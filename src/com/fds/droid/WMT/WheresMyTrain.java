@@ -32,14 +32,14 @@ import android.widget.Toast;
 
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.droid.WMT.Library.json.TflJsonFetcher;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPAsyncTask;
-import com.fds.droid.WMT.Library.requests.DetailedPredictions.DPContainer;
-import com.fds.droid.WMT.Library.requests.LineStatus.LSAsyncTask;
-import com.fds.droid.WMT.Library.requests.LineStatus.LSContainer;
-import com.fds.droid.WMT.Library.requests.StationsList.SLAsyncTask;
-import com.fds.droid.WMT.Library.requests.StationsList.SLContainer;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
-import com.fds.droid.WMT.Library.requests.StationsList.SLStation;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsAsyncTask;
+import com.fds.droid.WMT.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
+import com.fds.droid.WMT.Library.requests.LineStatus.LineStatusAsyncTask;
+import com.fds.droid.WMT.Library.requests.LineStatus.LineStatusContainer;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListAsyncTask;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListContainer;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListStation;
 import com.fds.droid.WMT.UiElements.StationsSpinnerAdapter;
 import com.fds.droid.WMT.UiElements.UiController;
 import com.fds.droid.WMT.UiElements.UiControllerMain;
@@ -89,12 +89,12 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * Instance of the currently selected Line for rapid access to code, name
 	 * and stations
 	 */
-	private SLLine line;
+	private StationsListLine line;
 	/**
 	 * Instance of the currently selected Station for rapid access to code and
 	 * name
 	 */
-	private SLStation station;
+	private StationsListStation station;
 
 	// Anything else
 	/**
@@ -154,16 +154,16 @@ public class WheresMyTrain extends ExpandableListActivity {
 			break;
 		case R.id.refresh:
 			// Refresh the predictions
-			if (getPredictions instanceof DPAsyncTask) {
+			if (getPredictions instanceof DetailedPredictionsAsyncTask) {
 				getPredictions.cancel(true);
 			}
-			getPredictions = new DPAsyncTask(this, uiController, line.linecode, station.stationcode).execute();
+			getPredictions = new DetailedPredictionsAsyncTask(this, uiController, line.linecode, station.stationcode).execute();
 
 			// Also refresh line status
-			if (getLineStatus instanceof LSAsyncTask) {
+			if (getLineStatus instanceof LineStatusAsyncTask) {
 				getLineStatus.cancel(true);
 			}
-			getLineStatus = new LSAsyncTask(this, uiController, line).execute();
+			getLineStatus = new LineStatusAsyncTask(this, uiController, line).execute();
 			break;
 		}
 		return true;
@@ -205,10 +205,10 @@ public class WheresMyTrain extends ExpandableListActivity {
 		// First of all, reset the line status button
 		resetLineStatusButton();
 		// Call an Asynchronous Task to instantiate the Stations List
-		if (prepareStationsList instanceof SLAsyncTask) {
+		if (prepareStationsList instanceof StationsListAsyncTask) {
 			prepareStationsList.cancel(true);
 		}
-		prepareStationsList = new SLAsyncTask(this, uiController).execute();
+		prepareStationsList = new StationsListAsyncTask(this, uiController).execute();
 
 		// Set the OnItemSelectedListener for Lines Spinner
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -216,15 +216,15 @@ public class WheresMyTrain extends ExpandableListActivity {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				// Handle the item selected by setting the second
 				// spinner with the correct stations
-				line = (SLLine) parent.getItemAtPosition(pos);
+				line = (StationsListLine) parent.getItemAtPosition(pos);
 				if (connected) {
 					setupStationsSpinner();
 					// Refresh the line status too, since a line has
 					// been selected now
-					if (getLineStatus instanceof LSAsyncTask) {
+					if (getLineStatus instanceof LineStatusAsyncTask) {
 						getLineStatus.cancel(true);
 					}
-					getLineStatus = new LSAsyncTask(WheresMyTrain.this, uiController, line).execute();
+					getLineStatus = new LineStatusAsyncTask(WheresMyTrain.this, uiController, line).execute();
 				}
 			}
 			@Override
@@ -239,12 +239,12 @@ public class WheresMyTrain extends ExpandableListActivity {
 				// Handle the selected item by getting detailed
 				// predictions for that line & station choice, 
 				// displaying that in the ExpandableListView
-				station = (SLStation) parent.getItemAtPosition(pos);
+				station = (StationsListStation) parent.getItemAtPosition(pos);
 				if (connected) {
-					if (getPredictions instanceof DPAsyncTask) {
+					if (getPredictions instanceof DetailedPredictionsAsyncTask) {
 						getPredictions.cancel(true);
 					}
-					getPredictions = new DPAsyncTask(WheresMyTrain.this, uiController, line.linecode, station.stationcode).execute();
+					getPredictions = new DetailedPredictionsAsyncTask(WheresMyTrain.this, uiController, line.linecode, station.stationcode).execute();
 					// Edit the title bar every time station is changed
 					// to reflect the changes
 					if (customTitleBar)
@@ -263,17 +263,17 @@ public class WheresMyTrain extends ExpandableListActivity {
 			public void onRefresh() {
 				if (connected) {
 					// Check if there's already an instance, if so, cancel for safety
-					if (getPredictions instanceof DPAsyncTask) {
+					if (getPredictions instanceof DetailedPredictionsAsyncTask) {
 						getPredictions.cancel(true);
 					}
 					// Then instantiate a-new and execute the request
-					getPredictions = new DPAsyncTask(WheresMyTrain.this, uiController, line.linecode, station.stationcode).execute();
+					getPredictions = new DetailedPredictionsAsyncTask(WheresMyTrain.this, uiController, line.linecode, station.stationcode).execute();
 					// Refresh the line status too, since we're refreshing everything
-					if (getLineStatus instanceof LSAsyncTask) {
+					if (getLineStatus instanceof LineStatusAsyncTask) {
 						getLineStatus.cancel(true);
 					}
 					// Instantiate a-new and execute this request too
-					getLineStatus = new LSAsyncTask(getParent(), uiController, line).execute();
+					getLineStatus = new LineStatusAsyncTask(getParent(), uiController, line).execute();
 				}
 			}
 		});
@@ -291,15 +291,15 @@ public class WheresMyTrain extends ExpandableListActivity {
 
 	// Fetch, parse, display the list of lines and stations
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask<Void, Void, SLContainer> prepareStationsList;
+	private AsyncTask<Void, Void, StationsListContainer> prepareStationsList;
 
 	// Get/Refresh the detailed predictions
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask<Void, Void, DPContainer> getPredictions;
+	private AsyncTask<Void, Void, DetailedPredictionsContainer> getPredictions;
 
 	// Get/Refresh the line status
 	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
-	private AsyncTask<Void, Void, LSContainer> getLineStatus;
+	private AsyncTask<Void, Void, LineStatusContainer> getLineStatus;
 
 	private void resetLineStatusButton() {
 		// Reset the status button to black and white, unknown status

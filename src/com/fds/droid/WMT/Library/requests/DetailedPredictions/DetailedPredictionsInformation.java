@@ -16,41 +16,23 @@ package com.fds.droid.WMT.Library.requests.DetailedPredictions;
  * limitations under the License.
  *****************************************************************************/
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * <b>DPContainer</b>
- * <p>Container of Detailed Predictions.<br/>
- * Used when parsing JSON with GSON.</p>
+ * <b>DPInformation</b>
+ * <p>Instance of Information from Detailed Predictions requests<br/>
+ * Stores an instance of Information from Detailed Predictions request JSON syntax.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPContainer {
-	public String requesttype;
-	public DPInformation information;
-	public List<DPStation> stations = new ArrayList<DPStation>();
+public class DetailedPredictionsInformation {
+	public String created;
+	public String linecode;
+	public String linename;
 
-	/**
-	 * Using for early-on diagnostics, just to avoid the slow ADB debugger
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("requesttype:");
-		sb.append(requesttype);
-		sb.append("\ninformation:{");
-		sb.append(information.toString());
-		sb.append("\nstations:{");
-
-		for (DPStation station : stations) {
-			sb.append(station.toString());
-		}
-
-		sb.append("\n}");
-		return sb.toString();
+		String out = "\n\tcreated:" + created
+				+ "\n\tlinecode:" + linecode
+				+ "\n\tlinename:" + linename;
+		return out;
 	}
 }

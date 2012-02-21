@@ -1,8 +1,8 @@
 package com.fds.droid.WMT.Widget.Config;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
-import com.fds.droid.WMT.Library.requests.StationsList.SLStation;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListStation;
 import com.fds.droid.WMT.UiElements.StationsArrayAdapter;
 import com.fds.droid.WMT.UiElements.UiController;
 import com.fds.droid.WMT.UiElements.UiControllerConfig;
@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class Stations extends ListActivity {
-	private ArrayAdapter<SLStation> adapter;
+	private ArrayAdapter<StationsListStation> adapter;
 	private UiController uiController;
 
 	// Anything else
@@ -44,7 +44,7 @@ public class Stations extends ListActivity {
 		this.appWidgetId = extras
 				.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 		int colour = extras.getInt(Lines.LINE_COLOUR_EXTRA, android.R.color.black);
-		SLLine line = extras.getParcelable(Lines.SLLINE_EXTRA);
+		StationsListLine line = extras.getParcelable(Lines.SLLINE_EXTRA);
 		this.linecode = line.linecode;
 
 		// Setup the cancel result first, in case the user cancels this activity early

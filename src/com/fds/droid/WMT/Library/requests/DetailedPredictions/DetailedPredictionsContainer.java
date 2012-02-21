@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.StationStatus;
+package com.fds.droid.WMT.Library.requests.DetailedPredictions;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -17,15 +17,40 @@ package com.fds.droid.WMT.Library.requests.StationStatus;
  *****************************************************************************/
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * <b>SSContainer</b>
- * <p>Container of Station Status.<br/>
+ * <b>DPContainer</b>
+ * <p>Container of Detailed Predictions.<br/>
  * Used when parsing JSON with GSON.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SSContainer {
+public class DetailedPredictionsContainer {
 	public String requesttype;
-	public ArrayList<SSStation> stations = new ArrayList<SSStation>();
+	public DetailedPredictionsInformation information;
+	public List<DetailedPredictionsStation> stations = new ArrayList<DetailedPredictionsStation>();
+
+	/**
+	 * Using for early-on diagnostics, just to avoid the slow ADB debugger
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("requesttype:");
+		sb.append(requesttype);
+		sb.append("\ninformation:{");
+		sb.append(information.toString());
+		sb.append("\nstations:{");
+
+		for (DetailedPredictionsStation station : stations) {
+			sb.append(station.toString());
+		}
+
+		sb.append("\n}");
+		return sb.toString();
+	}
 }

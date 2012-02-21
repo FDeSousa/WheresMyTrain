@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.SummaryPredictions;
+package com.fds.droid.WMT.Library.requests.LineStatus;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -19,14 +19,30 @@ package com.fds.droid.WMT.Library.requests.SummaryPredictions;
 import java.util.ArrayList;
 
 /**
- * <b>SPContainer</b>
- * <p>Container of Summary Predictions.<br/>
+ * <b>LSContainer</b>
+ * <p>Container of Line Status.<br/>
  * Used when parsing JSON with GSON.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SPContainer {
+public class LineStatusContainer {
 	public String requesttype;
-	public String created;
-	public ArrayList<SPStation> stations = new ArrayList<SPStation>();
+	public ArrayList<LineStatusLine> lines = new ArrayList<LineStatusLine>();
+	
+	/**
+	 * Very simple, slow, arraylist search. Loops through each line to find
+	 * the line with the matching linename
+	 * @param linename - the name of the line to search for
+	 * @return instance of matching line, or null if not found
+	 */
+	public LineStatusLine searchByLinename(String linename) {
+		//	If there's nothing to search through, exit early
+		if (lines == null || lines.isEmpty()) return null;
+		//	Search with foreach for the right line
+		for (LineStatusLine line : lines) {
+			if (line.linename.equals(linename)) return line;
+		}
+		//	If nothing has been found, return null
+		return null;
+	}
 }

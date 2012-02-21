@@ -26,10 +26,10 @@ import java.util.List;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPStation {
+public class DetailedPredictionsStation {
 	public String stationcode;
 	public String stationname;
-	public List<DPPlatform> platforms = new ArrayList<DPPlatform>();
+	public List<DetailedPredictionsPlatform> platforms = new ArrayList<DetailedPredictionsPlatform>();
 	
 	@Override
 	public String toString() {
@@ -41,7 +41,7 @@ public class DPStation {
 		out.append(stationname);
 		out.append("\n\tplatforms:{");
 		
-		for (DPPlatform platform : platforms) {
+		for (DetailedPredictionsPlatform platform : platforms) {
 			out.append(platform.toString());
 		}
 		

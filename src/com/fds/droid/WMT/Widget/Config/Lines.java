@@ -4,9 +4,9 @@ import java.util.Calendar;
 
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.droid.WMT.Library.json.TflJsonReader;
-import com.fds.droid.WMT.Library.requests.StationsList.SLContainer;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
-import com.fds.droid.WMT.Library.requests.StationsList.SLReader;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListContainer;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListReader;
 import com.fds.droid.WMT.UiElements.LinesArrayAdapter;
 import com.fds.droid.WMT.UiElements.UiController;
 import com.fds.droid.WMT.UiElements.UiControllerConfig;
@@ -32,7 +32,7 @@ public class Lines extends ListActivity {
 	public static final String STATION_CODE_RESULT = "stationcode";
 	public static final int PICK_STATION_REQUEST = 1122334455;
 
-	private ArrayAdapter<SLLine> adapter;
+	private ArrayAdapter<StationsListLine> adapter;
 	private UiController uiController;
 
 	// Anything else
@@ -68,8 +68,8 @@ public class Lines extends ListActivity {
 		uiController = new UiControllerConfig(getResources(), getAssets(), customTitleBar, this, false);
 		uiController.refreshMainTitleBar("Choose Underground Line");
 		//	Time to sort out the list of lines and their associated stations
-		TflJsonReader<SLContainer> mJsonR = new SLReader(getCacheDir());
-		SLContainer container = mJsonR.get();
+		TflJsonReader<StationsListContainer> mJsonR = new StationsListReader(getCacheDir());
+		StationsListContainer container = mJsonR.get();
 		adapter = new LinesArrayAdapter(this, container.lines, uiController);
 		//	Now set the ListAdapter so we can see this data set
 		setListAdapter(adapter);
@@ -77,7 +77,7 @@ public class Lines extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		SLLine line = adapter.getItem(position);
+		StationsListLine line = adapter.getItem(position);
 		this.uiController.setTextColour(uiController.getLineColour(line.linecode));
 
 		Intent getStation = new Intent(this, Stations.class)

@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.SummaryPredictions;
+package com.fds.droid.WMT.Library.requests.StationStatus;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -19,14 +19,13 @@ package com.fds.droid.WMT.Library.requests.SummaryPredictions;
 import java.util.ArrayList;
 
 /**
- * <b>SPStation</b>
- * <p>Instance of Station in Summary Predictions requests.<br/>
- * Stores an instance of Station from Summary Predictions request JSON syntax.</p>
+ * <b>SSContainer</b>
+ * <p>Container of Station Status.<br/>
+ * Used when parsing JSON with GSON.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SPStation {
-	public String stationcode;
-	public String stationname;
-	public ArrayList<SPPlatform> platforms = new ArrayList<SPPlatform>();
+public class StationStatusContainer {
+	public String requesttype;
+	public ArrayList<StationStatusStation> stations = new ArrayList<StationStatusStation>();
 }

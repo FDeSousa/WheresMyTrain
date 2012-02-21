@@ -3,7 +3,7 @@ package com.fds.droid.WMT.UiElements;
 import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.droid.WMT.Library.requests.StationsList.SLStation;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListStation;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class StationsArrayAdapter extends ArrayAdapter<SLStation> {
+public class StationsArrayAdapter extends ArrayAdapter<StationsListStation> {
 	private UiController uiController;
 	private int colour;
 
-	public StationsArrayAdapter(Context context, List<SLStation> objects, UiController uiController) {
+	public StationsArrayAdapter(Context context, List<StationsListStation> objects,
+			UiController uiController) {
 		super(context, R.layout.spinner_row, objects);
 		this.uiController = uiController;
 		this.colour = uiController.getTextColour();
@@ -24,7 +25,7 @@ public class StationsArrayAdapter extends ArrayAdapter<SLStation> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		SLStation station = getItem(position);
+		StationsListStation station = getItem(position);
 
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
@@ -38,4 +39,5 @@ public class StationsArrayAdapter extends ArrayAdapter<SLStation> {
 
 		return convertView;
 	}
+
 }

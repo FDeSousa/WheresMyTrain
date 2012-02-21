@@ -26,7 +26,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.droid.WMT.Library.requests.StationsList.SLStation;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListStation;
 
 /**
  * <b>StationsSpinnerAdapter ; SpinnerAdapter</b>
@@ -40,12 +40,13 @@ import com.fds.droid.WMT.Library.requests.StationsList.SLStation;
  */
 public class StationsSpinnerAdapter implements SpinnerAdapter {
 
-	private List<SLStation> stations;
+	private List<StationsListStation> stations;
 	private LayoutInflater layoutInflater;
 	private UiController uiController;
 	private int colour;
 
-	public StationsSpinnerAdapter(List<SLStation> stations, String linecode, LayoutInflater layoutInflater, UiController uiController) {
+	public StationsSpinnerAdapter(List<StationsListStation> stations, String linecode,
+			LayoutInflater layoutInflater, UiController uiController) {
 		this.stations = stations;
 		this.layoutInflater = layoutInflater;
 		this.uiController = uiController;
@@ -74,7 +75,7 @@ public class StationsSpinnerAdapter implements SpinnerAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		SLStation station = (SLStation) getItem(position);
+		StationsListStation station = (StationsListStation) getItem(position);
 		uiController.setTextColour(colour);
 
 		if (convertView == null) {

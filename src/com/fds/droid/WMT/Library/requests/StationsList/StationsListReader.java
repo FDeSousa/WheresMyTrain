@@ -5,7 +5,7 @@ import java.net.URI;
 
 import com.fds.droid.WMT.Library.json.TflJsonReader;
 
-public class SLReader extends TflJsonReader<SLContainer> {
+public class StationsListReader extends TflJsonReader<StationsListContainer> {
 	private File cacheDir;
 
 	/**
@@ -14,7 +14,7 @@ public class SLReader extends TflJsonReader<SLContainer> {
 	 * This is the only sub-class that caches its JSON responses
 	 * @param cacheDir - File instance preferably pointing to application's cache directory
 	 */
-	public SLReader(File cacheDir) {
+	public StationsListReader(File cacheDir) {
 		super();
 	}
 
@@ -23,9 +23,9 @@ public class SLReader extends TflJsonReader<SLContainer> {
 	 * @return instance of SLContainer with the requested results
 	 */
 	@Override
-	public SLContainer get() {
+	public StationsListContainer get() {
 		URI uri = makeUri(STATIONS_LIST, null, null, false);
-		jsonHandler = new SLHandler(cacheDir, uri);
+		jsonHandler = new StationsListHandler(cacheDir, uri);
 		jsonHandler.start();
 		stopHandler(jsonHandler);
 		return jsonHandler.getContainer();
@@ -36,7 +36,7 @@ public class SLReader extends TflJsonReader<SLContainer> {
 	 * @return instance of SLContainer with the requested results
 	 */
 	@Override
-	public SLContainer refresh() {
+	public StationsListContainer refresh() {
 		jsonHandler.start();
 		stopHandler(jsonHandler);
 		return jsonHandler.getContainer();

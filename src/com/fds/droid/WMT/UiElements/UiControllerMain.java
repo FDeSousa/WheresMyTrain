@@ -73,9 +73,9 @@ public class UiControllerMain extends UiController {
 		};
 		// Setup the AlertDialog.Builder to display the dialog later
 		exitConfirmation = new AlertDialog.Builder(activity)
-				.setMessage("Exit Where's My Train?")
-				.setPositiveButton(android.R.string.yes,
-						exitConfirmationDialogClickListener)
+		.setMessage("Exit Where's My Train?")
+		.setPositiveButton(android.R.string.yes,
+				exitConfirmationDialogClickListener)
 				.setNegativeButton(android.R.string.no,
 						exitConfirmationDialogClickListener).create();
 		// Setup of Dialog finished
@@ -99,12 +99,12 @@ public class UiControllerMain extends UiController {
 		Linkify.addLinks(s, Linkify.ALL);
 
 		aboutDialog = new AlertDialog.Builder(activity)
-				.setTitle(title)
-				.setMessage(s)
-				.setCancelable(true)
-				.setIcon(R.drawable.ic_launcher)
-				.setPositiveButton(resources.getString(android.R.string.ok),
-						null).create();
+		.setTitle(title)
+		.setMessage(s)
+		.setCancelable(true)
+		.setIcon(R.drawable.ic_launcher)
+		.setPositiveButton(resources.getString(android.R.string.ok),
+				null).create();
 	}
 
 	public void displayAboutDialog() {
@@ -116,9 +116,9 @@ public class UiControllerMain extends UiController {
 
 	private void buildLineStatusDialog() {
 		lineStatusDialog = new AlertDialog.Builder(activity)
-				.setCancelable(true)
-				.setPositiveButton(resources.getString(android.R.string.ok),
-						null).create();
+		.setCancelable(true)
+		.setPositiveButton(resources.getString(android.R.string.ok),
+				null).create();
 	}
 
 	public void setLineStatusDialogText(String title, String message) {

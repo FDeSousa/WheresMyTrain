@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.LineStatus;
+package com.fds.droid.WMT.Library.requests.DetailedPredictions;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -22,34 +22,34 @@ import com.fdesousa.google.gson.Gson;
 import com.fds.droid.WMT.Library.json.TflJsonHandler;
 
 /**
- * <b>LSHandler : TflJsonHandler</b>
- * <p>Handler of Line Status requests.<br/>
- * Used to parse JSON with GSON in a manner specific to Line Status.</p>
+ * <b>DPHandler : TflJsonHandler</b>
+ * <p>Handler of Detailed Predictions requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Detailed Predictions.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class LSHandler extends TflJsonHandler<LSContainer> {
-	private LSContainer linesstatus;
+public class DetailedPredictionsHandler extends TflJsonHandler<DetailedPredictionsContainer> {
+	private DetailedPredictionsContainer detailedpredictions;
 
 	/**
 	 * Constructor. Sets the URI of the request
 	 * @param uri - the URI of the data to fetch
 	 */
-	public LSHandler(URI uri) {
+	public DetailedPredictionsHandler(URI uri) {
 		super(uri);
 	}
 
 	/**
 	 * Simple getter, return the container the JSON was parsed into
-	 * @return New SPContainer instance with the fetched data
+	 * @return New DPContainer instance with the fetched data
 	 */
 	@Override
-	public LSContainer getContainer() {
-		return linesstatus;
+	public DetailedPredictionsContainer getContainer() {
+		return detailedpredictions;
 	}
 
 	@Override
 	protected void parseJson() {
-		linesstatus = new Gson().fromJson(json, LSContainer.class);
+		detailedpredictions = new Gson().fromJson(json, DetailedPredictionsContainer.class);
 	}
 }

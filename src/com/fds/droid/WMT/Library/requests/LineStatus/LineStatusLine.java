@@ -16,33 +16,20 @@ package com.fds.droid.WMT.Library.requests.LineStatus;
  * limitations under the License.
  *****************************************************************************/
 
-import java.util.ArrayList;
-
 /**
- * <b>LSContainer</b>
- * <p>Container of Line Status.<br/>
- * Used when parsing JSON with GSON.</p>
+ * <b>LSLine</b>
+ * <p>Instance of Line in Line Status requests.<br/>
+ * Stores an instance of Line from Line Status request JSON syntax.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class LSContainer {
-	public String requesttype;
-	public ArrayList<LSLine> lines = new ArrayList<LSLine>();
-	
-	/**
-	 * Very simple, slow, arraylist search. Loops through each line to find
-	 * the line with the matching linename
-	 * @param linename - the name of the line to search for
-	 * @return instance of matching line, or null if not found
-	 */
-	public LSLine searchByLinename(String linename) {
-		//	If there's nothing to search through, exit early
-		if (lines == null || lines.isEmpty()) return null;
-		//	Search with foreach for the right line
-		for (LSLine line : lines) {
-			if (line.linename.equals(linename)) return line;
-		}
-		//	If nothing has been found, return null
-		return null;
-	}
+public class LineStatusLine {
+	public int id;
+	public String details;
+	public int lineid;
+	public String linename;
+	public String statusid;
+	public String status;
+	public String description;
+	public boolean active;
 }

@@ -26,7 +26,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
 
 /**
  * <b>LinesSpinnerAdapter ; SpinnerAdapter</b>
@@ -39,12 +39,12 @@ import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
  * @version 0.7
  */
 public class LinesSpinnerAdapter implements SpinnerAdapter {
-
-	private List<SLLine> lines;
+	private List<StationsListLine> lines;
 	private LayoutInflater layoutInflater;
 	private UiController uiController;
 
-	public LinesSpinnerAdapter(List<SLLine> lines, LayoutInflater layoutInflater, UiController uiController) {
+	public LinesSpinnerAdapter(List<StationsListLine> lines, LayoutInflater layoutInflater,
+			UiController uiController) {
 		this.lines = lines;
 		this.layoutInflater = layoutInflater;
 		this.uiController = uiController;
@@ -72,7 +72,7 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		SLLine line = (SLLine) getItem(position);
+		StationsListLine line = (StationsListLine) getItem(position);
 
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.spinner_row, null);
@@ -113,4 +113,5 @@ public class LinesSpinnerAdapter implements SpinnerAdapter {
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
 		return this.getView(position, convertView, parent);
 	}
+
 }

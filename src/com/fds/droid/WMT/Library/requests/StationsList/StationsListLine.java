@@ -28,28 +28,28 @@ import android.os.Parcelable;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLLine implements Parcelable {
+public class StationsListLine implements Parcelable {
 	public String linecode;
 	public String linename;
-	public ArrayList<SLStation> stations;
+	public ArrayList<StationsListStation> stations;
 
 	//	Need a Creator for reading from a Parcel at some point
-	public static final Parcelable.Creator<SLLine> CREATOR = new Parcelable.Creator<SLLine>() {
+	public static final Parcelable.Creator<StationsListLine> CREATOR = new Parcelable.Creator<StationsListLine>() {
 		@Override
-		public SLLine createFromParcel(Parcel source) {
-			return new SLLine(source);
+		public StationsListLine createFromParcel(Parcel source) {
+			return new StationsListLine(source);
 		}
 		@Override
-		public SLLine[] newArray(int size) {
-			return new SLLine[size];
+		public StationsListLine[] newArray(int size) {
+			return new StationsListLine[size];
 		}
 	};
 
-	public SLLine() {
-		stations = new ArrayList<SLStation>();
+	public StationsListLine() {
+		stations = new ArrayList<StationsListStation>();
 	}
 
-	public SLLine(Parcel in) {
+	public StationsListLine(Parcel in) {
 		this();
 		this.readFromParcel(in);
 	}
@@ -57,7 +57,7 @@ public class SLLine implements Parcelable {
 	private void readFromParcel(Parcel in) {
 		this.linecode = in.readString();
 		this.linename = in.readString();
-		in.readTypedList(stations, SLStation.CREATOR);
+		in.readTypedList(stations, StationsListStation.CREATOR);
 	}
 
 	@Override

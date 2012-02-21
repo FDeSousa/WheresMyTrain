@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.StationStatus;
+package com.fds.droid.WMT.Library.requests.LineStatus;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -22,34 +22,34 @@ import com.fdesousa.google.gson.Gson;
 import com.fds.droid.WMT.Library.json.TflJsonHandler;
 
 /**
- * <b>SSHandler : TflJsonHandler</b>
- * <p>Handler of Station Status requests.<br/>
- * Used to parse JSON with GSON in a manner specific to Station Status.</p>
+ * <b>LSHandler : TflJsonHandler</b>
+ * <p>Handler of Line Status requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Line Status.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SSHandler extends TflJsonHandler<SSContainer> {
-	private SSContainer stationsstatus;
-	
+public class LineStatusHandler extends TflJsonHandler<LineStatusContainer> {
+	private LineStatusContainer linesstatus;
+
 	/**
 	 * Constructor. Sets the URI of the request
 	 * @param uri - the URI of the data to fetch
 	 */
-	public SSHandler(URI uri) {
+	public LineStatusHandler(URI uri) {
 		super(uri);
 	}
-	
+
 	/**
 	 * Simple getter, return the container the JSON was parsed into
-	 * @return New SSContainer instance with the fetched data
+	 * @return New SPContainer instance with the fetched data
 	 */
 	@Override
-	public SSContainer getContainer() {
-		return stationsstatus;
+	public LineStatusContainer getContainer() {
+		return linesstatus;
 	}
 
 	@Override
 	protected void parseJson() {
-		stationsstatus = new Gson().fromJson(json, SSContainer.class);
+		linesstatus = new Gson().fromJson(json, LineStatusContainer.class);
 	}
 }

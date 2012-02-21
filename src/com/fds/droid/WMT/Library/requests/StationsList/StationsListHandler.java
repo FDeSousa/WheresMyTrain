@@ -37,8 +37,8 @@ import com.fds.droid.WMT.Library.json.TflJsonHandler;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLHandler extends TflJsonHandler<SLContainer> {
-	private SLContainer stationslist;
+public class StationsListHandler extends TflJsonHandler<StationsListContainer> {
+	private StationsListContainer stationslist;
 	private File cacheFile;
 
 	/**
@@ -46,7 +46,7 @@ public class SLHandler extends TflJsonHandler<SLContainer> {
 	 * @param cacheDir - File instance for the application's cache directory
 	 * @param uri - the URI of the data to fetch
 	 */
-	public SLHandler(File cacheDir, URI uri) {
+	public StationsListHandler(File cacheDir, URI uri) {
 		super(uri);
 		cacheFile = new File(cacheDir, "stationslist.json");
 	}
@@ -56,7 +56,7 @@ public class SLHandler extends TflJsonHandler<SLContainer> {
 	 * @return New SLContainer instance with the fetched data
 	 */
 	@Override
-	public SLContainer getContainer() {
+	public StationsListContainer getContainer() {
 		return stationslist;
 	}
 
@@ -87,7 +87,7 @@ public class SLHandler extends TflJsonHandler<SLContainer> {
 	 */
 	@Override
 	protected void parseJson() {
-		stationslist = new Gson().fromJson(json, SLContainer.class);
+		stationslist = new Gson().fromJson(json, StationsListContainer.class);
 	}
 
 	private String fetchJsonFromCache() {

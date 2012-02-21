@@ -28,23 +28,23 @@ import com.fds.droid.WMT.Library.LibraryMain;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPPlatform {
+public class DetailedPredictionsPlatform {
 	public String platformname;
 	public int platformnumber;
-	public List<DPTrain> trains = new ArrayList<DPTrain>();
+	public List<DetailedPredictionsTrain> trains = new ArrayList<DetailedPredictionsTrain>();
 
 	/**
 	 * Utility method to make a shallow clone of this Platform, and filter its List
 	 * of the unnecessary trains information (out of service/no trip trains)
 	 * @return copy of this object, with filtered trains List
 	 */
-	public DPPlatform filterAndClone() {
-		DPPlatform platform = new DPPlatform();
+	public DetailedPredictionsPlatform filterAndClone() {
+		DetailedPredictionsPlatform platform = new DetailedPredictionsPlatform();
 		platform.platformname = this.platformname;
 		platform.platformnumber = this.platformnumber;
 		
 		//	Copied basic information, now filter list of trains
-		for (DPTrain train : trains) {
+		for (DetailedPredictionsTrain train : trains) {
 			if (train.destcode != LibraryMain.OUT_OF_SERVICE &&
 					train.tripno != LibraryMain.NO_TRIP) {
 				platform.trains.add(train);
@@ -63,7 +63,7 @@ public class DPPlatform {
 		out.append(platformnumber);
 		out.append("\n\t\ttrains:{");
 
-		for (DPTrain train : trains) {
+		for (DetailedPredictionsTrain train : trains) {
 			out.append(train.toString());
 		}
 

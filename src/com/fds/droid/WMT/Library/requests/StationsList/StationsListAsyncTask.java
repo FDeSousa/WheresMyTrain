@@ -19,29 +19,29 @@ import com.fds.droid.WMT.UiElements.UiController;
  * Will not block the UI thread, which is the important part.
  * @author Filipe De Sousa
  */
-public class SLAsyncTask extends AsyncTask<Void, Void, SLContainer> {
+public class StationsListAsyncTask extends AsyncTask<Void, Void, StationsListContainer> {
 	private Activity activity;
 	private UiController uiController;
-	private TflJsonReader<SLContainer> mJsonR;
+	private TflJsonReader<StationsListContainer> mJsonR;
 	private LinesSpinnerAdapter mLineAdapter;
 	private Spinner linesSpinner;
 
-	public SLAsyncTask(Activity activity, UiController uiController) {
+	public StationsListAsyncTask(Activity activity, UiController uiController) {
 		this.activity = activity;
 		this.uiController = uiController;
-		this.mJsonR = new SLReader(this.activity.getCacheDir());
+		this.mJsonR = new StationsListReader(this.activity.getCacheDir());
 		linesSpinner = (Spinner) this.activity.findViewById(R.id.lines_spinner);
 	}
 	
 	@Override
-	protected SLContainer doInBackground(Void... params) {
+	protected StationsListContainer doInBackground(Void... params) {
 		// Send the request to prepare the JSON data while other stuff goes on
 		// Get the prepared JSON data now to fill the spinners
 		return mJsonR.get();
 	}
 
 	@Override
-	protected void onPostExecute(SLContainer result) {
+	protected void onPostExecute(StationsListContainer result) {
 		// Initialise the Lines Spinner adapter
 		mLineAdapter = new LinesSpinnerAdapter(result.lines, activity.getLayoutInflater(), uiController);
 		// Set the adapter onto the Lines Spinner

@@ -3,7 +3,7 @@ package com.fds.droid.WMT.UiElements;
 import java.util.List;
 
 import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,17 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class LinesArrayAdapter extends ArrayAdapter<SLLine> {
+public class LinesArrayAdapter extends ArrayAdapter<StationsListLine> {
 	private UiController uiController;
 
-	public LinesArrayAdapter(Context context, List<SLLine> objects, UiController uiController) {
+	public LinesArrayAdapter(Context context, List<StationsListLine> objects, UiController uiController) {
 		super(context, R.layout.spinner_row, objects);
 		this.uiController = uiController;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		SLLine line = getItem(position);
+		StationsListLine line = getItem(position);
 
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()

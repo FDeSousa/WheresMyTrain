@@ -26,7 +26,7 @@ import java.util.List;
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class SLContainer {
+public class StationsListContainer {
 	public String requesttype;
-	public List<SLLine> lines = new ArrayList<SLLine>();
+	public List<StationsListLine> lines = new ArrayList<StationsListLine>();
 }

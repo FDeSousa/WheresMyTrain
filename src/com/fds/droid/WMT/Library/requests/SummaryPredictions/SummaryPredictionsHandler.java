@@ -1,4 +1,4 @@
-package com.fds.droid.WMT.Library.requests.DetailedPredictions;
+package com.fds.droid.WMT.Library.requests.SummaryPredictions;
 
 /******************************************************************************
  * Copyright 2011 Filipe De Sousa
@@ -22,34 +22,34 @@ import com.fdesousa.google.gson.Gson;
 import com.fds.droid.WMT.Library.json.TflJsonHandler;
 
 /**
- * <b>DPHandler : TflJsonHandler</b>
- * <p>Handler of Detailed Predictions requests.<br/>
- * Used to parse JSON with GSON in a manner specific to Detailed Predictions.</p>
+ * <b>SPHandler : TflJsonHandler</b>
+ * <p>Handler of Summary Predictions requests.<br/>
+ * Used to parse JSON with GSON in a manner specific to Summary Predictions.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
-public class DPHandler extends TflJsonHandler<DPContainer> {
-	private DPContainer detailedpredictions;
+public class SummaryPredictionsHandler extends TflJsonHandler<SummaryPredictionsContainer> {
+	private SummaryPredictionsContainer summarypredictions;
 
 	/**
 	 * Constructor. Sets the URI of the request
 	 * @param uri - the URI of the data to fetch
 	 */
-	public DPHandler(URI uri) {
+	public SummaryPredictionsHandler(URI uri) {
 		super(uri);
 	}
 
 	/**
 	 * Simple getter, return the container the JSON was parsed into
-	 * @return New DPContainer instance with the fetched data
+	 * @return New SPContainer instance with the fetched data
 	 */
 	@Override
-	public DPContainer getContainer() {
-		return detailedpredictions;
+	public SummaryPredictionsContainer getContainer() {
+		return summarypredictions;
 	}
 
 	@Override
 	protected void parseJson() {
-		detailedpredictions = new Gson().fromJson(json, DPContainer.class);
+		summarypredictions = new Gson().fromJson(json, SummaryPredictionsContainer.class);
 	}
 }

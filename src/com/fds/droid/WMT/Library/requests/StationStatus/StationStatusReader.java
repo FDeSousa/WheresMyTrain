@@ -4,7 +4,7 @@ import java.net.URI;
 
 import com.fds.droid.WMT.Library.json.TflJsonReader;
 
-public class SSReader extends TflJsonReader<SSContainer> {
+public class StationStatusReader extends TflJsonReader<StationStatusContainer> {
 	private final boolean incidentsOnly;
 	
 	/**
@@ -12,7 +12,7 @@ public class SSReader extends TflJsonReader<SSContainer> {
 	 * of TflJsonReader of type SSContainer<SSContainer>
 	 * @param incidentsOnly - true to only fetch lines with incidents, false to fetch all
 	 */
-	public SSReader(final boolean incidentsOnly) {
+	public StationStatusReader(final boolean incidentsOnly) {
 		super();
 		this.incidentsOnly = incidentsOnly;
 	}
@@ -22,9 +22,9 @@ public class SSReader extends TflJsonReader<SSContainer> {
 	 * @return instance of SSContainer with the requested results
 	 */
 	@Override
-	public SSContainer get() {
+	public StationStatusContainer get() {
 		URI uri = makeUri(STATION_STATUS, null, null, incidentsOnly);
-		jsonHandler = new SSHandler(uri);
+		jsonHandler = new StationStatusHandler(uri);
 		jsonHandler.start();
 		stopHandler(jsonHandler);
 		return jsonHandler.getContainer();
@@ -35,7 +35,7 @@ public class SSReader extends TflJsonReader<SSContainer> {
 	 * @return instance of SSContainer with the requested results
 	 */
 	@Override
-	public SSContainer refresh() {
+	public StationStatusContainer refresh() {
 		jsonHandler.start();
 		stopHandler(jsonHandler);
 		return jsonHandler.getContainer();

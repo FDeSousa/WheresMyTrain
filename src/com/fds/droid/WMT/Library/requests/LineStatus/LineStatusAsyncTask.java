@@ -3,7 +3,7 @@ package com.fds.droid.WMT.Library.requests.LineStatus;
 import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.droid.WMT.Library.LibraryMain;
 import com.fds.droid.WMT.Library.json.TflJsonReader;
-import com.fds.droid.WMT.Library.requests.StationsList.SLLine;
+import com.fds.droid.WMT.Library.requests.StationsList.StationsListLine;
 import com.fds.droid.WMT.UiElements.UiController;
 import com.fds.droid.WMT.UiElements.UiControllerMain;
 
@@ -20,16 +20,16 @@ import android.widget.Button;
  * Will not block the UI thread, which is the important part.
  * @author Filipe De Sousa
  */
-public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
+public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContainer> {
 	private UiController uiController;
-	private TflJsonReader<LSContainer> mJsonR;
+	private TflJsonReader<LineStatusContainer> mJsonR;
 	private Button serviceStatus;
-	private SLLine line;
+	private StationsListLine line;
 	
-	public LSAsyncTask(Activity activity, UiController uiController, SLLine line) {
+	public LineStatusAsyncTask(Activity activity, UiController uiController, StationsListLine line) {
 		this.uiController = uiController;
 		this.line = line;
-		mJsonR = new LSReader(false);
+		mJsonR = new LineStatusReader(false);
 		serviceStatus = (Button) activity.findViewById(R.id.service_status);
 	}
 	
@@ -50,7 +50,7 @@ public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
 	}
 
 	@Override
-	protected LSContainer doInBackground(Void... params) {
+	protected LineStatusContainer doInBackground(Void... params) {
 		// Send the request to prepare the JSON data, but only get lines
 		// with incidents
 		// Get the prepared JSON data now to fill the button
@@ -58,7 +58,7 @@ public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
 	}
 
 	@Override
-	protected void onPostExecute(LSContainer result) {
+	protected void onPostExecute(LineStatusContainer result) {
 		// Since line status has been updated now, determine what to display to the user
 		determineLineStatus(result, line, uiController, serviceStatus);
 	}
@@ -68,7 +68,7 @@ public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
 	 * depending upon the station we're currently viewing. Needs cutting down.
 	 * @param linestatus - instance of LSContainer with line status info
 	 */
-	private static void determineLineStatus(LSContainer linestatus, SLLine line, UiController uiController, Button serviceStatus) {
+	private static void determineLineStatus(LineStatusContainer linestatus, StationsListLine line, UiController uiController, Button serviceStatus) {
 		// Only used for dialog box title, but still has to be set below
 		String title = "";
 		// Generally two-letter informational code. I.e. GS=Good Service,
@@ -88,7 +88,7 @@ public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
 			 * the same way. Search for the line name, place description in
 			 * Button text
 			 */
-			LSLine singleLine;
+			LineStatusLine singleLine;
 			String linename = line.linename;
 			// Waterloo and City line uses ampersand in detailed predictions,
 			// but "and" in line status
@@ -113,9 +113,9 @@ public class LSAsyncTask extends AsyncTask<Void, Void, LSContainer> {
 			// short
 			title = "H & C, Circle Lines";
 			// H&C line variable
-			LSLine hLine;
+			LineStatusLine hLine;
 			// Circle line variable
-			LSLine cLine;
+			LineStatusLine cLine;
 
 			// Get the line status for Hammersmith & City line
 			if ((hLine = linestatus

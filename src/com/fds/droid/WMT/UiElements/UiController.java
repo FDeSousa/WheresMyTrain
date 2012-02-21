@@ -118,9 +118,7 @@ public abstract class UiController {
 	//	Colours, colours and more colours
 	/**
 	 * Convenience method to get the right colour for the right train line
-	 * 
-	 * @param linecode
-	 *            - the ID of the train line to find the colour for
+	 * @param linecode - the ID of the train line to find the colour for
 	 * @return the integer colour code for the given train line
 	 */
 	public int getLineColour(String linecode) {
@@ -158,7 +156,6 @@ public abstract class UiController {
 
 	/**
 	 * Simple getter for text colour
-	 * 
 	 * @return integer value that textColour is set to
 	 */
 	public int getTextColour() {
@@ -167,7 +164,6 @@ public abstract class UiController {
 
 	/**
 	 * Simple setter for text colour
-	 * 
 	 * @param textColour
 	 *            integer value to set textColour to
 	 */
