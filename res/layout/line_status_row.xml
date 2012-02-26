@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:weightSum="1.0"
+    android:orientation="horizontal" >
+
+    <!-- Layout for a single row of a line status list view -->
+    <!-- List View row contains one line name and status information -->
+
+    <TextView
+        android:id="@+id/line_name"
+        android:layout_width="0dip"
+        android:layout_height="35dip"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight=".5"
+        android:background="@color/dlr_colour"
+        android:gravity="center"
+        android:textColor="@android:color/primary_text_dark_nodisable"
+        android:singleLine="true"
+        android:text="DLR" />
+
+    <TextView
+        android:id="@+id/service_status"
+        android:layout_width="0dip"
+        android:layout_height="35dip"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:textColor="@android:color/primary_text_light_nodisable"
+        android:singleLine="true"
+        android:text="Good Service" />
+
+</LinearLayout>

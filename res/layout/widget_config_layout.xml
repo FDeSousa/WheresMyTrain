@@ -5,6 +5,7 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <!-- Activity layout used for configuration of widget -->
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/custom_title_bar_config"

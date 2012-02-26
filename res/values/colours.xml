@@ -10,6 +10,8 @@
 	<color name="circle_colour">#ffffcc00</color>
 	<!-- TfL District Line colour -->
 	<color name="district_colour">#ff006633</color>
+	<!-- TfL DLR colour -->
+	<color name="dlr_colour">#ff009999</color>
 	<!-- TfL Hammersmith Line colour -->
 	<color name="hammersmith_colour">#ffcc9999</color>
 	<!-- TfL Jubilee Line colour -->
@@ -18,6 +20,8 @@
 	<color name="metropolitan_colour">#ff660066</color>
 	<!-- TfL Northern Line colour -->
 	<color name="northern_colour">#ff000000</color>
+	<!-- TfL Overground line colour -->
+	<color name="overground_colour">#ffff6600</color>
 	<!-- TfL Piccadilly Line colour -->
 	<color name="piccadilly_colour">#ff000099</color>
 	<!-- TfL Victoria Line colour -->
