@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import com.fdesousa.android.WheresMyTrain.R;
+import com.fds.WMT.R;
 import com.fds.WMT.Library.LibraryMain;
 import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsPlatform;
 import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsTrain;

@@ -4,7 +4,7 @@ import android.app.ExpandableListActivity;
 import android.os.AsyncTask;
 import android.view.View;
 
-import com.fdesousa.android.WheresMyTrain.R;
+import com.fds.WMT.R;
 import com.fds.WMT.Library.json.TflJsonReader;
 import com.fds.WMT.UiElements.PlatformsExpListAdapter;
 import com.fds.WMT.UiElements.UiController;

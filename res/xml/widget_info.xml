@@ -4,6 +4,6 @@
     android:minHeight="72dip"
     android:minWidth="294dip"
     android:updatePeriodMillis="0"
-    android:configure="com.fdesousa.android.WheresMyTrain.Widget.Config.Lines" >
+    android:configure="com.fds.WMT.Widget.Config.Lines" >
 
 </appwidget-provider>

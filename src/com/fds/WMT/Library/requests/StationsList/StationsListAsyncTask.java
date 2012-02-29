@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.Spinner;
 
-import com.fdesousa.android.WheresMyTrain.R;
+import com.fds.WMT.R;
 import com.fds.WMT.Library.json.TflJsonReader;
 import com.fds.WMT.UiElements.LinesSpinnerAdapter;
 import com.fds.WMT.UiElements.UiController;

@@ -25,7 +25,7 @@ import android.text.SpannableString;
 import android.text.util.Linkify;
 import android.widget.TextView;
 
-import com.fdesousa.android.WheresMyTrain.R;
+import com.fds.WMT.R;
 
 /**
  * <b>UiControllerMain</b>

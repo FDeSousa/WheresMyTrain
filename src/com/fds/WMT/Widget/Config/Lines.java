@@ -2,16 +2,6 @@ package com.fds.WMT.Widget.Config;
 
 import java.util.Calendar;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.WMT.Library.json.TflJsonReader;
-import com.fds.WMT.Library.requests.StationsList.StationsListContainer;
-import com.fds.WMT.Library.requests.StationsList.StationsListLine;
-import com.fds.WMT.Library.requests.StationsList.StationsListReader;
-import com.fds.WMT.UiElements.LinesArrayAdapter;
-import com.fds.WMT.UiElements.UiController;
-import com.fds.WMT.UiElements.UiControllerConfig;
-import com.fds.WMT.Widget.Widget;
-
 import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.PendingIntent;
@@ -24,6 +14,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.fds.WMT.R;
+import com.fds.WMT.Library.json.TflJsonReader;
+import com.fds.WMT.Library.requests.StationsList.StationsListContainer;
+import com.fds.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.WMT.Library.requests.StationsList.StationsListReader;
+import com.fds.WMT.UiElements.LinesArrayAdapter;
+import com.fds.WMT.UiElements.UiController;
+import com.fds.WMT.UiElements.UiControllerConfig;
+import com.fds.WMT.Widget.Widget;
 
 public class Lines extends ListActivity {
 	public static final String LINE_COLOUR_EXTRA = "line_colour";

@@ -1,12 +1,5 @@
 package com.fds.WMT.Widget.Config;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.WMT.Library.requests.StationsList.StationsListLine;
-import com.fds.WMT.Library.requests.StationsList.StationsListStation;
-import com.fds.WMT.UiElements.StationsArrayAdapter;
-import com.fds.WMT.UiElements.UiController;
-import com.fds.WMT.UiElements.UiControllerConfig;
-
 import android.app.ListActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -17,6 +10,13 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.fds.WMT.R;
+import com.fds.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.WMT.Library.requests.StationsList.StationsListStation;
+import com.fds.WMT.UiElements.StationsArrayAdapter;
+import com.fds.WMT.UiElements.UiController;
+import com.fds.WMT.UiElements.UiControllerConfig;
 
 public class Stations extends ListActivity {
 	private ArrayAdapter<StationsListStation> adapter;

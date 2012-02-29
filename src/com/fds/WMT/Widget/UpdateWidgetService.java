@@ -3,12 +3,6 @@ package com.fds.WMT.Widget;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.WMT.Library.json.TflJsonReader;
-import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
-import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsReader;
-import com.fds.WMT.UiElements.UiControllerConfig;
-
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -16,6 +10,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.widget.RemoteViews;
+
+import com.fds.WMT.R;
+import com.fds.WMT.Library.json.TflJsonReader;
+import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
+import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsReader;
+import com.fds.WMT.UiElements.UiControllerConfig;
 
 public class UpdateWidgetService extends Service {
 

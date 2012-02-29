@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.WMT.Library.json.TflJsonFetcher;
 import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsAsyncTask;
 import com.fds.WMT.Library.requests.DetailedPredictions.DetailedPredictionsContainer;

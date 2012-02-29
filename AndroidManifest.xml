@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fdesousa.android.WheresMyTrain"
-    android:versionCode="15"
+    package="com.fds.WMT"
+    android:versionCode="19"
     android:versionName="0.8" >
 
     <uses-sdk android:minSdkVersion="7" />
@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
 <!-- End of Main Activity-related entries -->
+
 <!-- Widget-related entries -->
         <!-- Application's widget has to be registered as receiver to get updates -->
         <receiver 

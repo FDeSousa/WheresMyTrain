@@ -6,8 +6,8 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 
-import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.WMT.Lines;
+import com.fds.WMT.R;
 import com.fds.WMT.Library.LibraryMain;
 import com.fds.WMT.Library.json.TflJsonReader;
 import com.fds.WMT.Library.requests.StationsList.StationsListLine;

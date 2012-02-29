@@ -1,7 +1,5 @@
 package com.fds.WMT.Widget;
 
-import com.fdesousa.android.WheresMyTrain.R;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,6 +8,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+
+import com.fds.WMT.R;
 
 public class Widget extends AppWidgetProvider {
 	public static final String TAG = "com.fdesousa.android.WheresMyTrain.Widget";

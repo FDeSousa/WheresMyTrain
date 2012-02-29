@@ -2,8 +2,6 @@ package com.fds.WMT;
 
 import android.content.res.Resources;
 
-import com.fdesousa.android.WheresMyTrain.R;
-
 /**
  * <h1>Lines.java</h1>
  * <p>

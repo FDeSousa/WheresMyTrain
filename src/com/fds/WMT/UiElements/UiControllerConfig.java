@@ -24,8 +24,8 @@ import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
-import com.fdesousa.android.WheresMyTrain.R;
 import com.fds.WMT.Lines;
+import com.fds.WMT.R;
 
 /**
  * <b>UiController</b>
