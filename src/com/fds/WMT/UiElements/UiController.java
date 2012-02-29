@@ -22,8 +22,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.view.View;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.WMT.Library.LibraryMain;
+import com.fds.WMT.Lines;
 
 /**
  * <b>UiController</b>
@@ -123,28 +122,13 @@ public abstract class UiController {
 	 */
 	public int getLineColour(String linecode) {
 		int colour = 0;
-
-		if (linecode.equals(LibraryMain.BAKERLOO_CODE))
-			colour = resources.getColor(R.color.bakerloo_colour);
-		else if (linecode.equals(LibraryMain.CENTRAL_CODE))
-			colour = resources.getColor(R.color.central_colour);
-		else if (linecode.equals(LibraryMain.DISTRICT_CODE))
-			colour = resources.getColor(R.color.district_colour);
-		else if (linecode.equals(LibraryMain.HAMMERSMITH_CODE))
-			colour = resources.getColor(R.color.hammersmith_colour);
-		else if (linecode.equals(LibraryMain.JUBILEE_CODE))
-			colour = resources.getColor(R.color.jubilee_colour);
-		else if (linecode.equals(LibraryMain.METROPOLITAN_CODE))
-			colour = resources.getColor(R.color.metropolitan_colour);
-		else if (linecode.equals(LibraryMain.NORTHERN_CODE))
-			colour = resources.getColor(R.color.northern_colour);
-		else if (linecode.equals(LibraryMain.PICCADILLY_CODE))
-			colour = resources.getColor(R.color.piccadilly_colour);
-		else if (linecode.equals(LibraryMain.VICTORIA_CODE))
-			colour = resources.getColor(R.color.victoria_colour);
-		else if (linecode.equals(LibraryMain.WATERLOO_CODE))
-			colour = resources.getColor(R.color.waterloo_colour);
-
+		try {
+			colour = Lines.getLineByCode(linecode).getColourCode();
+		} catch (NullPointerException e) {
+			//	Someone forgot to set resources beforehand, set them now
+			Lines.setResources(resources);
+			colour = Lines.getLineByCode(linecode).getColourCode();
+		}
 		return colour;
 	}
 

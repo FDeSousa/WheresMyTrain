@@ -117,6 +117,9 @@ public class WheresMyTrain extends ExpandableListActivity {
 			// Now it's time to instantiate and setup things
 			instantiateVariables();
 			setupWidgets();			
+		} else {
+			Toast.makeText(this, "Server is unreachable. Check connectivity", Toast.LENGTH_LONG);
+			this.finish();
 		}
 	}
 
@@ -178,6 +181,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	 * Makes onCreate tidier to look at
 	 */
 	private void instantiateVariables() {
+		Lines.setResources(getResources());
 		//INSTANCE = this;
 		uiController = new UiControllerMain(getResources(), getAssets(), customTitleBar, this);
 
@@ -285,16 +289,22 @@ public class WheresMyTrain extends ExpandableListActivity {
 		stationsSpinner.setAdapter(mStationAdapter);
 	}
 
-	// Fetch, parse, display the list of lines and stations
-	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
+	/**
+	 * Fetch, parse, display the list of lines and stations.
+	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
+	 */
 	private AsyncTask<Void, Void, StationsListContainer> prepareStationsList;
 
-	// Get/Refresh the detailed predictions
-	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
+	/**
+	 * Get/Refresh the detailed predictions
+	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
+	 */
 	private AsyncTask<Void, Void, DetailedPredictionsContainer> getPredictions;
 
-	// Get/Refresh the line status
-	/** To avoid conflicts, have a copy of the AsyncTask to cancel if needed */
+	/**
+	 * Get/Refresh the line status
+	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
+	 */
 	private AsyncTask<Void, Void, LineStatusContainer> getLineStatus;
 
 	private void resetLineStatusButton() {
@@ -307,9 +317,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 			((UiControllerMain) uiController).setLineStatusDialogText("Unknown Status", "Please wait");
 	}
 
-	// onClick method for the line status button
 	/**
-	 * OnClick method for the serviceStatus Button, as defined in layout
+	 * OnClick method for the LineStatus Button, as defined in layout
 	 * XML</br> Just shows the line status dialog
 	 * @param v - instance of View (generally will be the Button itself)
 	 */
@@ -317,4 +326,5 @@ public class WheresMyTrain extends ExpandableListActivity {
 		if (uiController instanceof UiControllerMain)
 			((UiControllerMain) uiController).showLineStatusDialog();
 	}
+
 }

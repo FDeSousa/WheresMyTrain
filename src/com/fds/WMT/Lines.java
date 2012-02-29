@@ -1,8 +1,8 @@
 package com.fds.WMT;
 
-import com.fdesousa.android.WheresMyTrain.R;
-
 import android.content.res.Resources;
+
+import com.fdesousa.android.WheresMyTrain.R;
 
 /**
  * <h1>Lines.java</h1>
@@ -13,30 +13,33 @@ import android.content.res.Resources;
  * @version 0.8
  */
 public enum Lines {
-	BAKERLOO("b", "Bakerloo", R.color.bakerloo_colour),
-	CENTRAL("c", "Central", R.color.central_colour),
-	CIRCLE("crl", "Circle", R.color.circle_colour),
-	DISTRICT("d", "District", R.color.district_colour),
-	DLR("dlr", "DLR", R.color.dlr_colour),
-	HAMMERSMITH("h", "Hammersmith & City", R.color.hammersmith_colour),
-	JUBILEE("j", "Jubilee", R.color.jubilee_colour),
-	METROPOLITAN("m", "Metropolitan", R.color.metropolitan_colour),
-	NORTHERN("n", "Northern", R.color.northern_colour),
-	OVERGROUND("ovr", "Overground", R.color.overground_colour),
-	PICCADILLY("p", "Piccadilly", R.color.piccadilly_colour),
-	VICTORIA("v", "Victoria", R.color.victoria_colour),
-	WATERLOO("w", "Waterloo & City", R.color.waterloo_colour);
+	BAKERLOO("b", "Bakerloo", R.color.bakerloo_colour, R.drawable.widget_title_shape_bakerloo),
+	CENTRAL("c", "Central", R.color.central_colour, R.drawable.widget_title_shape_central),
+	CIRCLE("crl", "Circle", R.color.circle_colour, R.drawable.widget_title_shape_hammersmith),
+	DISTRICT("d", "District", R.color.district_colour, R.drawable.widget_title_shape_district),
+	DLR("dlr", "DLR", R.color.dlr_colour, R.drawable.widget_title_shape_default),
+	HAMMERSMITH("h", "Hammersmith and City", R.color.hammersmith_colour, R.drawable.widget_title_shape_hammersmith),
+	JUBILEE("j", "Jubilee", R.color.jubilee_colour, R.drawable.widget_title_shape_jubilee),
+	METROPOLITAN("m", "Metropolitan", R.color.metropolitan_colour, R.drawable.widget_title_shape_metropolitan),
+	NORTHERN("n", "Northern", R.color.northern_colour, R.drawable.widget_title_shape_northern),
+	OVERGROUND("ovr", "Overground", R.color.overground_colour, R.drawable.widget_title_shape_default),
+	PICCADILLY("p", "Piccadilly", R.color.piccadilly_colour, R.drawable.widget_title_shape_piccadilly),
+	VICTORIA("v", "Victoria", R.color.victoria_colour, R.drawable.widget_title_shape_victoria),
+	WATERLOO("w", "Waterloo and City", R.color.waterloo_colour, R.drawable.widget_title_shape_waterloo),
+	UNKNOWN("", "Unknown line", R.color.northern_colour, R.drawable.widget_title_shape_default);
 
 	public static Resources resources;
 	private final String code;
 	private final String name;
 	private final int colourId;
+	private final int shapeId;
 	private int colourCode;
 
-	private Lines(String code, String name, int colourId) {
+	private Lines(String code, String name, int colourId, int shapeId) {
 		this.code = code;
 		this.name = name;
 		this.colourId = colourId;
+		this.shapeId = shapeId;
 		this.colourCode = 0;
 	}
 
@@ -59,7 +62,7 @@ public enum Lines {
 		for (Lines l : Lines.values()) {
 			if (l.code.equals(code)) return l;
 		}
-		return null;
+		return UNKNOWN;
 	}
 
 	/**
@@ -69,7 +72,7 @@ public enum Lines {
 	public String getCode() {
 		return this.code;
 	}
-	
+
 	/**
 	 * Basic getter method that returns the name of the Line
 	 * @return String of the Line name
@@ -95,4 +98,12 @@ public enum Lines {
 		return colourCode;
 	}
 
+	/**
+	 * Returns the shape ID that relates to this lines' specific shape
+	 * used in the title of the widget.
+	 * @return integer value, the ID of the relevant widget shape
+	 */
+	public int getShapeCode() {
+		return shapeId;
+	}
 }

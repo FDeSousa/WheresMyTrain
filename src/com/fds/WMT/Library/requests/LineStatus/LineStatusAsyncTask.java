@@ -1,17 +1,18 @@
 package com.fds.WMT.Library.requests.LineStatus;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fds.WMT.Library.LibraryMain;
-import com.fds.WMT.Library.json.TflJsonReader;
-import com.fds.WMT.Library.requests.StationsList.StationsListLine;
-import com.fds.WMT.UiElements.UiController;
-import com.fds.WMT.UiElements.UiControllerMain;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
+
+import com.fdesousa.android.WheresMyTrain.R;
+import com.fds.WMT.Lines;
+import com.fds.WMT.Library.LibraryMain;
+import com.fds.WMT.Library.json.TflJsonReader;
+import com.fds.WMT.Library.requests.StationsList.StationsListLine;
+import com.fds.WMT.UiElements.UiController;
+import com.fds.WMT.UiElements.UiControllerMain;
 
 /**
  * AsyncTask sub-class to achieve a non-blocking manner in which to get line
@@ -25,14 +26,14 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 	private TflJsonReader<LineStatusContainer> mJsonR;
 	private Button serviceStatus;
 	private StationsListLine line;
-	
+
 	public LineStatusAsyncTask(Activity activity, UiController uiController, StationsListLine line) {
 		this.uiController = uiController;
 		this.line = line;
 		mJsonR = new LineStatusReader(false);
 		serviceStatus = (Button) activity.findViewById(R.id.service_status);
 	}
-	
+
 	private void resetLineStatusButton() {
 		// Reset the status button to black and white, unknown status
 		serviceStatus.setBackgroundResource(R.drawable.btn_white_basic);
@@ -42,7 +43,7 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 		if (uiController instanceof UiControllerMain)
 			((UiControllerMain) uiController).setLineStatusDialogText("Unknown Status", "Please wait");
 	}
-	
+
 	@Override
 	protected void onPreExecute() {
 		// Just clean up the line status button
@@ -62,13 +63,14 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 		// Since line status has been updated now, determine what to display to the user
 		determineLineStatus(result, line, uiController, serviceStatus);
 	}
-	
+
 	/**
 	 * Rather ungainly and long method to set the button text and dialog text
 	 * depending upon the station we're currently viewing. Needs cutting down.
 	 * @param linestatus - instance of LSContainer with line status info
 	 */
-	private static void determineLineStatus(LineStatusContainer linestatus, StationsListLine line, UiController uiController, Button serviceStatus) {
+	private static void determineLineStatus(LineStatusContainer linestatus, StationsListLine line,
+			UiController uiController, Button serviceStatus) {
 		// Only used for dialog box title, but still has to be set below
 		String title = "";
 		// Generally two-letter informational code. I.e. GS=Good Service,
@@ -81,7 +83,7 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 		// Service
 		String details = "";
 
-		if (!line.linecode.equals(LibraryMain.HAMMERSMITH_CODE)) {
+		if (Lines.getLineByCode(line.linecode) != Lines.HAMMERSMITH) {
 			/*
 			 * These lines: Bakerloo, Central, District, Jubilee, Metropolitan,
 			 * Northern, Piccadilly, Victoria, Waterloo & City get treated in
@@ -92,8 +94,8 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 			String linename = line.linename;
 			// Waterloo and City line uses ampersand in detailed predictions,
 			// but "and" in line status
-			if (line.linecode.equals(LibraryMain.WATERLOO_CODE))
-				linename = LibraryMain.WATERLOO_NAME;
+			if (Lines.getLineByCode(line.linecode) != Lines.WATERLOO)
+				linename = Lines.WATERLOO.getName();
 
 			// Search for the line, check the result isn't null
 			if ((singleLine = linestatus.searchByLinename(linename)) != null) {
@@ -119,14 +121,14 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 
 			// Get the line status for Hammersmith & City line
 			if ((hLine = linestatus
-					.searchByLinename(LibraryMain.HAMMERSMITH_NAME)) != null) {
+					.searchByLinename(Lines.HAMMERSMITH.getName())) != null) {
 				// Just determine whether the description is empty
 				statusid = hLine.statusid;
 				description = hLine.description;
 				// Format the message string for the dialog, decide whether to
 				// use details/description
 				details = String.format("%s Line:\n%s",
-						LibraryMain.HAMMERSMITH_NAME,
+						Lines.HAMMERSMITH.getName(),
 						decideMessageChoice(hLine.details, hLine.description));
 			} else {
 				// If nothing is returned, make up status, pretending it's all
@@ -134,15 +136,15 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 				statusid = LibraryMain.GOOD_SERVICE_CODE;
 				description = "Good Service";
 				details = String.format("%s Line:\n%s",
-						LibraryMain.HAMMERSMITH_NAME, "Good Service");
+						Lines.HAMMERSMITH.getName(), "Good Service");
 			}
 
 			// Get the line status for Circle line
-			if ((cLine = linestatus.searchByLinename(LibraryMain.CIRCLE_NAME)) != null) {
+			if ((cLine = linestatus.searchByLinename(Lines.CIRCLE.getName())) != null) {
 				// Details are easy, just construct the String again, decide
 				// whether to use details or description
 				details = String.format("%s\n\n%s Line:\n%s", details,
-						LibraryMain.CIRCLE_NAME,
+						Lines.CIRCLE.getName(),
 						decideMessageChoice(cLine.details, cLine.description));
 
 				// Determine which status description to use now
@@ -160,7 +162,7 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 				// If Circle line isn't found, assume Good Service, make up
 				// details
 				details = String.format("%s\n\n%s Line:\n%s", details,
-						LibraryMain.CIRCLE_NAME, "Good Service");
+						Lines.CIRCLE.getName(), "Good Service");
 			}
 		}
 
@@ -185,7 +187,7 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 		if (uiController instanceof UiControllerMain)
 			((UiControllerMain) uiController).setLineStatusDialogText(title, details);
 	}
-	
+
 	/**
 	 * Convenience method to decide if details string is too short/is empty.<br/>
 	 * If so, return the description string instead. Useful for line status dialog
