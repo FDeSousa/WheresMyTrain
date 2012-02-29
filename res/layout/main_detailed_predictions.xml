@@ -50,9 +50,9 @@
     <!-- Custom control from Android-PullToRefresh library -->
     <!-- ExpandableListView for platforms and trains predictions, with pull-to-refresh capability -->
     <!-- com.handmark.pulltorefresh.library.PullToRefreshExpandableListView -->
-    <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
+    <ExpandableListView
         xmlns:ptr="http://schemas.android.com/apk/res/com.fds.WMT"
-        android:id="@+id/platforms_list"
+        android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/white"
@@ -62,10 +62,7 @@
         android:childDivider="@android:color/white"
         android:indicatorLeft="0dip"
         android:indicatorRight="310dip"
-        android:scrollbars="none"
-        ptr:adapterViewBackground="@android:color/white"
-        ptr:headerBackground="@android:color/white"
-        ptr:headerTextColor="@android:color/darker_gray" />
+        android:scrollbars="none" />
     <!-- ptr:adapterViewBackground="@android:color/white"
         ptr:headerBackground="@android:color/white"
         ptr:headerTextColor="@android:color/darker_gray" -->
