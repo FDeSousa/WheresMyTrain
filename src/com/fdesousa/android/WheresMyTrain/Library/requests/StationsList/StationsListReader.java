@@ -16,6 +16,7 @@ public class StationsListReader extends TflJsonReader<StationsListContainer> {
 	 */
 	public StationsListReader(File cacheDir) {
 		super();
+		this.cacheDir = cacheDir;
 	}
 
 	/**
