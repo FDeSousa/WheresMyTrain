@@ -27,7 +27,7 @@
 
 <!-- Widget-related entries -->
         <!-- Application's widget has to be registered as receiver to get updates -->
-        <receiver 
+       <!--  <receiver 
             android:icon="@drawable/ic_launcher"
             android:label="@string/widget_name"
             android:name=".Widget.Widget" >
@@ -40,12 +40,12 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <!-- Naming the update service for the widget -->
+        Naming the update service for the widget
         <service android:name=".Widget.UpdateWidgetService"
             android:process=":com.fdesousa.android.WheresMyTrain.Widget.Updater" >
         </service>
 
-		<!-- Configuration activity for the widget -->
+		Configuration activity for the widget
         <activity
             android:name=".Widget.Config.Lines"
             android:label="@string/line" >
@@ -54,10 +54,11 @@
             </intent-filter>
         </activity>
 
-		<!-- Secondary activity, also for configuration of the widget -->
+		Secondary activity, also for configuration of the widget
         <activity android:name=".Widget.Config.Stations"
             android:label="@string/station" >
-        </activity>
+        </activity> -->
+        <!-- Widget not yet implemented fully, so just leave out its entries for now -->
 <!-- End of Widget-related entries -->
     </application>
 
