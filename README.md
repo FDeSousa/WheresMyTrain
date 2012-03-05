@@ -38,7 +38,7 @@ There's some iffy workings with the back button pre-Android 2.1, as this overrid
 
 ## Where can I find out more about the project?
 The source is [hosted on GitHub.](https://github.com/FDeSousa/WheresMyTrain)  
-General information is on the [project page on my site.](http://wmt.desousa.com.pt)  
+General information is on the [project page on my site.](http://desousa.com.pt/wmt)  
 The application itself [on Android Market.](https://market.android.com/details?id=com.fdesousa.android.WheresMyTrain)  
 
 ## License
