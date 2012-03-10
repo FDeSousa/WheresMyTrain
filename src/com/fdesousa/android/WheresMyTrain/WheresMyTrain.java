@@ -60,12 +60,12 @@ public class WheresMyTrain extends ExpandableListActivity {
 
 	// Main view widgets
 	/** Spinner used for selecting Underground Line - colour-coded text choices */
-	private Spinner linesSpinner;
+	private Button linesSpinner;
 	/**
 	 * Spinner used for selecting tube station from the given Line -
 	 * colour-coded by Line
 	 */
-	private Spinner stationsSpinner;
+	private Button stationsSpinner;
 	/** Button for displaying service status to the user */
 	private Button serviceStatus;
 	/** Instance of the Adapter for StationsSpinner */
@@ -186,8 +186,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 		uiController.setTextColour(uiController.getLineColour("b"));
 
 		// Initialise the display widgets
-		linesSpinner = (Spinner) findViewById(R.id.lines_spinner);
-		stationsSpinner = (Spinner) findViewById(R.id.stations_spinner);
+		linesSpinner = (Button) findViewById(R.id.lines_spinner);
+		stationsSpinner = (Button) findViewById(R.id.stations_spinner);
 		serviceStatus = (Button) findViewById(R.id.service_status);
 	}
 
@@ -205,6 +205,13 @@ public class WheresMyTrain extends ExpandableListActivity {
 		}
 		prepareStationsList = new StationsListAsyncTask(this, uiController).execute();
 
+		linesSpinner.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
 		// Set the OnItemSelectedListener for Lines Spinner
 		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override

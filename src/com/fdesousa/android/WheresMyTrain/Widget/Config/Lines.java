@@ -3,7 +3,6 @@ package com.fdesousa.android.WheresMyTrain.Widget.Config;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
-import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -11,46 +10,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.fdesousa.android.WheresMyTrain.R;
-import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListContainer;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListLine;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListReader;
-import com.fdesousa.android.WheresMyTrain.UiElements.LinesArrayAdapter;
-import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
-import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerConfig;
+import com.fdesousa.android.WheresMyTrain.UiElements.LinesPickerActivity;
 import com.fdesousa.android.WheresMyTrain.Widget.Widget;
 
-public class Lines extends ListActivity {
-	public static final String LINE_COLOUR_EXTRA = "line_colour";
-	public static final String SLLINE_EXTRA = "sl_line";
-	public static final String LINE_CODE_RESULT = "linecode";
-	public static final String STATION_CODE_RESULT = "stationcode";
-	public static final int PICK_STATION_REQUEST = 1122334455;
-
-	private ArrayAdapter<StationsListLine> adapter;
-	private UiController uiController;
-
-	// Anything else
-	/**
-	 * Simple boolean for determining whether the Custom Title bar window
-	 * feature is enabled
-	 */
-	private boolean customTitleBar;
-	private int appWidgetId;
+/**
+ * <h1>Lines.java</h1>
+ * Exactly as its superclass, except for the ability to write configuration
+ * and choices data to a SharedPreferences file, which is useful for the
+ * configuration of a widget for WMT in later development.
+ * 
+ * @see com.fdesousa.android.WheresMyTrain.UiElements.LinesPickerActivity
+ * @author Filipe De Sousa
+ *
+ */
+public class Lines extends LinesPickerActivity {
+	protected int appWidgetId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Requesting window features must be done before anything else, so do it now
-		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// Set the content view to our main layout
-		setContentView(R.layout.widget_config_layout);
-
 		// get the appWidgetId of the appWidget being configured
 		appWidgetId = getIntent().getExtras()
 				.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -60,33 +41,24 @@ public class Lines extends ListActivity {
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId));
 
 		//	To save ourselves the hassle, check the fetched appWidgetId now
-		if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-			finish();
-		}
-
-		//	Setup the uiController for later use
-		uiController = new UiControllerConfig(getResources(), getAssets(), customTitleBar, this, false);
-		uiController.refreshMainTitleBar("Choose Underground Line");
-		//	Time to sort out the list of lines and their associated stations
-		TflJsonReader<StationsListContainer> mJsonR = new StationsListReader(getCacheDir());
-		StationsListContainer container = mJsonR.get();
-		adapter = new LinesArrayAdapter(this, container.lines, uiController);
-		//	Now set the ListAdapter so we can see this data set
-		setListAdapter(adapter);
+		if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish();
 	}
 
+	/**
+	 * Almost identical to its super-class implementation of onListItemClick,
+	 * but uses Stations.class instead of StationPickerActivity.class
+	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		StationsListLine line = adapter.getItem(position);
 		this.uiController.setTextColour(uiController.getLineColour(line.linecode));
 
 		Intent getStation = new Intent(this, Stations.class)
-				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 				.putExtra(LINE_COLOUR_EXTRA, this.uiController.getTextColour())
 				.putExtra(SLLINE_EXTRA, line);
 		startActivityForResult(getStation, PICK_STATION_REQUEST);
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PICK_STATION_REQUEST && resultCode == RESULT_OK) {
@@ -108,7 +80,7 @@ public class Lines extends ListActivity {
 			Widget.saveAlarmManager(alarmManager, pendingIntent);
 
 			//	Line and station chosen, set result to OK, finish normally
-			setResult(RESULT_OK, new Intent().putExtra(
+			setResult(RESULT_OK, data.putExtra(
 					AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId));
 			finish();
 		}

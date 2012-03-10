@@ -30,13 +30,13 @@
     </LinearLayout>
 
     <!-- Spinner for choosing Line -->
-    <Spinner
+    <Button
         android:id="@+id/lines_spinner"
         style="@style/ChoiceSpinner"
         android:prompt="@string/lines_prompt" />
 
     <!-- Spinner for choosing Station -->
-    <Spinner
+    <Button
         android:id="@+id/stations_spinner"
         style="@style/ChoiceSpinner"
         android:prompt="@string/stations_prompt" />
