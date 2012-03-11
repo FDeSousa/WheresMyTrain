@@ -21,9 +21,10 @@
             android:layout_height="20dip"
             android:layout_marginLeft="5dip"
             android:layout_marginTop="5dip"
-            android:layout_weight=".70"
+            android:layout_weight=".8"
             android:gravity="center_vertical|left"
             android:textColor="#ff000000"
+            android:singleLine="true"
             android:textSize="14sp" />
 
         <!-- TextView to display the estimated time left until train arrives at platform -->
@@ -33,7 +34,7 @@
             android:layout_height="20dip"
             android:layout_marginRight="5dip"
             android:layout_marginTop="5dip"
-            android:layout_weight=".30"
+            android:layout_weight=".2"
             android:gravity="center_vertical|right"
             android:textColor="#ff000000"
             android:textSize="14sp" />

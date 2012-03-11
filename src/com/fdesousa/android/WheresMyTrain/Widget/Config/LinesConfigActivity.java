@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.fdesousa.android.WheresMyTrain.Library.ConfigCodes;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListLine;
 import com.fdesousa.android.WheresMyTrain.UiElements.LinesPickerActivity;
 import com.fdesousa.android.WheresMyTrain.Widget.Widget;
@@ -24,9 +25,8 @@ import com.fdesousa.android.WheresMyTrain.Widget.Widget;
  * 
  * @see com.fdesousa.android.WheresMyTrain.UiElements.LinesPickerActivity
  * @author Filipe De Sousa
- *
  */
-public class Lines extends LinesPickerActivity {
+public class LinesConfigActivity extends LinesPickerActivity {
 	protected int appWidgetId;
 
 	@Override
@@ -53,15 +53,15 @@ public class Lines extends LinesPickerActivity {
 		StationsListLine line = adapter.getItem(position);
 		this.uiController.setTextColour(uiController.getLineColour(line.linecode));
 
-		Intent getStation = new Intent(this, Stations.class)
-				.putExtra(LINE_COLOUR_EXTRA, this.uiController.getTextColour())
-				.putExtra(SLLINE_EXTRA, line);
-		startActivityForResult(getStation, PICK_STATION_REQUEST);
+		Intent getStation = new Intent(this, StationsConfigActivity.class)
+				.putExtra(ConfigCodes.LINE_COLOUR_EXTRA, this.uiController.getTextColour())
+				.putExtra(ConfigCodes.SLLINE_EXTRA, line);
+		startActivityForResult(getStation, ConfigCodes.PICK_STATION_REQUEST);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PICK_STATION_REQUEST && resultCode == RESULT_OK) {
+		if (requestCode == ConfigCodes.PICK_STATION_REQUEST && resultCode == RESULT_OK) {
 			//	Write out the results, relevant to the widget being configured only
 			writePreferences(data.getExtras());
 
@@ -94,8 +94,8 @@ public class Lines extends LinesPickerActivity {
 		//	Get our shared preferences file for editing
 		SharedPreferences settings = this.getSharedPreferences(Widget.TAG, Context.MODE_PRIVATE);
 		SharedPreferences.Editor edit = settings.edit()
-				.putString(lineKey, result.getString(LINE_CODE_RESULT))
-				.putString(stationKey, result.getString(STATION_CODE_RESULT))
+				.putString(lineKey, result.getString(ConfigCodes.LINE_CODE_RESULT))
+				.putString(stationKey, result.getString(ConfigCodes.STATION_CODE_RESULT))
 				.putInt(lineColourKey, this.uiController.getTextColour());
 		//	Done reading, commit to shared preferences file
 		edit.commit();

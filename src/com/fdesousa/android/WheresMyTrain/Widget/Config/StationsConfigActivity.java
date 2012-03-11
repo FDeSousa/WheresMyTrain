@@ -11,10 +11,10 @@ import android.os.Bundle;
  * StationPickerActivity subclass which changes little about its
  * behaviour, apart from setting an extra in return bundle, to make
  * it more relevant to configuration of a widget.
- * @see com.fdesousa.android.WheresMyTrain.UiElements.StationsPickerActivity.android.WheresMyTrain.Widget.Config.StationPickerActivity
+ * @see com.fdesousa.android.WheresMyTrain.UiElements.StationsPickerActivity
  * @author Filipe De Sousa
  */
-public class Stations extends StationsPickerActivity {
+public class StationsConfigActivity extends StationsPickerActivity {
 	private int appWidgetId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

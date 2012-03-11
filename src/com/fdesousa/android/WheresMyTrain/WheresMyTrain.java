@@ -16,7 +16,12 @@ package com.fdesousa.android.WheresMyTrain;
  * limitations under the License.
  *****************************************************************************/
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,11 +30,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.fdesousa.android.WheresMyTrain.Library.ConfigCodes;
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonFetcher;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DetailedPredictionsAsyncTask;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
@@ -38,59 +42,82 @@ import com.fdesousa.android.WheresMyTrain.Library.requests.LineStatus.LineStatus
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListAsyncTask;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListContainer;
 import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListLine;
-import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListStation;
-import com.fdesousa.android.WheresMyTrain.UiElements.StationsSpinnerAdapter;
+import com.fdesousa.android.WheresMyTrain.Library.requests.StationsList.StationsListReader;
+import com.fdesousa.android.WheresMyTrain.UiElements.LinesPickerActivity;
+import com.fdesousa.android.WheresMyTrain.UiElements.StationsPickerActivity;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
 import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerMain;
 
 /**
- * <b>WheresMyTrain : Activity</b>
+ * <h1>WheresMyTrain : Activity</h1>
  * <p>Main Activity for the app, instantiating and controlling most UI elements.<br/>
  * Provides access to application resources, assets, UI widgets, useful instances.</p>
  * @author Filipe De Sousa
  * @version 0.7
  */
 public class WheresMyTrain extends ExpandableListActivity {
-	// Useful logging variables
 	/** Tag to be used when Logging an exception/error/anything at all */
 	public static final String TAG = "com.fdesousa.android.WheresMyTrain";
 
-	/** Instance of UiController for setting up, and controlling, all of the UI */
+	/** 
+	 * Instance of UiController for setting up, and controlling, all of the UI 
+	 */
 	private UiController uiController;
 
-	// Main view widgets
-	/** Spinner used for selecting Underground Line - colour-coded text choices */
-	private Button linesSpinner;
+	/** 
+	 * Button used for selecting Underground Line - colour-coded text choices 
+	 */
+	private Button linesChooser;
 	/**
-	 * Spinner used for selecting tube station from the given Line -
+	 * Button used for selecting tube station from the given Line -
 	 * colour-coded by Line
 	 */
-	private Button stationsSpinner;
-	/** Button for displaying service status to the user */
+	private Button stationsChooser;
+	/** 
+	 * Button for displaying service status to the user 
+	 */
 	private Button serviceStatus;
-	/** Instance of the Adapter for StationsSpinner */
-	private StationsSpinnerAdapter mStationAdapter;
 
-	// JSON reading related instances
+	/**
+	 * Container instance of stations list for rapid access to Line and Station
+	 * lists for opening activities.
+	 */
+	private StationsListContainer container;
+
 	/**
 	 * Instance of the currently selected Line for rapid access to code, name
 	 * and stations
 	 */
-	private StationsListLine line;
+	private String linecode;
+	private String linename;
 	/**
 	 * Instance of the currently selected Station for rapid access to code and
 	 * name
 	 */
-	private StationsListStation station;
+	private String stationcode;
+	private String stationname;
 
-	// Anything else
 	/**
 	 * Simple boolean for determining whether the Custom Title bar window
 	 * feature is enabled
 	 */
 	private boolean customTitleBar;
-	/** Simple boolean for determining if connectivity is available */
+	/** 
+	 * Boolean to store result when determining if connectivity is available 
+	 */
 	private boolean connected;
+
+	/**
+	 * Get/Refresh the detailed predictions
+	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
+	 */
+	private AsyncTask<Void, Void, DetailedPredictionsContainer> getPredictions;
+
+	/**
+	 * Get/Refresh the line status
+	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
+	 */
+	private AsyncTask<Void, Void, LineStatusContainer> getLineStatus;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -101,7 +128,9 @@ public class WheresMyTrain extends ExpandableListActivity {
 		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Set the content view to our main layout
 		setContentView(R.layout.main_detailed_predictions);
-
+		// Now it's time to instantiate and setup the GUI
+		instantiateVariables();
+		setupWidgets();
 	}
 
 	@Override
@@ -109,24 +138,26 @@ public class WheresMyTrain extends ExpandableListActivity {
 		super.onStart();
 		// Check the connectivity
 		checkConnectivity();
-		if (this.connected) {
-			// Now it's time to instantiate and setup things
-			instantiateVariables();
-			setupWidgets();
-		} else {
+		if (!this.connected) {
 			Toast.makeText(this, "Server is unreachable. Check connectivity", Toast.LENGTH_LONG);
 			this.finish();
 		}
 	}
 
+	/**
+	 * Convenience method to automate checking the connectivity of the device.
+	 */
 	private void checkConnectivity() {
 		this.connected = TflJsonFetcher.isReachable(this);
-		
+
 		if (!this.connected) {
 			Toast.makeText(this, "Server is unreachable. Check connectivity", Toast.LENGTH_LONG);
 		}
 	}
 
+	/**
+	 * Method called when first instantiating menu. Only called once.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater mInflater = getMenuInflater();
@@ -134,6 +165,10 @@ public class WheresMyTrain extends ExpandableListActivity {
 		return true;
 	}
 
+	/**
+	 * Method called when a Menu item is chosen by the user.
+	 * Determines what to do depending upon the item clicked.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -148,17 +183,8 @@ public class WheresMyTrain extends ExpandableListActivity {
 				((UiControllerMain) uiController).displayExitConfirmationDialog();
 			break;
 		case R.id.refresh:
-			// Refresh the predictions
-			if (getPredictions instanceof DetailedPredictionsAsyncTask) {
-				getPredictions.cancel(true);
-			}
-			getPredictions = new DetailedPredictionsAsyncTask(this, uiController, line.linecode, station.stationcode).execute();
-
-			// Also refresh line status
-			if (getLineStatus instanceof LineStatusAsyncTask) {
-				getLineStatus.cancel(true);
-			}
-			getLineStatus = new LineStatusAsyncTask(this, uiController, line).execute();
+			// Refresh the predictions and line status
+			performRefresh();
 			break;
 		}
 		return true;
@@ -171,144 +197,52 @@ public class WheresMyTrain extends ExpandableListActivity {
 			((UiControllerMain) uiController).displayExitConfirmationDialog();
 	}
 
-	// Convenience method for instantiation
 	/**
 	 * Convenience method to setup variables in the onCreate.<br/>
 	 * Makes onCreate tidier to look at
 	 */
 	private void instantiateVariables() {
 		Lines.setResources(getResources());
-		//INSTANCE = this;
 		uiController = new UiControllerMain(getResources(), getAssets(), customTitleBar, this);
 
-		// For safety, since Bakerloo is shown first, use Bakerloo colours to
-		// initialise
-		uiController.setTextColour(uiController.getLineColour("b"));
-
 		// Initialise the display widgets
-		linesSpinner = (Button) findViewById(R.id.lines_spinner);
-		stationsSpinner = (Button) findViewById(R.id.stations_spinner);
+		linesChooser = (Button) findViewById(R.id.lines_spinner);
+		stationsChooser = (Button) findViewById(R.id.stations_spinner);
 		serviceStatus = (Button) findViewById(R.id.service_status);
 	}
 
-	// Spinners related methods
 	/**
 	 * Convenience method to setup the Spinners in the onCreate.<br/>
-	 * Makes onCreate tidier to look at
+	 * Makes onCreate tidier to look at, though adds
 	 */
 	private void setupWidgets() {
 		// First of all, reset the line status button
 		resetLineStatusButton();
-		// Call an Asynchronous Task to instantiate the Stations List
-		if (prepareStationsList instanceof StationsListAsyncTask) {
-			prepareStationsList.cancel(true);
-		}
-		prepareStationsList = new StationsListAsyncTask(this, uiController).execute();
-
-		linesSpinner.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-			}
-		});
+		//	Set the startup colours to jubilee line grey
+		uiController.setTextColour(Lines.JUBILEE.getColourCode());
+		uiController.refreshMainTitleBar();
+		//	Set the typefaces
+		linesChooser.setTypeface(uiController.book);
+		stationsChooser.setTypeface(uiController.book);
+		//	Set the initial text of the buttons to prompt the user
+		linesChooser.setText("Please choose a line");
+		//	Hide unnecessary on-screen widgets
+		stationsChooser.setVisibility(View.INVISIBLE);
+		serviceStatus.setVisibility(View.INVISIBLE);
 		
-		// Set the OnItemSelectedListener for Lines Spinner
-		linesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				// Handle the item selected by setting the second
-				// spinner with the correct stations
-				line = (StationsListLine) parent.getItemAtPosition(pos);
-				if (connected) {
-					setupStationsSpinner();
-					// Refresh the line status too, since a line has
-					// been selected now
-					if (getLineStatus instanceof LineStatusAsyncTask) {
-						getLineStatus.cancel(true);
-					}
-					getLineStatus = new LineStatusAsyncTask(WheresMyTrain.this, uiController, line).execute();
-				}
-			}
-			@Override
-			// Do nothing
-			public void onNothingSelected(AdapterView<?> parent) {}
-		});
-
-		// Set the OnItemSelectedListener for Stations Spinner
-		stationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				// Handle the selected item by getting detailed
-				// predictions for that line & station choice, 
-				// displaying that in the ExpandableListView
-				station = (StationsListStation) parent.getItemAtPosition(pos);
-				if (connected) {
-					if (getPredictions instanceof DetailedPredictionsAsyncTask) {
-						getPredictions.cancel(true);
-					}
-					getPredictions = new DetailedPredictionsAsyncTask(WheresMyTrain.this, uiController, line.linecode, station.stationcode).execute();
-					// Edit the title bar every time station is changed
-					// to reflect the changes
-					if (customTitleBar)
-						if (uiController instanceof UiControllerMain)
-							((UiControllerMain) uiController).refreshMainTitleBar(line.linename, station.stationname);
-				}
-			}
-			@Override
-			// Do nothing
-			public void onNothingSelected(AdapterView<?> parent) {}
-		});
-
-		// Finally, set the OnRefreshListener for Predictions List
-//		predictionsList.setOnRefreshListener(new OnRefreshListener() {
-//			@Override
-//			public void onRefresh() {
-//				if (connected) {
-//					// Check if there's already an instance, if so, cancel for safety
-//					if (getPredictions instanceof DetailedPredictionsAsyncTask) {
-//						getPredictions.cancel(true);
-//					}
-//					// Then instantiate a-new and execute the request
-//					getPredictions = new DetailedPredictionsAsyncTask(WheresMyTrain.this, uiController,
-//							line.linecode, station.stationcode).execute();
-//					// Refresh the line status too, since we're refreshing everything
-//					if (getLineStatus instanceof LineStatusAsyncTask) {
-//						getLineStatus.cancel(true);
-//					}
-//					// Instantiate a-new and execute this request too
-//					getLineStatus = new LineStatusAsyncTask(getParent(), uiController, line).execute();
-//				}
-//			}
-//		});
+		StationsListReader reader = new StationsListReader(getCacheDir());
+		StationsListAsyncTask asyncTask = new StationsListAsyncTask(reader);
+		// Call an Asynchronous Task to instantiate the Stations List Container
+		try {
+			container = asyncTask.execute().get(60L, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			//	TODO Handle this with a loop(?)
+		} catch (ExecutionException e) {
+			//	Silently ignore, we have inner-try/catch/finally to handle computation errors
+		} catch (TimeoutException e) {
+			//	TODO Handler a timeout by warning the user, finishing activity(?)
+		}
 	}
-
-	/**
-	 * Utility method. Sets up the spinner for Stations. Useful for new
-	 * selection, but also for restoring the default station at start
-	 */
-	private void setupStationsSpinner() {
-		// Update the data set and reset the adapter
-		mStationAdapter = new StationsSpinnerAdapter(line.stations, line.linecode, getLayoutInflater(), uiController);
-		stationsSpinner.setAdapter(mStationAdapter);
-	}
-
-	/**
-	 * Fetch, parse, display the list of lines and stations.
-	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
-	 */
-	private AsyncTask<Void, Void, StationsListContainer> prepareStationsList;
-
-	/**
-	 * Get/Refresh the detailed predictions
-	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
-	 */
-	private AsyncTask<Void, Void, DetailedPredictionsContainer> getPredictions;
-
-	/**
-	 * Get/Refresh the line status
-	 * To avoid conflicts, have a copy of the AsyncTask to cancel if needed
-	 */
-	private AsyncTask<Void, Void, LineStatusContainer> getLineStatus;
 
 	private void resetLineStatusButton() {
 		// Reset the status button to black and white, unknown status
@@ -321,13 +255,97 @@ public class WheresMyTrain extends ExpandableListActivity {
 	}
 
 	/**
+	 * onClick method for Line choice button. Launches the activity
+	 * allowing the user to choose a line.
+	 * @param v - View instance of the Button
+	 */
+	public void chooseLine(View v) {
+		Intent lineChoiceIntent = new Intent(this, 
+				LinesPickerActivity.class).putExtra(ConfigCodes.SLCONTAINER_EXTRA, container);
+		startActivityForResult(lineChoiceIntent, ConfigCodes.PICK_LINE_REQUEST);
+	}
+
+	/**
+	 * onClick method for Station choice button. Launches the activity
+	 * allowing the user to choose a station.
+	 * @param v - View instance of the Button
+	 */
+	public void chooseStation(View v) {
+		StationsListLine line = container.getLineByLineCode(linecode);
+		Intent stationChoiceIntent = new Intent(this, StationsPickerActivity.class)
+				.putExtra(ConfigCodes.SLLINE_EXTRA, line)
+				.putExtra(ConfigCodes.LINE_COLOUR_EXTRA, uiController.getTextColour());
+		startActivityForResult(stationChoiceIntent, ConfigCodes.PICK_STATION_REQUEST);
+	}
+
+	/**
 	 * OnClick method for the LineStatus Button, as defined in layout
 	 * XML</br> Just shows the line status dialog
-	 * @param v - instance of View (generally will be the Button itself)
+	 * @param v - View instance of the Button
 	 */
 	public void showLineStatus(View v) {
 		if (uiController instanceof UiControllerMain)
 			((UiControllerMain) uiController).showLineStatusDialog();
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			Bundle extras = data.getExtras();
+			if (requestCode == ConfigCodes.PICK_LINE_REQUEST) {
+				//	Get the return String denoting line code
+				linecode = extras.getString(ConfigCodes.LINE_CODE_RESULT);
+				linename = extras.getString(ConfigCodes.LINE_NAME_RESULT);
+				onLineChosen();
+			} else if (requestCode == ConfigCodes.PICK_STATION_REQUEST) {
+				//	Get the return String denoting station code
+				stationcode = extras.getString(ConfigCodes.STATION_CODE_RESULT);
+				stationname = extras.getString(ConfigCodes.STATION_NAME_RESULT);
+				onStationChosen();
+				//	Refresh detailed predictions and line status
+				performRefresh();
+			}
+		}
+	}
+
+	/**
+	 * Utility method to refresh the line status and detailed predictions
+	 */
+	private void performRefresh() {
+		//	Only refresh if connectivity is available
+		if (connected) {
+			//	First start the fetch line status task
+			if (getLineStatus instanceof LineStatusAsyncTask) getLineStatus.cancel(true);
+			getLineStatus = new LineStatusAsyncTask(this, uiController, container.getLineByLineCode(linecode));
+			getLineStatus.execute();
+
+			//	Secondly start the fetch detailed predictions task
+			if (getPredictions instanceof DetailedPredictionsAsyncTask) getPredictions.cancel(true);
+			getPredictions = new DetailedPredictionsAsyncTask(this, uiController, linecode, stationcode);
+			getPredictions.execute();
+		}
+	}
+	
+	private void onLineChosen() {
+		//	Get Lines enum for the current line code in use
+		Lines lines = Lines.getLineByCode(linecode);
+		//	Change button text to display line name
+		linesChooser.setTextColor(lines.getColourCode());
+		linesChooser.setText(linename);
+		//	Set the titlebar up correctly
+		uiController.setTextColour(lines.getColourCode());
+		uiController.refreshMainTitleBar(linename);
+		//	Make station button visible
+		stationsChooser.setVisibility(View.VISIBLE);
+		stationsChooser.setText("Now choose a station");
+		stationsChooser.setTextColor(lines.getColourCode());
+		resetLineStatusButton();
+		this.getExpandableListView().setVisibility(View.INVISIBLE);
+	}
+	
+	private void onStationChosen() {
+		serviceStatus.setVisibility(View.VISIBLE);
+		stationsChooser.setText(stationname);
+	}
+	
 }

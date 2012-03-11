@@ -48,7 +48,7 @@ public class TflJsonFetcher {
 	 * and returning it for processing.<br/>
 	 * Static method to aide in easy, wide-spread use
 	 * @param uri - the URI of the data to fetch
-	 * @return InputStream containing the response of the request
+	 * @return InputStream containing the response of the request or null if there is none
 	 * @throws IllegalStateException - in case of a problem, or if connection was aborted
 	 * @throws IOException - if the stream could not be created
 	 */
@@ -58,7 +58,7 @@ public class TflJsonFetcher {
 		HttpResponse httpresponse = httpclient.execute(httppost);
 		HttpEntity entity = httpresponse.getEntity();
 
-		return entity.getContent();
+		return entity != null ? entity.getContent() : null;
 	}
 
 	/**

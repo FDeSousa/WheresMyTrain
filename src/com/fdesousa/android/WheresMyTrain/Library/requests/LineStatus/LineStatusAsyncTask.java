@@ -120,8 +120,7 @@ public class LineStatusAsyncTask extends AsyncTask<Void, Void, LineStatusContain
 			LineStatusLine cLine;
 
 			// Get the line status for Hammersmith & City line
-			if ((hLine = linestatus
-					.searchByLinename(Lines.HAMMERSMITH.getName())) != null) {
+			if ((hLine = linestatus.searchByLinename(Lines.HAMMERSMITH.getName())) != null) {
 				// Just determine whether the description is empty
 				statusid = hLine.statusid;
 				description = hLine.description;

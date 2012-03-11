@@ -19,8 +19,6 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.view.View;
-import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -42,18 +40,10 @@ import com.fdesousa.android.WheresMyTrain.R;
 public class UiControllerConfig extends UiController {
 
 	private TextView lineTitle;
-	private Button backButton;
 
 	public UiControllerConfig(Resources resources, AssetManager assetManager, 
-			boolean titleBarVisibility, Activity activity, boolean enableBack) {
+			boolean titleBarVisibility, Activity activity) {
 		super(resources, assetManager, titleBarVisibility, activity);
-
-		//	Set the back button's visibility GONE if it's not needed
-		if (enableBack) {
-			backButton.setVisibility(View.VISIBLE);
-		} else {
-			backButton.setVisibility(View.GONE);
-		}
 	}
 
 	@Override
@@ -62,8 +52,6 @@ public class UiControllerConfig extends UiController {
 		titleBar = activity.findViewById(R.id.custom_title_bar_config);
 		lineTitle = (TextView) activity.findViewById(R.id.text_choose_line_config);
 		lineTitle.setTypeface(bold);
-		backButton = (Button) activity.findViewById(R.id.custom_title_bar_btn_back_config);
-		backButton.setTypeface(bold);
 	}
 
 	@Override

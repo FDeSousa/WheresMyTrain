@@ -54,7 +54,7 @@ public abstract class TflJsonHandler<T> extends Thread {
 	
 	/**
 	 * Utility method that handles the HTTP request to the supplied URI, and its response.<br/>
-	 * @return String instance of the response JSON
+	 * @return String instance of the response JSON or empty String when there is none to parse
 	 */
 	protected String fetchJson() {
 		InputStream in = null;
@@ -67,15 +67,18 @@ public abstract class TflJsonHandler<T> extends Thread {
 			Log.e(LibraryMain.TAG, e.getMessage());
 		}
 		
-		String out = stringFromInputStream(in);
+		String out = "";
 		
-		try {
-			in.close();
-		} catch (IOException e) {
-			// Can't close the InputStream, log it, silently ignore
-			Log.e(LibraryMain.TAG, e.getMessage());
+		if (in != null) {
+			out = stringFromInputStream(in);
+			try {
+				in.close();
+			} catch (IOException e) {
+				// Can't close the InputStream, log it, silently ignore
+				Log.e(LibraryMain.TAG, e.getMessage());
+			}
 		}
-		
+
 		return out;
 	}
 	

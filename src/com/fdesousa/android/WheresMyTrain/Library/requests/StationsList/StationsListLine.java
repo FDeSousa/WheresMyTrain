@@ -17,6 +17,7 @@ package com.fdesousa.android.WheresMyTrain.Library.requests.StationsList;
  *****************************************************************************/
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -31,7 +32,7 @@ import android.os.Parcelable;
 public class StationsListLine implements Parcelable {
 	public String linecode;
 	public String linename;
-	public ArrayList<StationsListStation> stations;
+	public List<StationsListStation> stations;
 
 	//	Need a Creator for reading from a Parcel at some point
 	public static final Parcelable.Creator<StationsListLine> CREATOR = new Parcelable.Creator<StationsListLine>() {

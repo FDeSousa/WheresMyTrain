@@ -73,12 +73,12 @@ public class UiControllerMain extends UiController {
 		};
 		// Setup the AlertDialog.Builder to display the dialog later
 		exitConfirmation = new AlertDialog.Builder(activity)
-			.setMessage("Exit Where's My Train?")
-			.setPositiveButton(android.R.string.yes,
-				exitConfirmationDialogClickListener)
-			.setNegativeButton(android.R.string.no,
-				exitConfirmationDialogClickListener)
-			.create();
+				.setMessage("Exit Where's My Train?")
+				.setPositiveButton(android.R.string.yes,
+					exitConfirmationDialogClickListener)
+				.setNegativeButton(android.R.string.no,
+					exitConfirmationDialogClickListener)
+				.create();
 		// Setup of Dialog finished
 	}
 
@@ -100,12 +100,12 @@ public class UiControllerMain extends UiController {
 		Linkify.addLinks(s, Linkify.ALL);
 
 		aboutDialog = new AlertDialog.Builder(activity)
-		.setTitle(title)
-		.setMessage(s)
-		.setCancelable(true)
-		.setIcon(R.drawable.ic_launcher)
-		.setPositiveButton(resources.getString(android.R.string.ok),
-				null).create();
+				.setTitle(title)
+				.setMessage(s)
+				.setCancelable(true)
+				.setIcon(R.drawable.ic_launcher)
+				.setPositiveButton(resources.getString(android.R.string.ok),
+						null).create();
 	}
 
 	public void displayAboutDialog() {
@@ -117,9 +117,9 @@ public class UiControllerMain extends UiController {
 
 	private void buildLineStatusDialog() {
 		lineStatusDialog = new AlertDialog.Builder(activity)
-		.setCancelable(true)
-		.setPositiveButton(resources.getString(android.R.string.ok),
-				null).create();
+				.setCancelable(true)
+				.setPositiveButton(resources.getString(android.R.string.ok),
+						null).create();
 	}
 
 	public void setLineStatusDialogText(String title, String message) {
@@ -152,23 +152,20 @@ public class UiControllerMain extends UiController {
 	public void refreshMainTitleBar(String... params) {
 		// Set colours and text of widgets
 		titleBar.setBackgroundColor(textColour);
-		String line = params[0];
-		String station = params[1];
+		String line = params.length >= 1 ? params[0] : "";
+		String station = params.length >= 2 ? params[1] : "";
 		//	Check out and cut down line
-		if (line != null) {
-			if (line.length() > 15) {
-				lineTitle.setText(line.substring(0, 15));
-			} else {
-				lineTitle.setText(line);
-			}
+		if (line.length() > 15) {
+			lineTitle.setText(line.substring(0, 15));
+		} else {
+			lineTitle.setText(line);
 		}
 		//	Check out and cut down station
-		if (station != null) {
-			if (station.length() > 15) {
-				stationTitle.setText(station.substring(0, 15));
-			} else {
-				stationTitle.setText(station);
-			}
+		if (station.length() > 15) {
+			stationTitle.setText(station.substring(0, 15));
+		} else {
+			stationTitle.setText(station);
 		}
 	}
+
 }

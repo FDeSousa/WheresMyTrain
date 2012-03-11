@@ -36,6 +36,7 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 			// Clean out the list when refreshing, to rid ourselves of any
 			// old data hanging about
 			mPlatformAdapter.clearList();
+			predictionsList.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -48,15 +49,14 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 
 	@Override
 	protected void onPostExecute(DetailedPredictionsContainer result) {
+		if (result == null) return;	//	Early return if it's null
 		// Because of how tfl.php sends predictions data, there is only ever
 		// ONE station in stations array
 		mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms,
 				activity.getLayoutInflater(), uiController);
-		// Show the expandable list view, to show new predictions
-		predictionsList.setVisibility(View.VISIBLE);
 		// (Re)set the adapter onto the ExpandableListView
 		activity.setListAdapter(mPlatformAdapter);
-
-		super.onPostExecute(result);
+		// Show the expandable list view, to show new predictions
+		predictionsList.setVisibility(View.VISIBLE);
 	}
 }

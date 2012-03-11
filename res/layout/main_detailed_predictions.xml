@@ -33,12 +33,14 @@
     <Button
         android:id="@+id/lines_spinner"
         style="@style/ChoiceSpinner"
+        android:onClick="chooseLine"
         android:prompt="@string/lines_prompt" />
 
     <!-- Spinner for choosing Station -->
     <Button
         android:id="@+id/stations_spinner"
         style="@style/ChoiceSpinner"
+        android:onClick="chooseStation"
         android:prompt="@string/stations_prompt" />
 
     <!-- Button displaying the service status, with service status dialog attached -->
