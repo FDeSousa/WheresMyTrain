@@ -12,9 +12,9 @@
     <!-- Text displayed in About dialog -->
     <string name="about_text">
 Where\'s My Train?!\n
-Copyright 2011 Filipe De Sousa\n\n
+Copyright 2012 Filipe De Sousa\n\n
 tfl.php\n
-Copyright 2011 Filipe De Sousa\n\n
+Copyright 2012 Filipe De Sousa\n\n
 Where\'s My Train?! uses Transport for London data feeds via tfl.php (trains.desousa.com.pt)\n\n
 Licensed under the Apache License, Version 2.0 (the "License");\n
 you may not use this file except in compliance with the License.\n

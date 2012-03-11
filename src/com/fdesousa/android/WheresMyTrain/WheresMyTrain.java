@@ -346,6 +346,7 @@ public class WheresMyTrain extends ExpandableListActivity {
 	private void onStationChosen() {
 		serviceStatus.setVisibility(View.VISIBLE);
 		stationsChooser.setText(stationname);
+		uiController.refreshMainTitleBar(linename, stationname);
 	}
 	
 }
