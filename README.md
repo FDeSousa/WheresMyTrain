@@ -33,13 +33,22 @@ Would like to add:
 *	Use of GPS to find current location and station
 
 ## Platform
-Android 2.1+
-There's some iffy workings with the back button pre-Android 2.1, as this overrides onBackPressed, which was added in the Android 2.1 SDK. If you’d like to test and confirm to me whether Android 1.5/1.6 can be supported, then that would be very useful, as I currently have no older test devices.
+Android 2.1+  
+May work with older Android OS versions too, just lower the value in minSdkVersion in AndroidManifest.xml to suit. I have no physical older test devices to confirm.
 
 ## Where can I find out more about the project?
 The source is [hosted on GitHub.](https://github.com/FDeSousa/WheresMyTrain)  
 General information is on the [project page on my site.](http://wmt.desousa.com.pt)  
 The application itself [on Android Market.](https://market.android.com/details?id=com.fdesousa.android.WheresMyTrain)  
+
+## Attribution
+This project uses the Google GSON library, but with package names changed to avoid clashing with other versions on a user's phone. The modified library is included as 'lib/mygson-2.0.jar'.  
+Google GSON (google-gson): <http://code.google.com/p/google-gson/>
+
+This project uses the Quicksand font (specifically book and bold versions) by Andrew Paglinawan (<http://andrewpaglinawan.com>)
+Quicksand fonts: <http://www.fontsquirrel.com/fonts/Quicksand>
+
+I'm probably forgetting to give attribution to someone, somewhere, as per usual.
 
 ## License
 Copyright 2012 Filipe De Sousa
