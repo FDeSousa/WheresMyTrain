@@ -38,7 +38,7 @@
             android:layout_weight=".1"
             android:padding="8dip"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/refresh_button"
+            android:contentDescription="@string/refresh"
             android:scaleType="fitCenter"
             android:src="@drawable/refresh"
             android:visibility="visible" />

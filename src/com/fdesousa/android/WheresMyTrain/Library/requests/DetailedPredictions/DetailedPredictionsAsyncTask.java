@@ -4,6 +4,7 @@ import android.app.ExpandableListActivity;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.fdesousa.android.WheresMyTrain.Library.json.TflJsonReader;
 import com.fdesousa.android.WheresMyTrain.UiElements.PlatformsExpListAdapter;
@@ -49,7 +50,10 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 
 	@Override
 	protected void onPostExecute(DetailedPredictionsContainer result) {
-		if (result == null) return;	//	Early return if it's null
+		if (result == null || result.stations.isEmpty()) {
+			Toast.makeText(activity, "Please pick a line and station first.", Toast.LENGTH_LONG).show();
+			return;
+		}
 		// Because of how tfl.php sends predictions data, there is only ever
 		// ONE station in stations array
 		mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms,

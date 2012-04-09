@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,17 +16,10 @@ public class StationsPickerActivity extends ListActivity {
 
 	private ArrayAdapter<StationsListStation> adapter;
 	private UiController uiController;
-	/**
-	 * Simple boolean for determining whether the Custom Title bar window
-	 * feature is enabled
-	 */
-	private boolean customTitleBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Requesting window features must be done before anything else, so do it now
-		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Set the content view to our main layout
 		setContentView(R.layout.widget_config_layout);
 
@@ -51,10 +43,8 @@ public class StationsPickerActivity extends ListActivity {
 	 */
 	private void setUpUiController(int colour) {
 		//	Setup the uiController for later use
-		uiController = new UiControllerConfig(getResources(), getAssets(), customTitleBar, this);
+		uiController = new UiControllerConfig(getResources(), getAssets(), this);
 		uiController.setTextColour(colour);
-		uiController.setTitleBarColour(colour);
-		uiController.refreshMainTitleBar("Choose Station");
 	}
 	
 	@Override

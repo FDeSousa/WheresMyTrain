@@ -67,7 +67,7 @@ public class TflJsonFetcher {
 	 * @param context - Context instance used for getting connectivity service
 	 * @return true if server is reachable, false otherwise
 	 */
-	public static boolean isReachable(Context context) {
+	public static boolean isReachable(WheresMyTrain context) {
 		//	First, check we have any sort of connectivity
 		final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
@@ -87,7 +87,7 @@ public class TflJsonFetcher {
 					return false;
 				}
 			} catch (IOException e) {
-				Log.e(WheresMyTrain.TAG + "TflJsonFetcher", e.getMessage());
+				Log.e(WheresMyTrain.TAG + ".TflJsonFetcher", e.getMessage());
 				return false;
 			}
 		} else {

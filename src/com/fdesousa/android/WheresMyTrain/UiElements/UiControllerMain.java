@@ -18,14 +18,8 @@ package com.fdesousa.android.WheresMyTrain.UiElements;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.text.SpannableString;
-import android.text.util.Linkify;
-import android.widget.TextView;
-
-import com.fdesousa.android.WheresMyTrain.R;
 
 /**
  * <b>UiControllerMain</b>
@@ -40,78 +34,12 @@ import com.fdesousa.android.WheresMyTrain.R;
  */
 public class UiControllerMain extends UiController {
 
-	public UiControllerMain(Resources resources, AssetManager assetManager,
-			boolean titleBarVisibility, Activity activity) {
-		super(resources, assetManager, titleBarVisibility, activity);
-		buildExitConfirmationDialog();
-		buildAboutDialog();
+	public UiControllerMain(Resources resources, AssetManager assetManager, Activity activity) {
+		super(resources, assetManager, activity);
 		buildLineStatusDialog();
 	}
 
 	// ----------------------------------------------------------------------
-	// Quit dialog variables, builder and methods
-	private DialogInterface.OnClickListener exitConfirmationDialogClickListener;
-	private AlertDialog exitConfirmation;
-
-	/**
-	 * Method to build the Exit Confirmation dialog showed when pressing the
-	 * back button.
-	 */
-	private void buildExitConfirmationDialog() {
-		// Setup the quitDialogClickListener so we know what to do when back is
-		// pressed
-		exitConfirmationDialogClickListener = new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					activity.finish();
-				case DialogInterface.BUTTON_NEGATIVE:
-					dialog.cancel();
-				}
-			}
-		};
-		// Setup the AlertDialog.Builder to display the dialog later
-		exitConfirmation = new AlertDialog.Builder(activity)
-				.setMessage("Exit Where's My Train?")
-				.setPositiveButton(android.R.string.yes,
-					exitConfirmationDialogClickListener)
-				.setNegativeButton(android.R.string.no,
-					exitConfirmationDialogClickListener)
-				.create();
-		// Setup of Dialog finished
-	}
-
-	/**
-	 * Convenience method to display the Exit confirmation dialog
-	 */
-	public void displayExitConfirmationDialog() {
-		exitConfirmation.show();
-	}
-
-	// About dialog variables, builder and methods
-	private AlertDialog aboutDialog;
-
-	private void buildAboutDialog() {
-		String title = String.format("About %s",
-				resources.getString(R.string.app_name));
-		final SpannableString s = new SpannableString(
-				resources.getString(R.string.about_text));
-		Linkify.addLinks(s, Linkify.ALL);
-
-		aboutDialog = new AlertDialog.Builder(activity)
-				.setTitle(title)
-				.setMessage(s)
-				.setCancelable(true)
-				.setIcon(R.drawable.ic_launcher)
-				.setPositiveButton(resources.getString(android.R.string.ok),
-						null).create();
-	}
-
-	public void displayAboutDialog() {
-		aboutDialog.show();
-	}
-
 	// Line Status information dialog variables, builder and methods
 	private AlertDialog lineStatusDialog;
 
@@ -129,43 +57,6 @@ public class UiControllerMain extends UiController {
 
 	public void showLineStatusDialog() {
 		lineStatusDialog.show();
-	}
-
-	// ----------------------------------------------------------------------
-	// Main Activity's Custom title bar widgets and methods
-	/** TextView instance for the line textview in our custom title bar */
-	private TextView lineTitle;
-	/** TextView instance for the station textview in our custom title bar */
-	private TextView stationTitle;
-
-	@Override
-	protected void setupCustomTitleBar() {
-		// Get the widget instances
-		titleBar = activity.findViewById(R.id.custom_title_bar);
-		lineTitle = (TextView) activity.findViewById(R.id.text_line);
-		lineTitle.setTypeface(bold);
-		stationTitle = (TextView) activity.findViewById(R.id.text_station);
-		stationTitle.setTypeface(bold);
-	}
-
-	@Override
-	public void refreshMainTitleBar(String... params) {
-		// Set colours and text of widgets
-		titleBar.setBackgroundColor(textColour);
-		String line = params.length >= 1 ? params[0] : "";
-		String station = params.length >= 2 ? params[1] : "";
-		//	Check out and cut down line
-		if (line.length() > 15) {
-			lineTitle.setText(line.substring(0, 15));
-		} else {
-			lineTitle.setText(line);
-		}
-		//	Check out and cut down station
-		if (station.length() > 15) {
-			stationTitle.setText(station.substring(0, 15));
-		} else {
-			stationTitle.setText(station);
-		}
 	}
 
 }

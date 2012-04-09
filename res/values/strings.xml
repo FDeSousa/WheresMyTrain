@@ -35,6 +35,6 @@ https://github.com/FDeSousa/tfl.php\n
     <!-- Generic Back text for displaying on back buttons/prompts -->
     <string name="back">Back</string>
     <!-- Generic Refresh text for displaying on buttons -->
-    <string name="refresh_button">Refresh button</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

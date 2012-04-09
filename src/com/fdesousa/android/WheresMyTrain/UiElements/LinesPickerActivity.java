@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,25 +17,16 @@ public class LinesPickerActivity extends ListActivity {
 	protected ArrayAdapter<StationsListLine> adapter;
 	protected UiController uiController;
 
-	/**
-	 * Simple boolean for determining whether the Custom Title bar window
-	 * feature is enabled
-	 */
-	private boolean customTitleBar;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Requesting window features must be done before anything else, so do it now
-		customTitleBar = requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Set the content view to our main layout
 		setContentView(R.layout.widget_config_layout);
 		// Setup the cancel result first, in case the user cancels this activity early
 		setResult(RESULT_CANCELED, new Intent());
 
 		//	Setup the uiController for later use
-		uiController = new UiControllerConfig(getResources(), getAssets(), customTitleBar, this);
-		uiController.refreshMainTitleBar("Choose Underground Line");
+		uiController = new UiControllerConfig(getResources(), getAssets(), this);
 		//	Time to sort out the list of lines and their associated stations
 		StationsListContainer container = getIntent().getExtras().getParcelable(ConfigCodes.SLCONTAINER_EXTRA);
 		adapter = new LinesArrayAdapter(this, container.lines, uiController);

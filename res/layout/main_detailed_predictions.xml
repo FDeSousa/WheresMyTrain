@@ -5,30 +5,6 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <!-- Custom Title Bar layout -->
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/custom_title_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="25dip"
-        android:gravity="center_vertical|center_horizontal"
-        android:weightSum="1.0" >
-
-        <!-- TextView for displaying the Line Name -->
-        <TextView
-            android:id="@+id/text_line"
-            android:layout_gravity="center_vertical|left"
-            android:gravity="left"
-            style="@style/TitleBarText" />
-
-        <!-- TextView for displaying the Station Name -->
-        <TextView
-            android:id="@+id/text_station"
-            android:layout_gravity="center_vertical|right"
-            android:gravity="right"
-            style="@style/TitleBarText" />
-    </LinearLayout>
-
     <!-- Spinner for choosing Line -->
     <Button
         android:id="@+id/lines_spinner"
@@ -49,11 +25,7 @@
         android:onClick="showLineStatus"
         style="@style/ButtonText" />
 
-    <!-- Custom control from Android-PullToRefresh library -->
-    <!-- ExpandableListView for platforms and trains predictions, with pull-to-refresh capability -->
-    <!-- com.handmark.pulltorefresh.library.PullToRefreshExpandableListView -->
     <ExpandableListView
-        xmlns:ptr="http://schemas.android.com/apk/res/com.fds.WMT"
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -65,8 +37,5 @@
         android:indicatorLeft="0dip"
         android:indicatorRight="310dip"
         android:scrollbars="none" />
-    <!-- ptr:adapterViewBackground="@android:color/white"
-        ptr:headerBackground="@android:color/white"
-        ptr:headerTextColor="@android:color/darker_gray" -->
 
 </LinearLayout>

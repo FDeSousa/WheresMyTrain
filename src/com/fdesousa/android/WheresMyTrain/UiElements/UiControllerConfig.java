@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.fdesousa.android.WheresMyTrain.Lines;
 import com.fdesousa.android.WheresMyTrain.R;
@@ -39,25 +38,8 @@ import com.fdesousa.android.WheresMyTrain.R;
  */
 public class UiControllerConfig extends UiController {
 
-	private TextView lineTitle;
-
-	public UiControllerConfig(Resources resources, AssetManager assetManager, 
-			boolean titleBarVisibility, Activity activity) {
-		super(resources, assetManager, titleBarVisibility, activity);
-	}
-
-	@Override
-	protected void setupCustomTitleBar() {
-		// Get the widget instances
-		titleBar = activity.findViewById(R.id.custom_title_bar_config);
-		lineTitle = (TextView) activity.findViewById(R.id.text_choose_line_config);
-		lineTitle.setTypeface(bold);
-	}
-
-	@Override
-	public void refreshMainTitleBar(String... params) {
-		//	Nice and simple, just set the title bar string. Nothing special
-		lineTitle.setText(params[0]);
+	public UiControllerConfig(Resources resources, AssetManager assetManager, Activity activity) {
+		super(resources, assetManager, activity);
 	}
 
 	public static void setWidgetTitleShape(RemoteViews remoteView, String linecode) {
