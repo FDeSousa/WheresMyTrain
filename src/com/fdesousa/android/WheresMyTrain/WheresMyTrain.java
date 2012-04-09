@@ -28,9 +28,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.fdesousa.android.WheresMyTrain.ActionBar.ActionBarExpandableListActivity;
+import com.fdesousa.android.WheresMyTrain.ActionBar.ActionBarActivity;
 import com.fdesousa.android.WheresMyTrain.Library.ConfigCodes;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DetailedPredictionsAsyncTask;
 import com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions.DetailedPredictionsContainer;
@@ -57,7 +58,7 @@ import com.fdesousa.android.WheresMyTrain.UiElements.UiControllerMain;
  * @version %I%, %G%
  * 
  */
-public class WheresMyTrain extends ActionBarExpandableListActivity {
+public class WheresMyTrain extends ActionBarActivity {
 	/** Tag to be used when Logging an exception/error/anything at all */
 	public static final String TAG = "com.fdesousa.android.WheresMyTrain";
 	/**
@@ -125,7 +126,7 @@ public class WheresMyTrain extends ActionBarExpandableListActivity {
 	protected void onStart() {
 		super.onStart();
 		// Check the connectivity
-		// checkConnectivity();
+		checkConnectivity();
 		// if (!this.connected) {
 		// Toast.makeText(this, "Server is unreachable. Check connectivity",
 		// Toast.LENGTH_LONG).show();
@@ -318,6 +319,7 @@ public class WheresMyTrain extends ActionBarExpandableListActivity {
 			if (getPredictions instanceof DetailedPredictionsAsyncTask)
 				getPredictions.cancel(true);
 			getPredictions = new DetailedPredictionsAsyncTask(this,
+					(ExpandableListView) findViewById(android.R.id.list),
 					uiController, linecode, stationcode).execute();
 		}
 	}
@@ -335,7 +337,8 @@ public class WheresMyTrain extends ActionBarExpandableListActivity {
 		stationsChooser.setText("Now choose a station");
 		stationsChooser.setTextColor(lines.getColourCode());
 		resetLineStatusButton();
-		this.getExpandableListView().setVisibility(View.INVISIBLE);
+		((ExpandableListView) findViewById(android.R.id.list))
+				.setVisibility(View.INVISIBLE);
 	}
 
 	private void onStationChosen() {

@@ -1,7 +1,6 @@
 package com.fdesousa.android.WheresMyTrain.ActionBar;
 
 import android.app.Activity;
-import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,10 +16,10 @@ import android.view.MenuInflater;
  * @version %I%, %G%
  * 
  */
-public abstract class ActionBarExpandableListActivity extends ExpandableListActivity {
+public abstract class ActionBarActivity extends Activity {
 	final ActionBarHelper mActionBarHelper;
 
-	protected ActionBarExpandableListActivity() {
+	protected ActionBarActivity() {
 		mActionBarHelper = ActionBarHelper.createInstance(this);
 	}
 	

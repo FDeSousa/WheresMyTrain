@@ -1,6 +1,6 @@
 package com.fdesousa.android.WheresMyTrain.Library.requests.DetailedPredictions;
 
-import android.app.ExpandableListActivity;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -13,7 +13,7 @@ import com.fdesousa.android.WheresMyTrain.UiElements.UiController;
 public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, DetailedPredictionsContainer> {
 	private PlatformsExpListAdapter mPlatformAdapter;
 	private TflJsonReader<DetailedPredictionsContainer> mJsonR;
-	private ExpandableListActivity activity;
+	private Activity activity;
 	private UiController uiController;
 
 	/**
@@ -22,12 +22,12 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 	 */
 	private ExpandableListView predictionsList;
 	
-	public DetailedPredictionsAsyncTask(ExpandableListActivity activity, UiController uiController,
+	public DetailedPredictionsAsyncTask(Activity activity, ExpandableListView predictionsList, UiController uiController,
 			final String line, final String station) {
 
 		this.activity = activity;
 		this.uiController = uiController;
-		predictionsList = (ExpandableListView) this.activity.findViewById(android.R.id.list);
+		this.predictionsList = predictionsList;
 		mJsonR = new DetailedPredictionsReader(line, station);
 	}
 	
@@ -59,7 +59,7 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 		mPlatformAdapter = new PlatformsExpListAdapter(result.stations.get(0).platforms,
 				activity.getLayoutInflater(), uiController);
 		// (Re)set the adapter onto the ExpandableListView
-		activity.setListAdapter(mPlatformAdapter);
+		predictionsList.setAdapter(mPlatformAdapter);
 		// Show the expandable list view, to show new predictions
 		predictionsList.setVisibility(View.VISIBLE);
 	}
