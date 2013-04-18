@@ -22,8 +22,8 @@ public class DetailedPredictionsAsyncTask extends AsyncTask<Void, Void, Detailed
 	 */
 	private ExpandableListView predictionsList;
 	
-	public DetailedPredictionsAsyncTask(Activity activity, ExpandableListView predictionsList, UiController uiController,
-			final String line, final String station) {
+	public DetailedPredictionsAsyncTask(Activity activity, ExpandableListView predictionsList,
+			UiController uiController, final String line, final String station) {
 
 		this.activity = activity;
 		this.uiController = uiController;

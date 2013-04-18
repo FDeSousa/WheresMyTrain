@@ -69,7 +69,8 @@ public abstract class TflJsonReader<T> {
 	 * @param extension - the portion of the URL, after the base URL, required for the request
 	 * @return a new URL instance based upon the base URL concatenated with the extension
 	 */
-	protected URI makeUri(final String request, final String line, final String station, final boolean incidentsOnly) {
+	protected URI makeUri(final String request, final String line,
+			final String station, final boolean incidentsOnly) {
 		try {
 			String arguments = REQUEST_ARG + request;
 			//	If line is a letter, it's valid, add it to the arguments
@@ -92,13 +93,10 @@ public abstract class TflJsonReader<T> {
 	 * @param handler - the TflJsonHandler instance to stop execution of
 	 */
 	protected void stopHandler(TflJsonHandler<T> handler) {
-		//	I dislike using while(true), so use a boolean variable instead
-		boolean running = true;
-		while (running) {
+		while (handler.isAlive()) {
 			//	Wait for thread to finish before returning
 			try {
 				handler.join();
-				running = false;
 			} catch (InterruptedException e) {
 				Log.e(LibraryMain.TAG, e.getMessage());
 			}
@@ -110,5 +108,4 @@ public abstract class TflJsonReader<T> {
 	//	Abstract methods that each sub-class will individually implement
 	public abstract T get();
 	public abstract T refresh();
-
 }

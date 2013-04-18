@@ -14,7 +14,7 @@ If you’d just like to install it right away, and have access to the Android Ma
 Please do leave (hopefully constructive) comments, and email if you have bigger queries/suggestions while using it.
 
 ## Status
-Unfinished, but working admirably in my own out-and-about tests, with low mobile signal and all. Despite being somewhat biased, it is particularly stable and fast at loading data.  
+Released on Google Play store, but still being worked on.  
 Still needed before v1.0 release:
 
 *	Better connectivity checking before attempting to fetch data
@@ -24,6 +24,7 @@ Still needed before v1.0 release:
 
 Would like to add:
 
+*	Bus predictions - TfL now has an API for it
 *	Default line & station saving, ability to load defaults on start-up
 *	Variable number of trains in predictions
 *	Individual station status fetching
