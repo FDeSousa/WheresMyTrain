@@ -1,4 +1,4 @@
-# Where's My Train?!
+# Where's My Train?! hacktober
 ## Introduction
 An Android application that shows you the predicted trains arriving for almost any line* and station part of the Transport for London underground network within the next 30 minutes**.  
 Uses [tfl.php](http://trains.desousa.com.pt/) for handling requests for predictions and status information.
